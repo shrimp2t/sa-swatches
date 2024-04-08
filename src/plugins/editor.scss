@@ -1,0 +1,36 @@
+
+
+.wp-block-pm-blocks-section {
+	.block-editor-inner-blocks {
+		// display: ;
+	}
+}
+
+.pm-popver-container {
+	
+	> button.components-button {
+		padding: 3px;
+		width: 24px;
+	    min-width: 24px;
+	    height: 24px;
+	    min-height: 24px;
+	}
+}
+.pm-popver-content {
+	&.components-popover {
+		z-index: 9000;
+	}
+	.components-popover__content>div {
+		width: 280px;
+	}
+}
+
+.pm-tabs-panel {
+	.components-tab-panel__tabs {
+		.active-tab {
+			outline: 3px solid transparent;
+			box-shadow: inset 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color);
+		}
+	}
+	
+}

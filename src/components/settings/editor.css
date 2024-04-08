@@ -1,0 +1,89 @@
+.pm-fields-render {
+  padding: 16px;
+}
+
+.pm-fields-render .pm-field-item {
+  margin-bottom: 1.5em;
+}
+
+.pm-fields-render .pm-field-item:last-child {
+  margin-bottom: 0px;
+}
+
+.pm-fields-render .components-base-control__label {
+  margin-bottom: 10px;
+  display: block;
+}
+
+.pm-fields-render .pm-fields-render {
+  padding: 0px;
+}
+
+.pm-fields-render .components-panel__body {
+  margin: -16px;
+}
+
+.pm-fields-render .pm-field-type-group > .components-base-control > .components-base-control__field,
+.pm-fields-render .pm-field-type-border > .components-base-control > .components-base-control__field,
+.pm-fields-render .pm-field-type-bg > .components-base-control > .components-base-control__field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pm-fields-render .pm-field-type-group > .components-base-control > .components-base-control__field .components-base-control__label,
+.pm-fields-render .pm-field-type-border > .components-base-control > .components-base-control__field .components-base-control__label,
+.pm-fields-render .pm-field-type-bg > .components-base-control > .components-base-control__field .components-base-control__label {
+  margin-bottom: 0px;
+}
+
+.pm-fields-render .component-color-indicator {
+  width: 25px;
+  height: 25px;
+  display: block;
+  margin: 0px;
+}
+
+.pm-fields-render .pm-block-color-wrapper .components-base-control__field {
+  display: flex;
+  align-items: center;
+}
+
+.pm-fields-render .pm-block-color-wrapper .components-base-control__field .components-base-control__label {
+  margin-bottom: 0;
+}
+
+.pm-fields-render .pm-block-color-wrapper .pm-block-color-value {
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.pm-responsive {
+  position: relative;
+}
+
+.pm-responsive .components-dropdown-menu.pm-responsive-switcher {
+  width: auto;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  z-index: 26;
+}
+
+.pm-responsive .components-dropdown-menu.pm-responsive-switcher .components-button {
+  padding: 3px;
+  z-index: 26;
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  min-height: 24px;
+}
+
+.boxunit-inner {
+  position: relative;
+  z-index: 20;
+}
+
+.boxunit-inner > div {
+  max-width: 100%;
+}

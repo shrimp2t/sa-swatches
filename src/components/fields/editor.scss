@@ -1,0 +1,42 @@
+.pm-repeater {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+	
+}
+
+.repeater-item {
+	border: 1px solid #e0e0e0;
+	margin: 0 0 5px;
+	background:  #fff;
+	&.open {
+		.item-content {
+			border-top: 1px solid #e0e0e0;
+			padding: 1em;
+		}
+	}
+	.header {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 5px 10px;
+		.button {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.drag {
+			display: flex;
+			align-items: center;
+			cursor: move;
+			margin-right: 10px;
+		}
+		.toggle {
+			margin-left: auto;
+		}
+		.heading {
+			display: flex;
+			align-items: center;
+		}
+	}
+}
