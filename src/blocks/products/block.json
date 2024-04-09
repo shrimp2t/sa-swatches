@@ -3,7 +3,7 @@
 	"apiVersion": 3,
 	"name": "sa-wc-blocks/products",
 	"version": "0.1.0",
-	"title": "Sa Products",
+	"title": "Sa/Products",
 	"category": "widgets",
 	"icon": "smiley",
 	"description": "Example block scaffolded with Create Block tool.",

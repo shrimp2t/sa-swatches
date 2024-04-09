@@ -21,6 +21,10 @@ import { useBlockProps } from '@wordpress/block-editor';
  */
 import './editor.scss';
 
+
+import ServerSideRender from '@wordpress/server-side-render';
+
+
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -29,10 +33,16 @@ import './editor.scss';
  *
  * @return {Element} Element to render.
  */
-export default function Edit() {
+export default function Edit(props) {
+	const blockProps = useBlockProps();
+	console.log('props', props);
+	console.log('blockProps', blockProps);
 	return (
-		<p { ...useBlockProps() }>
-			{ __( 'Example Dynamic – hello from the editor!', 'example-dynamic' ) }
-		</p>
+		<div {...blockProps}>
+			<ServerSideRender
+				block={props.name}
+				attributes={props.attributes}
+			/>
+		</div>
 	);
 }
