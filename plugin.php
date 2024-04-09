@@ -120,6 +120,7 @@ add_action('init', __NAMESPACE__ . '\blocks_init');
 // app\public\wp-content\plugins\woocommerce\assets\js\admin\meta-boxes-product.js
 // app\public\wp-content\plugins\woocommerce\includes\admin\meta-boxes\views\html-product-attribute-inner.php
 // app\public\wp-content\plugins\woocommerce\includes\admin\class-wc-admin-assets.php
+// https://github.com/WordPress/gutenberg/blob/HEAD/packages/block-editor/src/components/media-upload/README.md
 
 
 add_filter('product_attributes_type_selector', function ($options) {

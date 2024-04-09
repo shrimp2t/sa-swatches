@@ -11,6 +11,8 @@ module.exports = [
 		entry: {
 			plugins: "./src/plugins/index.js",
 			admin: "./src/admin/admin.js",
+			['attr-product']: "./src/wc-attributes/att-product.js",
+			['attr-manager']: "./src/wc-attributes/attr-manager.js",
 		},
 		output: {
 			...defaultConfig.output,
