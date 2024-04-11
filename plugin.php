@@ -22,6 +22,9 @@ define('SA_WC_BLOCKS_URL', plugins_url('/', __FILE__));
 define('SA_WC_BLOCKS_PATH', dirname(__FILE__));
 define('SA_WC_BLOCKS_VERSION', '0.1.0');
 
+require_once SA_WC_BLOCKS_PATH . '/inc/functions.php';
+require_once SA_WC_BLOCKS_PATH . '/inc/attr-admin-column.php';
+
 function render_block_core_archives()
 {
 ?>
@@ -128,7 +131,7 @@ function add_attribute_types($options)
 	$options['sa_select'] = __('Select 2');
 	$options['sa_color'] = __('Color');
 	$options['sa_image'] = __('Image');
-	$options['sa_button'] = __('Button');
+	$options['sa_button'] = __('Buton');
 	return $options;
 }
 add_filter('product_attributes_type_selector', __NAMESPACE__ . '\add_attribute_types', 9999);
