@@ -121,15 +121,17 @@ add_action('init', __NAMESPACE__ . '\blocks_init');
 // app\public\wp-content\plugins\woocommerce\includes\admin\meta-boxes\views\html-product-attribute-inner.php
 // app\public\wp-content\plugins\woocommerce\includes\admin\class-wc-admin-assets.php
 // https://github.com/WordPress/gutenberg/blob/HEAD/packages/block-editor/src/components/media-upload/README.md
+// https://dev.to/diballesteros/how-to-create-a-stunning-side-drawer-with-react-spring-bja
 
-
-add_filter('product_attributes_type_selector', function ($options) {
+function add_attribute_types($options)
+{
 	$options['sa_select'] = __('Select 2');
 	$options['sa_color'] = __('Color');
-	$options['sa_image'] = __('Iamge');
-	$options['sa_button'] = __('Buton');
+	$options['sa_image'] = __('Image');
+	$options['sa_button'] = __('Button');
 	return $options;
-}, 9999);
+}
+add_filter('product_attributes_type_selector', __NAMESPACE__ . '\add_attribute_types', 9999);
 
 
 // do_action( 'woocommerce_product_option_terms', $attribute_taxonomy, $i, $attribute );
@@ -140,7 +142,9 @@ function woocommerce_product_option_terms($attribute_taxonomy, $i, $attribute)
 		return;
 	}
 ?>
-	<select multiple="multiple" data-minimum_input_length="0" data-limit="50" data-return_id="id" data-placeholder="<?php esc_attr_e('Select values', 'woocommerce'); ?>" data-orderby="name" class="multiselect attribute_values wc-taxonomy-term-search----" name="attribute_values[<?php echo esc_attr($i); ?>][]" data-taxonomy="<?php echo esc_attr($attribute->get_taxonomy()); ?>">
+	<select multiple="multiple"  data-return_id="id"
+	data-placeholder="<?php esc_attr_e('Select values', 'woocommerce'); ?>"
+	class="multiselect attribute_values wc-taxonomy-term-search----" name="attribute_values[<?php echo esc_attr($i); ?>][]" data-taxonomy="<?php echo esc_attr($attribute->get_taxonomy()); ?>">
 		<?php
 		$selected_terms = $attribute->get_terms();
 		if ($selected_terms) {
