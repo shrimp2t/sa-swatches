@@ -202,7 +202,11 @@ function admin_scripts()
   }
 
   $assets['dependencies'][] = 'jquery';
-
+  wp_enqueue_media();
   wp_register_script('sa_attr_manager', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
+  wp_localize_script('sa_attr_manager', 'SA_WC_BLOCKS', [
+    'root' => esc_url_raw(rest_url()),
+    'nonce' => wp_create_nonce('wp_rest')
+  ]);
   wp_enqueue_script('sa_attr_manager');
 }
