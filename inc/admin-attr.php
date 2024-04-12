@@ -135,7 +135,7 @@ function add_term_fields_color($taxonomy)
 	<div class="form-field">
 		<label for="sa_wc_attr_swatch"><?php _e('Swatch color') ?></label>
 		<div id="sa_wc_attr_swatch_el">
-			<input type="text" name="sa_wc_attr_swatch[value]" id="sa_wc_attr_swatch" />
+			<input type="hidden" name="sa_wc_attr_swatch[value]" id="sa_wc_attr_swatch" />
 			<input type="hidden" name="sa_wc_attr_swatch[type]" value="color" />
 		</div>
 	</div>
@@ -184,7 +184,7 @@ function edit_term_fields_color($term, $taxonomy)
 		<th><label for="sa_wc_attr_swatch_color"><?php _e('Swatch label') ?></label></th>
 		<td>
 			<div id="sa_wc_attr_swatch_el">
-				<input name="sa_wc_attr_swatch[value]" id="sa_wc_attr_swatch_color" type="text" value="<?php echo esc_attr($data['value']) ?>" />
+				<input name="sa_wc_attr_swatch[value]" id="sa_wc_attr_swatch" type="hidden" value="<?php echo esc_attr($data['value']) ?>" />
 				<input type="hidden" name="sa_wc_attr_swatch[type]" value="color" />
 				<input type="hidden" name="sa_wc_attr_swatch[value2]" value="" />
 			</div>
@@ -202,7 +202,7 @@ function edit_term_fields_image($term, $taxonomy)
 		<th><label for="sa_wc_attr_swatch_image"><?php _e('Swatch image') ?></label></th>
 		<td>
 			<div id="sa_wc_attr_swatch_el">
-				<input name="sa_wc_attr_swatch[value]" id="sa_wc_attr_swatch_image" type="hidden" value="<?php echo esc_attr($data['value']) ?>" />
+				<input name="sa_wc_attr_swatch[value]" id="sa_wc_attr_swatch" type="hidden" value="<?php echo esc_attr($data['value']) ?>" />
 				<input type="hidden" name="sa_wc_attr_swatch[src]" value="" />
 				<input type="hidden" name="sa_wc_attr_swatch[id]" value="" />
 				<input type="hidden" name="sa_wc_attr_swatch[type]" value="image" />

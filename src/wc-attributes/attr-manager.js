@@ -1,5 +1,12 @@
-import { MediaUpload, MediaUploadCheck } from "@wordpress/block-editor";
-import { Button } from "@wordpress/components";
+import {
+	Button,
+	ColorPalette,
+	ColorPicker,
+	Popover,
+} from "@wordpress/components";
+// import { SketchPicker } from 'react-color';
+// import { Popover } from "react-tiny-popover";
+
 import React from "react";
 import { render, useState, useMemo, useEffect } from "@wordpress/element";
 import "./attr-manager.scss";
@@ -28,7 +35,7 @@ const postData = ({ url, path, method, data }) => {
 	});
 };
 
-const Image2 = ({ id, type, onChange, clear }) => {
+const Image2 = ({ id, onChange, clear }) => {
 	const [image, setImage] = useState(null);
 
 	const frame = useMemo(() => {
@@ -154,26 +161,122 @@ const Image2 = ({ id, type, onChange, clear }) => {
 	);
 };
 
+const ColorSwatch = ({ color, onChange, confirm }) => {
+	const [value, setValue] = useState(color);
+	const [isVisible, setIsVisible] = useState(false);
+
+	const handleOnChange = (color) => {
+		setValue(color);
+		if (!confirm) {
+			console.log("Call__on_change", color);
+			onChange?.(color);
+		}
+	};
+	const handleOnClear = () => {
+		setValue("");
+		if (confirm) {
+			onChange?.("");
+		}
+	};
+
+	const handleOnOk = () => {
+		if (confirm) {
+			onChange?.(value);
+			setIsVisible(false);
+		}
+	};
+
+	return (
+		<>
+			<div className="wc_swatch_color">
+				<div
+					style={{ background: value, pointer: "cursor" }}
+					onClick={() => {
+						setIsVisible(!isVisible);
+					}}
+				></div>
+				{isVisible && (
+					<Popover
+						className="wc_swatch_color_picker"
+						onClickOutside={() => {
+							setIsVisible(false);
+						}}
+						onClose={() => {
+							setIsVisible(false);
+						}}
+					>
+						<ColorPicker color={value} onChange={handleOnChange} />
+						{confirm && (
+							<div className="act">
+								<Button
+									isDestructive
+									onClick={handleOnClear}
+									size="small"
+									variant="secondary"
+								>
+									Clear
+								</Button>
+								<Button
+									onClick={() => setValue(color)}
+									size="small"
+									variant="secondary"
+								>
+									Reset
+								</Button>
+								<Button size="small" onClick={handleOnOk} variant="primary">
+									Save
+								</Button>
+							</div>
+						)}
+					</Popover>
+				)}
+			</div>
+		</>
+	);
+};
+
 const App = () => {
 	const onChange = (data) => {
 		console.log("onChange", data);
-		jQuery("input#sa_wc_attr_swatch").val(data?.id);
+		if (SA_WC_BLOCKS?.current_tax?.type === "sa_image") {
+			jQuery("input#sa_wc_attr_swatch").val(data?.id);
+		}
+		if (SA_WC_BLOCKS?.current_tax?.type === "sa_color") {
+			jQuery("input#sa_wc_attr_swatch").val(data);
+		}
 	};
 	return (
-		<Image2
-			id={window.SA_WC_BLOCKS?.current_term?.value}
-			clear={true}
-			autoSave={false}
-			onChange={onChange}
-			type="full"
-		/>
+		<>
+			{SA_WC_BLOCKS?.current_tax?.type === "sa_image" ? (
+				<Image2
+					id={window.SA_WC_BLOCKS?.current_term?.value}
+					clear={true}
+					autoSave={false}
+					onChange={onChange}
+					type="full"
+				/>
+			) : null}
+
+			{SA_WC_BLOCKS?.current_tax?.type === "sa_color" ? (
+				<ColorSwatch
+					color={window.SA_WC_BLOCKS?.current_term?.value}
+					onChange={onChange}
+				/>
+			) : null}
+		</>
 	);
 };
 
 const AppCol = ({ data }) => {
 	return (
 		<>
-			<Image2 id={data?.value} />
+			{SA_WC_BLOCKS?.current_tax?.type === "sa_image" ? (
+				<Image2 id={data?.value} />
+			) : null}
+
+			{SA_WC_BLOCKS?.current_tax?.type === "sa_color" ? (
+				<ColorSwatch confirm={true} color={data?.value} />
+			) : null}
 		</>
 	);
 };
