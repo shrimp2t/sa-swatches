@@ -19,3 +19,21 @@
 		height: 40px;
 	}
 }
+
+.wc_swatch_image_wrap[data-type="full"] {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	.wc_swatch_image_placeholder {
+		.dashicons {
+			font-size: 32px;
+			width: 32px;
+			height: 32px;
+		}
+	}
+	.act {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+}

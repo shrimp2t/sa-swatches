@@ -28,8 +28,8 @@ const postData = ({ url, path, method, data }) => {
 	});
 };
 
-const Image2 = ({ id }) => {
-	const [image, setImage] = useState(false);
+const Image2 = ({ id, type, onChange, clear }) => {
+	const [image, setImage] = useState(null);
 
 	const frame = useMemo(() => {
 		// https://github.com/WordPress/gutenberg/blob/HEAD/packages/block-editor/src/components/media-upload/README.md
@@ -57,10 +57,13 @@ const Image2 = ({ id }) => {
 				sizes.full = attachment.sizes?.full?.url;
 			}
 
-			setImage({
+			const data = {
 				id: attachment.id,
 				...sizes,
-			});
+			};
+
+			setImage(data);
+			onChange?.(data);
 		});
 
 		return f;
@@ -69,6 +72,17 @@ const Image2 = ({ id }) => {
 	const handleOpen = () => {
 		frame.open();
 	};
+
+	useEffect(() => {
+		if (clear) {
+			jQuery(window).on("taxonomy_term_added", (e, res) => {
+				const t = res?.responses?.[1]?.supplemental?.term_id;
+				console.log("Tax_added", t, res);
+				setImage(null);
+				onChange?.(null);
+			});
+		}
+	}, []);
 
 	useEffect(() => {
 		if (id)
@@ -91,34 +105,75 @@ const Image2 = ({ id }) => {
 							sizes.full = res?.media_details.sizes?.full?.url;
 						}
 
-						setImage({
+						const data = {
 							id: res?.id,
 							...sizes,
-						});
+						};
+
+						setImage(data);
 					} else {
 						setImage(false);
 					}
 				})
 				.catch((e) => console.log(e));
 	}, [id]);
+	const handleRemove = () => {
+		setImage(false);
+		onChange?.(false);
+	};
 
 	const src = image?.thumbnail ?? image?.full;
 
 	return (
-		<div onClick={handleOpen} className="wc_swatch_image">
-			{src ? (
-				<img src={src} alt="" />
-			) : (
-				<span className="wc_swatch_image_placeholder"></span>
-			)}
+		<div className="wc_swatch_image_wrap" data-type={type}>
+			<div onClick={handleOpen} className="wc_swatch_image">
+				{src ? (
+					<img src={src} alt="" />
+				) : (
+					<span className="wc_swatch_image_placeholder">
+						<span class="dashicons dashicons-format-image"></span>
+					</span>
+				)}
+			</div>
+			{"full" === type ? (
+				<div className="act">
+					<Button size="small" onClick={handleOpen} variant="secondary">
+						Upload
+					</Button>
+					<Button
+						onClick={handleRemove}
+						isDestructive
+						size="small"
+						variant="secondary"
+					>
+						Remove
+					</Button>
+				</div>
+			) : null}
 		</div>
 	);
 };
 
 const App = () => {
+	const onChange = (data) => {
+		console.log("onChange", data);
+		jQuery("input#sa_wc_attr_swatch").val(data?.id);
+	};
+	return (
+		<Image2
+			id={window.SA_WC_BLOCKS?.current_term?.value}
+			clear={true}
+			autoSave={false}
+			onChange={onChange}
+			type="full"
+		/>
+	);
+};
+
+const AppCol = ({ data }) => {
 	return (
 		<>
-			<Image2 id={73} />
+			<Image2 id={data?.value} />
 		</>
 	);
 };
@@ -128,7 +183,23 @@ const appEl = document.createElement("div");
 domNode.append(appEl);
 render(<App />, appEl);
 
+const renderCol = (el) => {
+	const data = el.data("swatch");
+	console.log(data);
+	el.addClass("sa_added");
+	render(<AppCol data={data} />, el.get(0));
+};
+
 jQuery(".sa_wc_swatch").each(function () {
 	const el = jQuery(this);
-	render(<App />, el.get(0));
+	renderCol(el);
+});
+
+jQuery(window).on("taxonomy_term_added", (e, res) => {
+	jQuery(".sa_wc_swatch")
+		.not(".sa_added")
+		.each(function () {
+			const el = jQuery(this);
+			renderCol(el);
+		});
 });

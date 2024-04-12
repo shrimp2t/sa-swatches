@@ -21,12 +21,86 @@ function get_swatch_data($term_id)
 }
 
 
+function get_current_tax()
+{
+	if (isset($_GET['taxonomy'])) {
+		return sanitize_text_field($_GET['taxonomy']);
+	}
+	return false;
+}
+
+
+function get_wc_tax_attrs()
+{
+	$key = 'sa_attr_map_types';
+	if (isset($GLOBALS[$key])) {
+		return $GLOBALS[$key];
+	}
+	$attribute_taxonomies = wc_get_attribute_taxonomies();
+	$attr_map_types = [];
+	if (!empty($attribute_taxonomies)) {
+		foreach ($attribute_taxonomies as $tax) {
+			$name =  wc_attribute_taxonomy_name($tax->attribute_name);
+			$attr_map_types[$name] = $tax->attribute_type;
+		}
+	}
+
+	$GLOBALS[$key] = $attr_map_types;
+	return $GLOBALS[$key];
+}
+
+function get_current_tax_type()
+{
+
+	$key = 'sa_current_tax_type';
+	if (isset($GLOBALS[$key])) {
+		return $GLOBALS[$key];
+	}
+
+	$t = get_current_tax();
+	$attrs = get_wc_tax_attrs();
+	$type =  $t && isset($attrs[$t]) ? $attrs[$t] : false;
+	$GLOBALS[$key] = [
+		'tax' => $t,
+		'type' => $type,
+	];
+
+	return $GLOBALS[$key];
+}
+
+function save_term_fields($term_id)
+{
+
+	if (isset($_POST['sa_wc_attr_swatch'])) {
+		update_term_meta(
+			$term_id,
+			'_sa_wc_swatch',
+			json_encode($_POST['sa_wc_attr_swatch'])
+		);
+	}
+}
+
+
+function get_term_swatch($term_id)
+{
+	$data = get_term_meta($term_id, '_sa_wc_swatch', true);
+	$data = json_decode($data);
+	if (!is_array($data)) {
+		$data = [];
+	}
+
+	$data = wp_parse_args($data, ['value' => '', 'type' => '']);
+	return $data;
+}
+
+
 function column_content($content, $column_name, $term_id)
 {
 	switch ($column_name) {
 		case 'swatch':
+			$tax =  get_current_tax_type();
 			$data = get_swatch_data($term_id);
-			$content =  '<div class="sa_wc_swatch">' . esc_html($data['value']) . '</div>';
+			$content =  '<div data-tax="' . esc_attr($tax['tax']) . '" data-swatch="' . esc_attr(json_encode($data)) . '" data-tax-type="' . esc_attr($tax['type']) . '" data-term_id="' . esc_attr($term_id) . '"  class="sa_wc_swatch">' . esc_html($data['value']) . '</div>';
 			break;
 		default:
 			break;
@@ -75,7 +149,7 @@ function add_term_fields_image($taxonomy)
 
 		<label for="sa_wc_attr_swatch"><?php _e('Swatch image') ?></label>
 		<div id="sa_wc_attr_swatch_el">
-			<input type="text" name="sa_wc_attr_swatch[value]" id="sa_wc_attr_swatch" />
+			<input type="hidden" name="sa_wc_attr_swatch[value]" id="sa_wc_attr_swatch" />
 			<input type="hidden" name="sa_wc_attr_swatch[type]" value="image" />
 		</div>
 	</div>
@@ -128,7 +202,7 @@ function edit_term_fields_image($term, $taxonomy)
 		<th><label for="sa_wc_attr_swatch_image"><?php _e('Swatch image') ?></label></th>
 		<td>
 			<div id="sa_wc_attr_swatch_el">
-				<input name="sa_wc_attr_swatch[value]" id="sa_wc_attr_swatch_image" type="text" value="<?php echo esc_attr($data['value']) ?>" />
+				<input name="sa_wc_attr_swatch[value]" id="sa_wc_attr_swatch_image" type="hidden" value="<?php echo esc_attr($data['value']) ?>" />
 				<input type="hidden" name="sa_wc_attr_swatch[src]" value="" />
 				<input type="hidden" name="sa_wc_attr_swatch[id]" value="" />
 				<input type="hidden" name="sa_wc_attr_swatch[type]" value="image" />
@@ -139,17 +213,6 @@ function edit_term_fields_image($term, $taxonomy)
 }
 
 
-function save_term_fields($term_id)
-{
-
-	if (isset($_POST['sa_wc_attr_swatch'])) {
-		update_term_meta(
-			$term_id,
-			'_sa_wc_swatch',
-			json_encode($_POST['sa_wc_attr_swatch'])
-		);
-	}
-}
 
 function manage_attr_columns()
 {
@@ -198,6 +261,8 @@ function maybe_change_admin_js($src, $handle)
 	return $src;
 }
 
+
+
 function admin_scripts()
 {
 
@@ -205,8 +270,9 @@ function admin_scripts()
 	$screen_id = $screen ? $screen->id : '';
 	$taxonomy = $screen ? $screen->taxonomy : '';
 
-	$attrs = wc_get_attribute_taxonomy_names();
-	if (!in_array($taxonomy, $attrs)) {
+	$attrs = get_wc_tax_attrs();
+
+	if (!isset($attrs[$taxonomy])) {
 		return;
 	}
 
@@ -219,10 +285,19 @@ function admin_scripts()
 	wp_enqueue_media();
 	wp_register_script('sa_attr_manager', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
 	wp_register_style('sa_attr_manager', $assets['files']['css'], [], $assets['version']);
-	wp_localize_script('sa_attr_manager', 'SA_WC_BLOCKS', [
+
+	$config =  [
 		'root' => esc_url_raw(rest_url()),
-		'nonce' => wp_create_nonce('wp_rest')
-	]);
+		'nonce' => wp_create_nonce('wp_rest'),
+		'current_tax' => get_current_tax_type(),
+	];
+
+	if (isset($_GET['tag_ID'])) {
+		$config['current_term'] = get_swatch_data(absint($_GET['tag_ID']));
+	}
+
+
+	wp_localize_script('sa_attr_manager', 'SA_WC_BLOCKS', $config);
 	wp_enqueue_script('sa_attr_manager');
 	wp_enqueue_style('sa_attr_manager');
 
