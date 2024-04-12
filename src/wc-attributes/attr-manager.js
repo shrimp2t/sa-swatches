@@ -168,7 +168,6 @@ const ColorSwatch = ({ color, onChange, confirm }) => {
 	const handleOnChange = (color) => {
 		setValue(color);
 		if (!confirm) {
-			console.log("Call__on_change", color);
 			onChange?.(color);
 		}
 	};

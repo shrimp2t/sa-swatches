@@ -288,6 +288,7 @@ function admin_scripts()
 
 	$config =  [
 		'root' => esc_url_raw(rest_url()),
+		'ajax' => admin_url('admin-ajax.php'),
 		'nonce' => wp_create_nonce('wp_rest'),
 		'current_tax' => get_current_tax_type(),
 	];
