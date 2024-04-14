@@ -11,21 +11,36 @@ import React from "react";
 import { render, useState, useMemo, useEffect } from "@wordpress/element";
 import "./attr-manager.scss";
 
-const postData = ({ url, path, method, data }) => {
+const sendReq = ({ url, path, method, data, body, params }) => {
 	return new Promise((resolve, reject) => {
-		let reqUrl = url ? url : window.SA_WC_BLOCKS.root + path;
+		let reqUrl = url ? url : window?.SA_WC_BLOCKS?.root + path;
 		const args = {
 			method: method || "get", // *GET, POST, PUT, DELETE, etc.
 			cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
 			headers: {
 				"Content-Type": "application/json",
-				"X-WP-Nonce": window.SA_WC_BLOCKS.nonce,
+				"X-WP-Nonce": window?.SA_WC_BLOCKS?.nonce,
 			},
 			redirect: "follow", // manual, *follow, error
 		};
 
 		if (data) {
-			args.data = JSON.stringify(data);
+			args.body = JSON.stringify(data);
+		}
+		if (body) {
+			args.body = JSON.stringify(body);
+		}
+
+		if (params) {
+			const sp = new URLSearchParams(params || {});
+			const q = sp.toString();
+			if (q.length) {
+				if (reqUrl?.includes("?")) {
+					reqUrl += "&" + q;
+				} else {
+					reqUrl += "?" + q;
+				}
+			}
 		}
 
 		fetch(reqUrl, args)
@@ -35,7 +50,7 @@ const postData = ({ url, path, method, data }) => {
 	});
 };
 
-const Image2 = ({ id, onChange, clear }) => {
+const Image2 = ({ id, type, onChange, clear }) => {
 	const [image, setImage] = useState(null);
 
 	const frame = useMemo(() => {
@@ -93,7 +108,7 @@ const Image2 = ({ id, onChange, clear }) => {
 
 	useEffect(() => {
 		if (id)
-			postData({
+			sendReq({
 				path: `wp/v2/media/${id}?_fields=id,media_details`,
 			})
 				.then((res) => {
@@ -266,15 +281,45 @@ const App = () => {
 	);
 };
 
-const AppCol = ({ data }) => {
+const AppCol = ({ data, term_id }) => {
+	// console.log("Load_data", data);
+	const onChange = (changeData) => {
+		// console.log("onChange__col", changeData);
+
+		let saveData = {
+			...SA_WC_BLOCKS.current_tax,
+			term_id,
+		};
+		if (SA_WC_BLOCKS?.current_tax?.type === "sa_image") {
+			saveData.value = changeData.id;
+		}
+		if (SA_WC_BLOCKS?.current_tax?.type === "sa_color") {
+			saveData.value = changeData;
+		}
+
+		// console.log("saveData", saveData);
+
+		sendReq({
+			url: SA_WC_BLOCKS?.ajax,
+			method: "post",
+			data: saveData,
+			params: {
+				endpoint: "update_term_swatch",
+			},
+		})
+			.then((res) => {
+				console.log("Update_meta", res);
+			})
+			.catch((e) => console.log(e));
+	};
 	return (
 		<>
 			{SA_WC_BLOCKS?.current_tax?.type === "sa_image" ? (
-				<Image2 id={data?.value} />
+				<Image2 id={data?.value} onChange={onChange} />
 			) : null}
 
 			{SA_WC_BLOCKS?.current_tax?.type === "sa_color" ? (
-				<ColorSwatch confirm={true} color={data?.value} />
+				<ColorSwatch confirm={true} onChange={onChange} color={data?.value} />
 			) : null}
 		</>
 	);
@@ -287,9 +332,9 @@ render(<App />, appEl);
 
 const renderCol = (el) => {
 	const data = el.data("swatch");
-	console.log(data);
+	const term_id = el.data("term_id");
 	el.addClass("sa_added");
-	render(<AppCol data={data} />, el.get(0));
+	render(<AppCol data={data} term_id={term_id} />, el.get(0));
 };
 
 jQuery(".sa_wc_swatch").each(function () {

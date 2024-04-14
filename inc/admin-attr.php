@@ -100,7 +100,11 @@ function column_content($content, $column_name, $term_id)
 		case 'swatch':
 			$tax =  get_current_tax_type();
 			$data = get_swatch_data($term_id);
-			$content =  '<div data-tax="' . esc_attr($tax['tax']) . '" data-swatch="' . esc_attr(json_encode($data)) . '" data-tax-type="' . esc_attr($tax['type']) . '" data-term_id="' . esc_attr($term_id) . '"  class="sa_wc_swatch">' . esc_html($data['value']) . '</div>';
+			if (in_array($tax['type'], ['sa_color', 'sa_image'])) {
+				$content =  '<div data-tax="' . esc_attr($tax['tax']) . '" data-swatch="' . esc_attr(json_encode($data)) . '" data-tax-type="' . esc_attr($tax['type']) . '" data-term_id="' . esc_attr($term_id) . '"  class="sa_wc_swatch"></div>';
+			} else {
+				$content = esc_html($data['value']);
+			}
 			break;
 		default:
 			break;
@@ -288,7 +292,7 @@ function admin_scripts()
 
 	$config =  [
 		'root' => esc_url_raw(rest_url()),
-		'ajax' => admin_url('admin-ajax.php'),
+		'ajax' => add_query_arg(['action' => 'sa_wc_ajax', 'nonce' => wp_create_nonce('sa_wc_ajax')], admin_url('admin-ajax.php')),
 		'nonce' => wp_create_nonce('wp_rest'),
 		'current_tax' => get_current_tax_type(),
 	];

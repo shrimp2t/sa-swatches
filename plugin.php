@@ -23,6 +23,7 @@ define('SA_WC_BLOCKS_PATH', dirname(__FILE__));
 define('SA_WC_BLOCKS_VERSION', '0.1.0');
 
 require_once SA_WC_BLOCKS_PATH . '/inc/functions.php';
+require_once SA_WC_BLOCKS_PATH . '/api/api.php';
 require_once SA_WC_BLOCKS_PATH . '/inc/admin-attr.php';
 
 function render_block_core_archives()

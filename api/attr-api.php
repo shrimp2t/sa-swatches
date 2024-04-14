@@ -1,23 +1,30 @@
 <?php
 
-add_action('wp_ajax_loadpost', 'loadpost_init');
-add_action('wp_ajax_nopriv_loadpost', 'loadpost_init');
-function loadpost_init()
+namespace SA_WC_BLOCKS\API\Attrs;
+
+add_action('sa_wc_api/update_term_swatch', __NAMESPACE__ . '\update_term_swatch');
+
+function update_term_swatch($post)
 {
-	ob_start(); //bắt đầu bộ nhớ đệm
-	$post_new = new WP_Query(array(
-		'post_type' =>  'post',
-		'posts_per_page'    =>  '5'
-	));
-	if ($post_new->have_posts()) :
-		echo '<ul>';
-		while ($post_new->have_posts()) : $post_new->the_post();
-			echo '<li>' . get_the_title() . '</li>';
-		endwhile;
-		echo '</ul>';
-	endif;
-	wp_reset_query();
-	$result = ob_get_clean(); //cho hết bộ nhớ đệm vào biến $result
-	wp_send_json_success($result); // trả về giá trị dạng json
-	die(); //bắt buộc phải có khi kết thúc
+	$tax = isset($post['tax']) ? sanitize_text_field($post['tax']) : '';
+	$term_id = isset($post['term_id']) ? absint($post['term_id']) : '';
+	$value = isset($post['value']) ? sanitize_text_field($post['value']) : '';
+	$type = isset($post['type']) ? sanitize_text_field($post['type']) : '';
+
+	$data = [
+		'type' => $type,
+		'value' => $value,
+	];
+
+	update_term_meta(
+		$term_id,
+		'_sa_wc_swatch',
+		json_encode($data)
+	);
+
+	wp_send_json([
+		'success' => true,
+		'term_id' => $term_id,
+		'data' => $data,
+	]);
 }
