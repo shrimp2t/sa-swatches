@@ -25,6 +25,7 @@ define('SA_WC_BLOCKS_VERSION', '0.1.0');
 require_once SA_WC_BLOCKS_PATH . '/inc/functions.php';
 require_once SA_WC_BLOCKS_PATH . '/api/api.php';
 require_once SA_WC_BLOCKS_PATH . '/inc/admin-attr.php';
+require_once SA_WC_BLOCKS_PATH . '/inc/admin-attr-product.php';
 
 function render_block_core_archives()
 {
@@ -138,39 +139,3 @@ function add_attribute_types($options)
 add_filter('product_attributes_type_selector', __NAMESPACE__ . '\add_attribute_types', 9999);
 
 
-// do_action( 'woocommerce_product_option_terms', $attribute_taxonomy, $i, $attribute );
-
-function woocommerce_product_option_terms($attribute_taxonomy, $i, $attribute)
-{
-	if (strpos($attribute_taxonomy->attribute_type, 'sa_') === false) {
-		return;
-	}
-?>
-	<select multiple="multiple"  data-return_id="id"
-	data-placeholder="<?php esc_attr_e('Select values', 'woocommerce'); ?>"
-	class="multiselect attribute_values wc-taxonomy-term-search----" name="attribute_values[<?php echo esc_attr($i); ?>][]" data-taxonomy="<?php echo esc_attr($attribute->get_taxonomy()); ?>">
-		<?php
-		$selected_terms = $attribute->get_terms();
-		if ($selected_terms) {
-			foreach ($selected_terms as $selected_term) {
-				/**
-				 * Filter the selected attribute term name.
-				 *
-				 * @since 3.4.0
-				 * @param string  $name Name of selected term.
-				 * @param array   $term The selected term object.
-				 */
-				echo '<option value="' . esc_attr($selected_term->term_id) . '" selected="selected">' . esc_html(apply_filters('woocommerce_product_attribute_term_name', $selected_term->name, $selected_term)) . '</option>';
-			}
-		}
-		?>
-	</select>
-	<button class="button plus select_all_attributes"><?php esc_html_e('Select all', 'woocommerce'); ?></button>
-	<button class="button minus select_no_attributes"><?php esc_html_e('Select none', 'woocommerce'); ?></button>
-	<button class="button fr plus add_new_attribute"><?php esc_html_e('Create value', 'woocommerce'); ?></button>
-
-<?php
-
-}
-
-add_action('woocommerce_product_option_terms', __NAMESPACE__ . '\woocommerce_product_option_terms', 10, 3);

@@ -273,9 +273,7 @@ function admin_scripts()
 	$screen    = get_current_screen();
 	$screen_id = $screen ? $screen->id : '';
 	$taxonomy = $screen ? $screen->taxonomy : '';
-
 	$attrs = get_wc_tax_attrs();
-
 	if (!isset($attrs[$taxonomy])) {
 		return;
 	}
@@ -300,7 +298,6 @@ function admin_scripts()
 	if (isset($_GET['tag_ID'])) {
 		$config['current_term'] = get_swatch_data(absint($_GET['tag_ID']));
 	}
-
 
 	wp_localize_script('sa_attr_manager', 'SA_WC_BLOCKS', $config);
 	wp_enqueue_script('sa_attr_manager');
