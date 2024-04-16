@@ -1,0 +1,19 @@
+.sa-list-term {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	.term-item {
+		display: flex;
+		gap: 5px;
+		align-items: center;
+		border: 1px solid #ededed;
+		padding: 5px;
+		img,
+		.color {
+			width: 40px;
+			height: 40px;
+			display: block;
+			object-fit: cover;
+		}
+	}
+}

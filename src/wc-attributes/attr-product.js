@@ -1,14 +1,14 @@
-
 import {
 	Button,
 	ColorPalette,
 	ColorPicker,
 	Popover,
+	Modal,
 } from "@wordpress/components";
 
 import React from "react";
 import { render, useState, useMemo, useEffect } from "@wordpress/element";
-import './attr-product.scss'
+import "./attr-product.scss";
 
 const sendReq = ({ url, path, method, data, body, params }) => {
 	return new Promise((resolve, reject) => {
@@ -248,43 +248,104 @@ const ColorSwatch = ({ color, onChange, confirm }) => {
 	);
 };
 
-const App = () => {
-	const onChange = (data) => {
-		console.log("onChange", data);
-		if (SA_WC_BLOCKS?.current_tax?.type === "sa_image") {
-			jQuery("input#sa_wc_attr_swatch").val(data?.id);
-		}
-		if (SA_WC_BLOCKS?.current_tax?.type === "sa_color") {
-			jQuery("input#sa_wc_attr_swatch").val(data);
-		}
-	};
+const ListItems = ({ list, taxonomy }) => {
+	return (
+		<div className="sa-list-term">
+			{list.map((term) => {
+				return (
+					<div className="term-item" key={`${taxonomy}-${term.id}`}>
+						{term?.swatch?.type === "sa_image" ? (
+							<span className="img">
+								<img
+									src={term?.swatch?.thumbnail || term?.swatch?.full || ""}
+									alt=""
+								/>
+							</span>
+						) : null}
+						{term?.swatch?.type === "sa_color" ? (
+							<span
+								className="color"
+								style={{ background: `${term?.swatch?.value}` }}
+							></span>
+						) : null}
+						<span className="name">{term.name}</span>
+					</div>
+				);
+			})}
+		</div>
+	);
+};
+
+const App = ({ title, taxonomy, selected }) => {
+	const [isOpen, setOpen] = useState(false);
+	const [list, setList] = useState([]);
+
+	const onChange = (data) => {};
+
+	useEffect(() => {
+		sendReq({
+			url: SA_WC_BLOCKS?.ajax,
+			method: "post",
+			params: {
+				endpoint: "get_terms",
+			},
+			data: {
+				taxonomy,
+				selected: Array.isArray(selected) ? selected.join(",") : [selected],
+			},
+		})
+			.then((res) => {
+				console.log("get_tax_term", taxonomy, res);
+				if (res?.data) {
+					setList(res?.data);
+				}
+			})
+			.catch((e) => console.log(e));
+	}, []);
+
+	let selectedList = [];
+	if (list?.length && selected?.length) {
+		selectedList = selected
+			.map((id) => {
+				const m = list.filter((i) => i.id === id);
+				if (m?.length) {
+					return m[0];
+				}
+				return false;
+			})
+			.filter((e) => e);
+	}
+
 	return (
 		<>
-			{SA_WC_BLOCKS?.current_tax?.type === "sa_image" ? (
-				<Image2
-					id={window.SA_WC_BLOCKS?.current_term?.value}
-					clear={true}
-					autoSave={false}
-					onChange={onChange}
-					type="full"
-				/>
-			) : null}
-
-			{SA_WC_BLOCKS?.current_tax?.type === "sa_color" ? (
-				<ColorSwatch
-					color={window.SA_WC_BLOCKS?.current_term?.value}
-					onChange={onChange}
-				/>
-			) : null}
+			<ListItems list={selectedList} taxonomy={taxonomy} />
+			<Button variant="secondary" onClick={() => setOpen(true)}>
+				Open Modal
+			</Button>
+			{isOpen && (
+				<Modal
+					title={title}
+					size="small"
+					className="sa_swatch_modal"
+					onRequestClose={() => setOpen(false)}
+				>
+					<ListItems list={list} taxonomy={taxonomy} />
+				</Modal>
+			)}
 		</>
 	);
 };
 
-
-jQuery('.sa_attr_swatches').each(function() {
-  const el = jQuery(this);
-  const div = jQuery( '<div/>' );
-  div.insertAfter(el);
-  div.html('tesst');
-
-})
+jQuery(".sa_attr_swatches").each(function () {
+	const el = jQuery(this);
+	const div = jQuery("<span/>");
+	div.insertAfter(el);
+	const title = el.data("title");
+	const selected = el.data("selected");
+	const taxonomy = el.data("taxonomy");
+	console.log("selected", selected, taxonomy);
+	render(
+		<App title={title} taxonomy={taxonomy} selected={selected} />,
+		div.get(0),
+	);
+});

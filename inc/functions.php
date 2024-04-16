@@ -24,3 +24,23 @@ function get_assets($path)
 
 	return $assets;
 }
+
+
+
+function get_wc_tax_attrs()
+{
+	$key = 'sa_attr_map_types';
+	if (isset($GLOBALS[$key])) {
+		return $GLOBALS[$key];
+	}
+	$attribute_taxonomies = wc_get_attribute_taxonomies();
+	$attr_map_types = [];
+	if (!empty($attribute_taxonomies)) {
+		foreach ($attribute_taxonomies as $tax) {
+			$name =  wc_attribute_taxonomy_name($tax->attribute_name);
+			$attr_map_types[$name] = $tax->attribute_type;
+		}
+	}
+	$GLOBALS[$key] = $attr_map_types;
+	return $attr_map_types;
+}

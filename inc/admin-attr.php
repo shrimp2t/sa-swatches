@@ -3,6 +3,7 @@
 namespace SA_WC_BLOCKS\Admin\Attr;
 
 use function SA_WC_BLOCKS\get_assets;
+use function SA_WC_BLOCKS\get_wc_tax_attrs;
 
 function get_swatch_data($term_id)
 {
@@ -30,24 +31,7 @@ function get_current_tax()
 }
 
 
-function get_wc_tax_attrs()
-{
-	$key = 'sa_attr_map_types';
-	if (isset($GLOBALS[$key])) {
-		return $GLOBALS[$key];
-	}
-	$attribute_taxonomies = wc_get_attribute_taxonomies();
-	$attr_map_types = [];
-	if (!empty($attribute_taxonomies)) {
-		foreach ($attribute_taxonomies as $tax) {
-			$name =  wc_attribute_taxonomy_name($tax->attribute_name);
-			$attr_map_types[$name] = $tax->attribute_type;
-		}
-	}
 
-	$GLOBALS[$key] = $attr_map_types;
-	return $GLOBALS[$key];
-}
 
 function get_current_tax_type()
 {
