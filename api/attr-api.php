@@ -59,6 +59,7 @@ function get_tax_terms($post)
 
 	$tax = isset($post['taxonomy']) ? sanitize_text_field($post['taxonomy']) : '';
 	$selected = isset($post['selected']) ? sanitize_text_field($post['selected']) : '';
+	$search = isset($post['search']) ? sanitize_text_field($post['search']) : '';
 	// $selected = explode(',', $selected);
 	// $selected = array_map('absint', $selected);
 
@@ -73,14 +74,20 @@ function get_tax_terms($post)
 		'orderby'  => 'name',
 		'order'  => 'ASC',
 		'number' => 30,
+		'search' => $search,
 	));
 
-	$terms_selected = get_terms(array(
-		'taxonomy' => $tax, //Custom taxonomy name
-		'hide_empty' => false,
-		'orderby'  => 'include',
-		'include' => $selected,
-	));
+	if ($selected) {
+		$terms_selected = get_terms(array(
+			'taxonomy' => $tax, //Custom taxonomy name
+			'hide_empty' => false,
+			'orderby'  => 'include',
+			'include' => $selected,
+		));
+	} else {
+		$terms_selected = [];
+	}
+
 
 	if (is_wp_error($terms)) {
 		$terms  = [];

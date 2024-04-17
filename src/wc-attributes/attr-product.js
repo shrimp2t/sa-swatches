@@ -11,7 +11,7 @@ import { render, useState, useMemo, useEffect } from "@wordpress/element";
 import { ReactSortable } from "react-sortablejs";
 import "./attr-product.scss";
 
-const sendReq = ({ url, path, method, data, body, params }) => {
+const sendReq = ({ url, path, method, data, body, params, signal }) => {
 	return new Promise((resolve, reject) => {
 		let reqUrl = url ? url : window?.SA_WC_BLOCKS?.root + path;
 		const args = {
@@ -23,6 +23,10 @@ const sendReq = ({ url, path, method, data, body, params }) => {
 			},
 			redirect: "follow", // manual, *follow, error
 		};
+
+		if ( signal ) {
+			args.signal = signal;
+		}
 
 		if (data) {
 			args.body = JSON.stringify(data);
@@ -321,36 +325,58 @@ const ColSwatch = ({ term, tax, type }) => {
 const App = ({ title, taxonomy, selected, onChange }) => {
 	const [isOpen, setOpen] = useState(false);
 	const [isChanged, setIsChanged] = useState(false);
+	const [loadSelected, setLoadSelected] = useState(false);
 	const [list, setList] = useState([]);
 	const [selectedList, setSelectdList] = useState([]);
 	const [type, setType] = useState(false);
+	const [search, setSearch] = useState('');
 
 	useEffect(() => {
+
+		const controller = new AbortController();
+		const signal = controller.signal;
+
+		const body = {
+			taxonomy,
+		}
+		if (!search?.length && selected?.length) {
+			if (!loadSelected) {
+				body.selected = Array.isArray(selected) ? selected.join(",") : [selected];
+			}
+		} else {
+			body.search = search
+		}
+
 		sendReq({
 			url: SA_WC_BLOCKS?.ajax,
 			method: "post",
+			signal,
 			params: {
 				endpoint: "get_terms",
 			},
-			data: {
-				taxonomy,
-				selected: Array.isArray(selected) ? selected.join(",") : [selected],
-			},
+			data: body,
 		})
 			.then((res) => {
 				console.log("get_tax_term", taxonomy, res);
 				if (res?.data) {
 					setList(res?.data);
 				}
-				if (res?.selected) {
-					setSelectdList(res?.selected);
+
+				if (!loadSelected) {
+					if (res?.selected) {
+						setLoadSelected(true);
+						setSelectdList(res?.selected);
+					}
 				}
 				if (res?.selected) {
 					setType(res?.type);
 				}
 			})
 			.catch((e) => console.log(e));
-	}, []);
+		return () => {
+			controller.abort();
+		}
+	}, [search]);
 
 	useEffect(() => {
 		if (isChanged) {
@@ -396,9 +422,8 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 					className="sa_swatch_modal"
 					onRequestClose={() => setOpen(false)}
 					headerActions={
-
 						<>
-							<input type="search" placeholder="Search" />
+							<input type="search" onChange={e => setSearch(e.target.value)} value={search || ''} placeholder="Search" />
 							<button className="button">Add new</button>
 						</>
 					}
