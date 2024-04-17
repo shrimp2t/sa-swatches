@@ -50,7 +50,7 @@ const sendReq = ({ url, path, method, data, body, params }) => {
 	});
 };
 
-const Image2 = ({ id, type, onChange, clear }) => {
+const Image2 = ({ term, type, onChange, clear }) => {
 	const [image, setImage] = useState(null);
 
 	const frame = useMemo(() => {
@@ -106,45 +106,13 @@ const Image2 = ({ id, type, onChange, clear }) => {
 		}
 	}, []);
 
-	useEffect(() => {
-		if (id)
-			sendReq({
-				path: `wp/v2/media/${id}?_fields=id,media_details`,
-			})
-				.then((res) => {
-					if (res?.id) {
-						const sizes = {};
-						if (res?.media_details.sizes?.thumbnail?.source_url) {
-							sizes.thumbnail = res?.media_details.sizes?.thumbnail?.source_url;
-						}
-						if (res?.media_details.sizes?.thumbnail?.url) {
-							sizes.thumbnail = res?.media_details.sizes?.thumbnail?.url;
-						}
-						if (res?.media_details.sizes?.full?.source_url) {
-							sizes.full = res?.media_details.sizes?.full?.source_url;
-						}
-						if (res?.media_details.sizes?.full?.url) {
-							sizes.full = res?.media_details.sizes?.full?.url;
-						}
 
-						const data = {
-							id: res?.id,
-							...sizes,
-						};
-
-						setImage(data);
-					} else {
-						setImage(false);
-					}
-				})
-				.catch((e) => console.log(e));
-	}, [id]);
 	const handleRemove = () => {
 		setImage(false);
 		onChange?.(false);
 	};
 
-	const src = image?.thumbnail ?? image?.full;
+	const src = term?.swatch?.thumbnail || term?.swatch?.full
 
 	return (
 		<div className="wc_swatch_image_wrap" data-type={type}>
@@ -339,7 +307,7 @@ const ColSwatch = ({ term, tax, type }) => {
 	return (
 		<>
 			{type === "sa_image" ? (
-				<Image2 id={term?.swatch?.value} onChange={onChange} />
+				<Image2 term={term} onChange={onChange} />
 			) : null}
 
 			{type === "sa_color" ? (

@@ -7,7 +7,7 @@ use function SA_WC_BLOCKS\get_wc_tax_attrs;
 add_action('sa_wc_api/update_term_swatch', __NAMESPACE__ . '\update_term_swatch');
 add_action('sa_wc_api/get_terms', __NAMESPACE__ . '\get_tax_terms');
 
-function get_swatch_data($term_id)
+function get_swatch_data($term_id, $type = null)
 {
 
 	$data = json_decode(get_term_meta($term_id, '_sa_wc_swatch', true), true);
@@ -20,7 +20,7 @@ function get_swatch_data($term_id)
 		'type' => '',
 	]);
 
-	if ($data['type'] === 'sa_image' && $data['value']) {
+	if ($type === 'sa_image' && $data['value']) {
 		$thumb =  wp_get_attachment_image_src($data['value'], 'thumbnail');
 		if ($thumb) {
 			$data['thumbnail'] =  $thumb[0];
@@ -40,7 +40,7 @@ function get_terms_data($terms, $type = null)
 
 	$list = [];
 	foreach ($terms as $term) {
-		$swatch = get_swatch_data($term->term_id);
+		$swatch = get_swatch_data($term->term_id, $type);
 		$swatch['type'] = $type;
 		$list[] = [
 			'id' => $term->term_id,
