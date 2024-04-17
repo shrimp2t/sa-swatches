@@ -8,6 +8,7 @@ import {
 
 import React from "react";
 import { render, useState, useMemo, useEffect } from "@wordpress/element";
+import { ReactSortable } from "react-sortablejs";
 import "./attr-product.scss";
 
 const sendReq = ({ url, path, method, data, body, params }) => {
@@ -248,39 +249,113 @@ const ColorSwatch = ({ color, onChange, confirm }) => {
 	);
 };
 
-const ListItems = ({ list, taxonomy }) => {
+const LisTermItem = ({ term, onClick, selectedList, showClose = false, onClose, showChecked = false, showMove = false }) => {
+
+	const classes = ['term-item'];
+	let isSelected = false;
+	if (selectedList?.length) {
+		if (selectedList.filter(i => i.id === term.id).length) {
+			classes.push('selected');
+			isSelected = true;
+		}
+	}
+
 	return (
-		<div className="sa-list-term">
-			{list.map((term) => {
-				return (
-					<div className="term-item" key={`${taxonomy}-${term.id}`}>
-						{term?.swatch?.type === "sa_image" ? (
-							<span className="img">
-								<img
-									src={term?.swatch?.thumbnail || term?.swatch?.full || ""}
-									alt=""
-								/>
-							</span>
-						) : null}
-						{term?.swatch?.type === "sa_color" ? (
-							<span
-								className="color"
-								style={{ background: `${term?.swatch?.value}` }}
-							></span>
-						) : null}
-						<span className="name">{term.name}</span>
-					</div>
-				);
-			})}
+		<div className={classes.join(' ')} onClick={() => onClick?.(term)} key={term.id}>
+
+			{term?.swatch?.type === "sa_image" ? (
+				<span className="img">
+					<img
+						src={term?.swatch?.thumbnail || term?.swatch?.full || ""}
+						alt=""
+					/>
+				</span>
+			) : null}
+			{term?.swatch?.type === "sa_color" ? (
+				<span
+					className="color"
+					style={{ background: `${term?.swatch?.value}` }}
+				></span>
+			) : null}
+			<span className="name">{term.name}</span>
+
+			{/* {showssMove ? (<span className="move ic" ><span className="dashicons dashicons-move"></span></span>) : null} */}
+			{showClose ? (<span className="close ic" onClick={() => onClose?.(term)}><span className="dashicons dashicons-no-alt"></span></span>) : null}
+			{showChecked ? (<span className={isSelected ? 'close ic' : 'add ic'}><span className={isSelected ? 'dashicons dashicons-no-alt' : 'dashicons dashicons-plus'}></span></span>) : null}
 		</div>
+	);
+}
+
+
+
+const SortabListTerms = ({ list, onSorted, onClick, selectedList, showClose = false, onClose, showChecked = false }) => {
+
+	return (
+		<ReactSortable list={list} setList={onSorted} className="sa-list-term"
+		// handle=".move"
+
+		>
+			{list.map((term) => {
+				return <LisTermItem term={term} showMove={true} onClose={onClose} onClick={onClick} showClose={showClose} selectedList={selectedList} showChecked={showChecked} />
+			})}
+		</ReactSortable >
 	);
 };
 
-const App = ({ title, taxonomy, selected }) => {
-	const [isOpen, setOpen] = useState(false);
-	const [list, setList] = useState([]);
 
-	const onChange = (data) => {};
+
+const ColSwatch = ({ term, tax, type }) => {
+	// console.log("Load_data", data);
+	const onChange = (changeData) => {
+		// console.log("onChange__col", changeData);
+
+		let saveData = {
+			tax,
+			type,
+			term_id: term.id,
+		};
+		if (type === "sa_image") {
+			saveData.value = changeData.id;
+		}
+		if (type === "sa_color") {
+			saveData.value = changeData;
+		}
+
+		// console.log("saveData", saveData);
+
+		sendReq({
+			url: SA_WC_BLOCKS?.ajax,
+			method: "post",
+			data: saveData,
+			params: {
+				endpoint: "update_term_swatch",
+			},
+		})
+			.then((res) => {
+				console.log("Update_meta", res);
+			})
+			.catch((e) => console.log(e));
+	};
+	return (
+		<>
+			{type === "sa_image" ? (
+				<Image2 id={term?.swatch?.value} onChange={onChange} />
+			) : null}
+
+			{type === "sa_color" ? (
+				<ColorSwatch confirm={true} onChange={onChange} color={term?.swatch?.value} />
+			) : null}
+		</>
+	);
+};
+
+
+const App = ({ title, taxonomy, selected, onChange }) => {
+	const [isOpen, setOpen] = useState(false);
+	const [isChanged, setIsChanged] = useState(false);
+	const [list, setList] = useState([]);
+	const [selectedList, setSelectdList] = useState([]);
+	const [type, setType] = useState(false);
 
 	useEffect(() => {
 		sendReq({
@@ -299,53 +374,141 @@ const App = ({ title, taxonomy, selected }) => {
 				if (res?.data) {
 					setList(res?.data);
 				}
+				if (res?.selected) {
+					setSelectdList(res?.selected);
+				}
+				if (res?.selected) {
+					setType(res?.type);
+				}
 			})
 			.catch((e) => console.log(e));
 	}, []);
 
-	let selectedList = [];
-	if (list?.length && selected?.length) {
-		selectedList = selected
-			.map((id) => {
-				const m = list.filter((i) => i.id === id);
-				if (m?.length) {
-					return m[0];
-				}
-				return false;
-			})
-			.filter((e) => e);
+	useEffect(() => {
+		if (isChanged) {
+			onChange(selectedList)
+		}
+	}, [selectedList]);
+
+	const handleAddItem = (item) => {
+		setIsChanged(true);
+		setSelectdList(prev => {
+			if (prev.filter(i => i.id === item.id).length) {
+				return prev.filter(i => i.id !== item.id);
+			}
+			const next = [...prev, item];
+			return next;
+		});
+	}
+
+	const handleOnRemove = (item) => {
+		setIsChanged(true);
+		setSelectdList(prev => {
+			const next = prev.filter(i => i.id !== item?.id);
+			return next;
+		});
+	}
+
+	const onSorted = (list) => {
+		setIsChanged(true);
+		setSelectdList(list);
+
 	}
 
 	return (
 		<>
-			<ListItems list={selectedList} taxonomy={taxonomy} />
-			<Button variant="secondary" onClick={() => setOpen(true)}>
+			<SortabListTerms onSorted={onSorted} list={selectedList} showClose={true} onClose={handleOnRemove} taxonomy={taxonomy} />
+			<button type="button" className="button" onClick={() => setOpen(true)}>
 				Open Modal
-			</Button>
+			</button>
 			{isOpen && (
 				<Modal
 					title={title}
-					size="small"
+					size="large"
 					className="sa_swatch_modal"
 					onRequestClose={() => setOpen(false)}
+					headerActions={
+
+						<>
+							<input type="search" placeholder="Search" />
+							<button className="button">Add new</button>
+						</>
+					}
 				>
-					<ListItems list={list} taxonomy={taxonomy} />
+
+					<table className="sa_swatch_table wp-list-table widefat striped fixed table-view-list">
+						<thead>
+							<tr>
+								<th style={{ width: '40px' }}></th>
+								<th>Name</th>
+								<th className="actions"></th>
+							</tr>
+						</thead>
+						<tbody>
+							{list.map((term) => {
+
+								const classes = ['term-item'];
+								let isSelected = false;
+								if (selectedList?.length) {
+									if (selectedList.filter(i => i.id === term.id).length) {
+										classes.push('selected');
+										isSelected = true;
+									}
+								}
+
+								return <tr key={term.id}>
+									<td>
+
+										<ColSwatch term={term} tax={taxonomy} type={type} />
+
+									</td>
+									<td>{term.name}</td>
+									<td className="actions">
+										<span onClick={() => handleAddItem(term)} className={isSelected ? ' close ic' : ' add ic'}><span className={isSelected ? 'dashicons dashicons-no-alt' : 'dashicons dashicons-plus'}></span>{isSelected ? 'Remove' : 'Add'}</span>
+									</td>
+								</tr>
+							})}
+						</tbody>
+					</table>
 				</Modal>
 			)}
 		</>
 	);
 };
 
-jQuery(".sa_attr_swatches").each(function () {
-	const el = jQuery(this);
-	const div = jQuery("<span/>");
-	div.insertAfter(el);
-	const title = el.data("title");
-	const selected = el.data("selected");
-	const taxonomy = el.data("taxonomy");
-	console.log("selected", selected, taxonomy);
-	render(
-		<App title={title} taxonomy={taxonomy} selected={selected} />,
-		div.get(0),
-	);
+
+const init = () => {
+	jQuery(".sa_attr_swatches").each(function () {
+		const el = jQuery(this);
+		if (el.hasClass('sa_added')) {
+			return;
+		}
+		const div = jQuery("<span/>");
+		div.insertAfter(el);
+		const title = el.data("title");
+		const selected = el.data("selected");
+		const taxonomy = el.data("taxonomy");
+		console.log("selected", selected, taxonomy);
+		el.addClass('sa_added sa_hide');
+		const onChange = (ids) => {
+			console.log('Change_callled');
+			const opts = ids.map(i => {
+				return `<option selected="selected" value="${i.id}">${i.name}</option>`
+			});
+
+			el.html(opts.join(' ')).trigger('change');
+		}
+		render(
+			<App title={title} taxonomy={taxonomy} onChange={onChange} selected={selected} />,
+			div.get(0),
+		);
+	});
+}
+init();
+
+jQuery(document.body).on('woocommerce_added_attribute', function () {
+	init();
+});
+jQuery(document.body).on('woocommerce_attributes_saved', function () {
+	init();
 });

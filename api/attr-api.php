@@ -35,6 +35,24 @@ function get_swatch_data($term_id)
 }
 
 
+function get_terms_data($terms, $type = null)
+{
+
+	$list = [];
+	foreach ($terms as $term) {
+		$swatch = get_swatch_data($term->term_id);
+		$swatch['type'] = $type;
+		$list[] = [
+			'id' => $term->term_id,
+			'name' => $term->name,
+			'slug' => $term->slug,
+			'swatch' => $swatch,
+		];
+	}
+
+	return $list;
+}
+
 
 function get_tax_terms($post)
 {
@@ -43,8 +61,6 @@ function get_tax_terms($post)
 	$selected = isset($post['selected']) ? sanitize_text_field($post['selected']) : '';
 	// $selected = explode(',', $selected);
 	// $selected = array_map('absint', $selected);
-	$list = [];
-
 
 	$attrs = get_wc_tax_attrs();
 	// $t = strpos($tax, 'pa_') ? substr($tax, 3) : $tax;
@@ -74,28 +90,13 @@ function get_tax_terms($post)
 		$terms_selected = [];
 	}
 
-	$terms =  array_merge($terms, $terms_selected);
-
-	if ($terms) {
-		foreach ($terms as $term) {
-			$swatch = get_swatch_data($term->term_id);
-			$swatch['type'] = $type;
-			$list[] = [
-				'id' => $term->term_id,
-				'name' => $term->name,
-				'slug' => $term->slug,
-				'swatch' => $swatch,
-			];
-		}
-	}
-
-
 
 	wp_send_json([
 		'success' => true,
 		'type' => $type,
 		'tax' => $tax,
-		'data' => $list,
+		'data' => get_terms_data($terms, $type),
+		'selected' => get_terms_data($terms_selected, $type),
 	]);
 }
 

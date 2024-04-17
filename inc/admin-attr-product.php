@@ -54,8 +54,6 @@ function woocommerce_product_option_terms($attribute_taxonomy, $i, $attribute)
 	if (strpos($attribute_taxonomy->attribute_type, 'sa_') === false) {
 		return;
 	}
-
-	// var_dump( $attribute);
 ?>
 	<select multiple="multiple" data-return_id="id" data-title="<?php echo esc_attr(wc_attribute_label($attribute->get_name())) ?>" data-selected="<?php echo json_encode($attribute->get_options()); ?>" data-placeholder="<?php esc_attr_e('Select values', 'woocommerce'); ?>" class="sa_attr_swatches multiselect attribute_values wc-taxonomy-term-search----" name="attribute_values[<?php echo esc_attr($i); ?>][]" data-taxonomy="<?php echo esc_attr($attribute->get_taxonomy()); ?>">
 		<?php
@@ -67,9 +65,6 @@ function woocommerce_product_option_terms($attribute_taxonomy, $i, $attribute)
 		}
 		?>
 	</select>
-	<button class="button plus select_all_attributes"><?php esc_html_e('Select all', 'woocommerce'); ?></button>
-	<button class="button minus select_no_attributes"><?php esc_html_e('Select none', 'woocommerce'); ?></button>
-	<button class="button fr plus add_new_attribute"><?php esc_html_e('Create value', 'woocommerce'); ?></button>
 <?php
 }
 

@@ -1,19 +1,167 @@
+.sa_hide {
+	display: none !important;
+}
+
 .sa-list-term {
 	display: flex;
-	flex-direction: column;
+	// flex-direction: column;
+	flex-wrap: wrap;
 	gap: 10px;
+	margin: 15px 0;
+
 	.term-item {
 		display: flex;
-		gap: 5px;
+		gap: 10px;
 		align-items: center;
 		border: 1px solid #ededed;
 		padding: 5px;
-		img,
-		.color {
+		background: #fff;
+		border-radius: 3px;
+
+		&.selected {
+			color: #2271b1;
+			border-color: #2271b1;
+			background: #f6f7f7;
+		}
+
+		cursor: pointer;
+
+		img {
 			width: 40px;
 			height: 40px;
 			display: block;
 			object-fit: cover;
+		}
+
+		.color {
+			width: 30px;
+			height: 30px;
+			display: block;
+			object-fit: cover;
+		}
+
+		.close {
+			&:hover {
+				color: red;
+			}
+		}
+	}
+}
+
+
+.wc_swatch_image {
+	width: 80px;
+	height: 80px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid #8c8f94;
+	background: #fff;
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+}
+
+.wc_swatch_color {
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid #8c8f94;
+	position: relative;
+	cursor: pointer;
+	z-index: 3;
+	background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill-opacity=".05"><path d="M8 0h8v8H8zM0 8h8v8H0z"/></svg>');
+
+	div {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+}
+
+.column-swatch {
+	.wc_swatch_image {
+		width: 40px;
+		height: 40px;
+	}
+
+	.wc_swatch_color {
+		height: 40px;
+		width: 40px;
+	}
+
+	.components-color-palette__custom-color-text-wrapper,
+	.components-circular-option-picker {
+		display: none;
+	}
+}
+
+.wc_swatch_color_picker {
+	.components-color-picker {
+		.components-flex {
+			padding-top: 5px;
+			padding-bottom: 5px;
+		}
+		.components-input-control__container {
+			width: 100%;
+		}
+		.components-input-control__input {
+			height: 25px !important;
+			min-height: 25px !important;
+		}
+		> div:nth-child(2) {
+			padding-top: 0px;
+			> div:nth-child(1) {
+				display: none;
+			}
+		}
+	}
+
+	.act {
+		padding: 5px 16px 10px;
+		display: flex;
+		justify-content: space-between;
+	}
+}
+
+
+.sa_swatch_table {
+	.actions {
+		width: 100px;
+		text-align: left;
+	}
+	td, th {
+		vertical-align: middle;
+	}
+
+	tr {
+		cursor: pointer;
+
+		img {
+			width: 40px;
+			height: 40px;
+			display: block;
+			object-fit: cover;
+		}
+
+		.color {
+			width: 30px;
+			height: 30px;
+			display: block;
+			object-fit: cover;
+		}
+
+		.close {
+			&:hover {
+				color: red;
+			}
 		}
 	}
 }
