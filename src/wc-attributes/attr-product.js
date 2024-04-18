@@ -24,7 +24,7 @@ const sendReq = ({ url, path, method, data, body, params, signal }) => {
 			redirect: "follow", // manual, *follow, error
 		};
 
-		if ( signal ) {
+		if (signal) {
 			args.signal = signal;
 		}
 
@@ -110,13 +110,12 @@ const Image2 = ({ term, type, onChange, clear }) => {
 		}
 	}, []);
 
-
 	const handleRemove = () => {
 		setImage(false);
 		onChange?.(false);
 	};
 
-	const src = term?.swatch?.thumbnail || term?.swatch?.full
+	const src = term?.swatch?.thumbnail || term?.swatch?.full;
 
 	return (
 		<div className="wc_swatch_image_wrap" data-type={type}>
@@ -221,20 +220,30 @@ const ColorSwatch = ({ color, onChange, confirm }) => {
 	);
 };
 
-const LisTermItem = ({ term, onClick, selectedList, showClose = false, onClose, showChecked = false, showMove = false }) => {
-
-	const classes = ['term-item'];
+const LisTermItem = ({
+	term,
+	onClick,
+	selectedList,
+	showClose = false,
+	onClose,
+	showChecked = false,
+	showMove = false,
+}) => {
+	const classes = ["term-item"];
 	let isSelected = false;
 	if (selectedList?.length) {
-		if (selectedList.filter(i => i.id === term.id).length) {
-			classes.push('selected');
+		if (selectedList.filter((i) => i.id === term.id).length) {
+			classes.push("selected");
 			isSelected = true;
 		}
 	}
 
 	return (
-		<div className={classes.join(' ')} onClick={() => onClick?.(term)} key={term.id}>
-
+		<div
+			className={classes.join(" ")}
+			onClick={() => onClick?.(term)}
+			key={term.id}
+		>
 			{term?.swatch?.type === "sa_image" ? (
 				<span className="img">
 					<img
@@ -252,29 +261,58 @@ const LisTermItem = ({ term, onClick, selectedList, showClose = false, onClose, 
 			<span className="name">{term.name}</span>
 
 			{/* {showssMove ? (<span className="move ic" ><span className="dashicons dashicons-move"></span></span>) : null} */}
-			{showClose ? (<span className="close ic" onClick={() => onClose?.(term)}><span className="dashicons dashicons-no-alt"></span></span>) : null}
-			{showChecked ? (<span className={isSelected ? 'close ic' : 'add ic'}><span className={isSelected ? 'dashicons dashicons-no-alt' : 'dashicons dashicons-plus'}></span></span>) : null}
+			{showClose ? (
+				<span className="close ic" onClick={() => onClose?.(term)}>
+					<span className="dashicons dashicons-no-alt"></span>
+				</span>
+			) : null}
+			{showChecked ? (
+				<span className={isSelected ? "close ic" : "add ic"}>
+					<span
+						className={
+							isSelected
+								? "dashicons dashicons-no-alt"
+								: "dashicons dashicons-plus"
+						}
+					></span>
+				</span>
+			) : null}
 		</div>
-	);
-}
-
-
-
-const SortabListTerms = ({ list, onSorted, onClick, selectedList, showClose = false, onClose, showChecked = false }) => {
-
-	return (
-		<ReactSortable list={list} setList={onSorted} className="sa-list-term"
-		// handle=".move"
-
-		>
-			{list.map((term) => {
-				return <LisTermItem term={term} showMove={true} onClose={onClose} onClick={onClick} showClose={showClose} selectedList={selectedList} showChecked={showChecked} />
-			})}
-		</ReactSortable >
 	);
 };
 
-
+const SortabListTerms = ({
+	list,
+	onSorted,
+	onClick,
+	selectedList,
+	showClose = false,
+	onClose,
+	showChecked = false,
+}) => {
+	return (
+		<ReactSortable
+			list={list}
+			setList={onSorted}
+			className="sa-list-term"
+			// handle=".move"
+		>
+			{list.map((term) => {
+				return (
+					<LisTermItem
+						term={term}
+						showMove={true}
+						onClose={onClose}
+						onClick={onClick}
+						showClose={showClose}
+						selectedList={selectedList}
+						showChecked={showChecked}
+					/>
+				);
+			})}
+		</ReactSortable>
+	);
+};
 
 const ColSwatch = ({ term, tax, type }) => {
 	// console.log("Load_data", data);
@@ -310,17 +348,18 @@ const ColSwatch = ({ term, tax, type }) => {
 	};
 	return (
 		<>
-			{type === "sa_image" ? (
-				<Image2 term={term} onChange={onChange} />
-			) : null}
+			{type === "sa_image" ? <Image2 term={term} onChange={onChange} /> : null}
 
 			{type === "sa_color" ? (
-				<ColorSwatch confirm={true} onChange={onChange} color={term?.swatch?.value} />
+				<ColorSwatch
+					confirm={true}
+					onChange={onChange}
+					color={term?.swatch?.value}
+				/>
 			) : null}
 		</>
 	);
 };
-
 
 const App = ({ title, taxonomy, selected, onChange }) => {
 	const [isOpen, setOpen] = useState(false);
@@ -329,22 +368,23 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 	const [list, setList] = useState([]);
 	const [selectedList, setSelectdList] = useState([]);
 	const [type, setType] = useState(false);
-	const [search, setSearch] = useState('');
+	const [search, setSearch] = useState("");
 
 	useEffect(() => {
-
 		const controller = new AbortController();
 		const signal = controller.signal;
 
 		const body = {
 			taxonomy,
-		}
+		};
 		if (!search?.length && selected?.length) {
 			if (!loadSelected) {
-				body.selected = Array.isArray(selected) ? selected.join(",") : [selected];
+				body.selected = Array.isArray(selected)
+					? selected.join(",")
+					: [selected];
 			}
 		} else {
-			body.search = search
+			body.search = search;
 		}
 
 		sendReq({
@@ -375,45 +415,50 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 			.catch((e) => console.log(e));
 		return () => {
 			controller.abort();
-		}
+		};
 	}, [search]);
 
 	useEffect(() => {
 		if (isChanged) {
-			onChange(selectedList)
+			onChange(selectedList);
 		}
 	}, [selectedList]);
 
 	const handleAddItem = (item) => {
 		setIsChanged(true);
-		setSelectdList(prev => {
-			if (prev.filter(i => i.id === item.id).length) {
-				return prev.filter(i => i.id !== item.id);
+		setSelectdList((prev) => {
+			if (prev.filter((i) => i.id === item.id).length) {
+				return prev.filter((i) => i.id !== item.id);
 			}
 			const next = [...prev, item];
 			return next;
 		});
-	}
+	};
 
 	const handleOnRemove = (item) => {
 		setIsChanged(true);
-		setSelectdList(prev => {
-			const next = prev.filter(i => i.id !== item?.id);
+		setSelectdList((prev) => {
+			const next = prev.filter((i) => i.id !== item?.id);
 			return next;
 		});
-	}
+	};
 
 	const onSorted = (list) => {
 		setIsChanged(true);
 		setSelectdList(list);
-
-	}
+	};
 
 	return (
 		<>
-			<SortabListTerms onSorted={onSorted} list={selectedList} showClose={true} onClose={handleOnRemove} taxonomy={taxonomy} />
+			<SortabListTerms
+				onSorted={onSorted}
+				list={selectedList}
+				showClose={true}
+				onClose={handleOnRemove}
+				taxonomy={taxonomy}
+			/>
 			<button type="button" className="button" onClick={() => setOpen(true)}>
-				Open Modal
+				Select Options
 			</button>
 			{isOpen && (
 				<Modal
@@ -423,43 +468,58 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 					onRequestClose={() => setOpen(false)}
 					headerActions={
 						<>
-							<input type="search" onChange={e => setSearch(e.target.value)} value={search || ''} placeholder="Search" />
+							<input
+								type="search"
+								onChange={(e) => setSearch(e.target.value)}
+								value={search || ""}
+								placeholder="Search"
+							/>
 							<button className="button">Add new</button>
 						</>
 					}
 				>
-
 					<table className="sa_swatch_table wp-list-table widefat striped fixed table-view-list">
 						<thead>
 							<tr>
-								<th style={{ width: '40px' }}></th>
+								<th style={{ width: "40px" }}></th>
 								<th>Name</th>
 								<th className="actions"></th>
 							</tr>
 						</thead>
 						<tbody>
 							{list.map((term) => {
-
-								const classes = ['term-item'];
+								const classes = ["term-item"];
 								let isSelected = false;
 								if (selectedList?.length) {
-									if (selectedList.filter(i => i.id === term.id).length) {
-										classes.push('selected');
+									if (selectedList.filter((i) => i.id === term.id).length) {
+										classes.push("selected");
 										isSelected = true;
 									}
 								}
 
-								return <tr key={term.id}>
-									<td>
-
-										<ColSwatch term={term} tax={taxonomy} type={type} />
-
-									</td>
-									<td>{term.name}</td>
-									<td className="actions">
-										<span onClick={() => handleAddItem(term)} className={isSelected ? ' close ic' : ' add ic'}><span className={isSelected ? 'dashicons dashicons-no-alt' : 'dashicons dashicons-plus'}></span>{isSelected ? 'Remove' : 'Add'}</span>
-									</td>
-								</tr>
+								return (
+									<tr key={term.id}>
+										<td>
+											<ColSwatch term={term} tax={taxonomy} type={type} />
+										</td>
+										<td>{term.name}</td>
+										<td className="actions">
+											<span
+												onClick={() => handleAddItem(term)}
+												className={isSelected ? " close ic" : " add ic"}
+											>
+												<span
+													className={
+														isSelected
+															? "dashicons dashicons-no-alt"
+															: "dashicons dashicons-plus"
+													}
+												></span>
+												{isSelected ? "Remove" : "Add"}
+											</span>
+										</td>
+									</tr>
+								);
 							})}
 						</tbody>
 					</table>
@@ -469,11 +529,10 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 	);
 };
 
-
 const init = () => {
 	jQuery(".sa_attr_swatches").each(function () {
 		const el = jQuery(this);
-		if (el.hasClass('sa_added')) {
+		if (el.hasClass("sa_added")) {
 			return;
 		}
 		const div = jQuery("<span/>");
@@ -482,26 +541,31 @@ const init = () => {
 		const selected = el.data("selected");
 		const taxonomy = el.data("taxonomy");
 		console.log("selected", selected, taxonomy);
-		el.addClass('sa_added sa_hide');
+		el.addClass("sa_added sa_hide");
 		const onChange = (ids) => {
-			console.log('Change_callled');
-			const opts = ids.map(i => {
-				return `<option selected="selected" value="${i.id}">${i.name}</option>`
+			console.log("Change_callled");
+			const opts = ids.map((i) => {
+				return `<option selected="selected" value="${i.id}">${i.name}</option>`;
 			});
 
-			el.html(opts.join(' ')).trigger('change');
-		}
+			el.html(opts.join(" ")).trigger("change");
+		};
 		render(
-			<App title={title} taxonomy={taxonomy} onChange={onChange} selected={selected} />,
+			<App
+				title={title}
+				taxonomy={taxonomy}
+				onChange={onChange}
+				selected={selected}
+			/>,
 			div.get(0),
 		);
 	});
-}
+};
 init();
 
-jQuery(document.body).on('woocommerce_added_attribute', function () {
+jQuery(document.body).on("woocommerce_added_attribute", function () {
 	init();
 });
-jQuery(document.body).on('woocommerce_attributes_saved', function () {
+jQuery(document.body).on("woocommerce_attributes_saved", function () {
 	init();
 });
