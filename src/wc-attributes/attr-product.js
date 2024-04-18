@@ -4,6 +4,7 @@ import {
 	ColorPicker,
 	Popover,
 	Modal,
+	Tooltip,
 } from "@wordpress/components";
 
 import React from "react";
@@ -54,7 +55,7 @@ const sendReq = ({ url, path, method, data, body, params, signal }) => {
 	});
 };
 
-const Image2 = ({ term, type, onChange, clear }) => {
+const Image = ({ term, type, onChange, clear }) => {
 	const [image, setImage] = useState(null);
 
 	const frame = useMemo(() => {
@@ -259,29 +260,25 @@ const LisTermItem = ({
 				></span>
 			) : null}
 			<span className="name">{term.name}</span>
-
-			{/* {showssMove ? (<span className="move ic" ><span className="dashicons dashicons-move"></span></span>) : null} */}
-			{showClose ? (
+			<div className="actions">
+				<span className="move ic">
+					<span class="dashicons dashicons-move"></span>
+				</span>
+				<span className="edit ic">
+					<span class="dashicons dashicons-edit-page"></span>
+				</span>
 				<span className="close ic" onClick={() => onClose?.(term)}>
 					<span className="dashicons dashicons-no-alt"></span>
 				</span>
-			) : null}
-			{showChecked ? (
-				<span className={isSelected ? "close ic" : "add ic"}>
-					<span
-						className={
-							isSelected
-								? "dashicons dashicons-no-alt"
-								: "dashicons dashicons-plus"
-						}
-					></span>
-				</span>
-			) : null}
+			</div>
 		</div>
 	);
 };
 
-const SortabListTerms = ({
+// Custom save Attribute meta here.
+// 	$attributes[] = apply_filters( 'woocommerce_admin_meta_boxes_prepare_attribute', $attribute, $data, $i );
+
+const SortabeListTerms = ({
 	list,
 	onSorted,
 	onClick,
@@ -295,7 +292,7 @@ const SortabListTerms = ({
 			list={list}
 			setList={onSorted}
 			className="sa-list-term"
-			// handle=".move"
+			handle=".move"
 		>
 			{list.map((term) => {
 				return (
@@ -348,7 +345,7 @@ const ColSwatch = ({ term, tax, type }) => {
 	};
 	return (
 		<>
-			{type === "sa_image" ? <Image2 term={term} onChange={onChange} /> : null}
+			{type === "sa_image" ? <Image term={term} onChange={onChange} /> : null}
 
 			{type === "sa_color" ? (
 				<ColorSwatch
@@ -366,9 +363,11 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 	const [isChanged, setIsChanged] = useState(false);
 	const [loadSelected, setLoadSelected] = useState(false);
 	const [list, setList] = useState([]);
-	const [selectedList, setSelectdList] = useState([]);
+	const [selectedList, setSelectedList] = useState([]);
 	const [type, setType] = useState(false);
 	const [search, setSearch] = useState("");
+	const [view, setView] = useState("");
+	const [newTerm, setNewTerm] = useState("");
 
 	useEffect(() => {
 		const controller = new AbortController();
@@ -405,7 +404,7 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 				if (!loadSelected) {
 					if (res?.selected) {
 						setLoadSelected(true);
-						setSelectdList(res?.selected);
+						setSelectedList(res?.selected);
 					}
 				}
 				if (res?.selected) {
@@ -426,7 +425,7 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 
 	const handleAddItem = (item) => {
 		setIsChanged(true);
-		setSelectdList((prev) => {
+		setSelectedList((prev) => {
 			if (prev.filter((i) => i.id === item.id).length) {
 				return prev.filter((i) => i.id !== item.id);
 			}
@@ -437,7 +436,7 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 
 	const handleOnRemove = (item) => {
 		setIsChanged(true);
-		setSelectdList((prev) => {
+		setSelectedList((prev) => {
 			const next = prev.filter((i) => i.id !== item?.id);
 			return next;
 		});
@@ -445,12 +444,38 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 
 	const onSorted = (list) => {
 		setIsChanged(true);
-		setSelectdList(list);
+		setSelectedList(list);
+	};
+
+	const handleAddNew = () => {
+		if (!newTerm?.length) {
+			return;
+		}
+		sendReq({
+			url: SA_WC_BLOCKS?.ajax,
+			method: "post",
+			params: {
+				endpoint: "add_term",
+			},
+			data: {
+				taxonomy,
+				name: newTerm,
+			},
+		})
+			.then((res) => {
+				if (res?.data) {
+					setList([res.data, ...list]);
+					setNewTerm("");
+					setView("");
+				}
+				console.log("added_new_term", taxonomy, res);
+			})
+			.catch((e) => console.log(e));
 	};
 
 	return (
 		<>
-			<SortabListTerms
+			<SortabeListTerms
 				onSorted={onSorted}
 				list={selectedList}
 				showClose={true}
@@ -463,66 +488,93 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 			{isOpen && (
 				<Modal
 					title={title}
-					size="large"
+					size="medium"
 					className="sa_swatch_modal"
+					style={{ width: 550 }}
 					onRequestClose={() => setOpen(false)}
 					headerActions={
 						<>
-							<input
-								type="search"
-								onChange={(e) => setSearch(e.target.value)}
-								value={search || ""}
-								placeholder="Search"
-							/>
-							<button className="button">Add new</button>
+							{view !== "add" ? (
+								<>
+									<input
+										type="search"
+										onChange={(e) => setSearch(e.target.value)}
+										value={search || ""}
+										placeholder="Search"
+									/>
+									<button onClick={() => setView("add")} className="button">
+										Add New
+									</button>
+								</>
+							) : (
+								<button onClick={() => setView("")} className="button">
+									Cancel
+								</button>
+							)}
 						</>
 					}
 				>
-					<table className="sa_swatch_table wp-list-table widefat striped fixed table-view-list">
-						<thead>
-							<tr>
-								<th style={{ width: "40px" }}></th>
-								<th>Name</th>
-								<th className="actions"></th>
-							</tr>
-						</thead>
-						<tbody>
-							{list.map((term) => {
-								const classes = ["term-item"];
-								let isSelected = false;
-								if (selectedList?.length) {
-									if (selectedList.filter((i) => i.id === term.id).length) {
-										classes.push("selected");
-										isSelected = true;
-									}
-								}
-
-								return (
-									<tr key={term.id}>
-										<td>
-											<ColSwatch term={term} tax={taxonomy} type={type} />
-										</td>
-										<td>{term.name}</td>
-										<td className="actions">
-											<span
-												onClick={() => handleAddItem(term)}
-												className={isSelected ? " close ic" : " add ic"}
-											>
-												<span
-													className={
-														isSelected
-															? "dashicons dashicons-no-alt"
-															: "dashicons dashicons-plus"
-													}
-												></span>
-												{isSelected ? "Remove" : "Add"}
-											</span>
-										</td>
+					<div className="modal-inner">
+						{view !== "add" ? (
+							<table className="sa_swatch_table wp-list-table widefat striped fixed table-view-list">
+								<thead>
+									<tr>
+										<th style={{ width: "40px" }}></th>
+										<th>Name</th>
+										<th className="actions"></th>
 									</tr>
-								);
-							})}
-						</tbody>
-					</table>
+								</thead>
+								<tbody>
+									{list.map((term) => {
+										const classes = ["term-item"];
+										let isSelected = false;
+										if (selectedList?.length) {
+											if (selectedList.filter((i) => i.id === term.id).length) {
+												classes.push("selected");
+												isSelected = true;
+											}
+										}
+
+										return (
+											<tr key={term.id}>
+												<td>
+													<ColSwatch term={term} tax={taxonomy} type={type} />
+												</td>
+												<td>{term.name}</td>
+												<td className="actions">
+													<span
+														onClick={() => handleAddItem(term)}
+														className={isSelected ? " close ic" : " add ic"}
+													>
+														<span
+															className={
+																isSelected
+																	? "dashicons dashicons-no-alt"
+																	: "dashicons dashicons-plus"
+															}
+														></span>
+														{isSelected ? "Remove" : "Add"}
+													</span>
+												</td>
+											</tr>
+										);
+									})}
+								</tbody>
+							</table>
+						) : (
+							<div className="add-form">
+								<input
+									type="text"
+									onChange={(e) => setNewTerm(e.target.value)}
+									value={newTerm || ""}
+									placeholder="New option name"
+								/>
+								<button className="button" onClick={() => handleAddNew()}>
+									Save
+								</button>
+							</div>
+						)}
+					</div>
 				</Modal>
 			)}
 		</>

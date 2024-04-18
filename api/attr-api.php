@@ -4,8 +4,9 @@ namespace SA_WC_BLOCKS\API\Attrs;
 
 use function SA_WC_BLOCKS\get_wc_tax_attrs;
 
-add_action('sa_wc_api/update_term_swatch', __NAMESPACE__ . '\update_term_swatch');
-add_action('sa_wc_api/get_terms', __NAMESPACE__ . '\get_tax_terms');
+add_action('sa_wc_api/update_term_swatch', __NAMESPACE__ . '\rest_update_term_swatch');
+add_action('sa_wc_api/get_terms', __NAMESPACE__ . '\rest_get_tax_terms');
+add_action('sa_wc_api/add_term', __NAMESPACE__ . '\rest_add_term');
 
 function get_swatch_data($term_id, $type = null)
 {
@@ -53,8 +54,45 @@ function get_terms_data($terms, $type = null)
 	return $list;
 }
 
+function rest_add_term($post)
+{
+	$tax = isset($post['taxonomy']) ? sanitize_text_field($post['taxonomy']) : '';
+	$name = isset($post['name']) ? sanitize_text_field($post['name']) : '';
+	if (!$name) {
+		wp_send_json([
+			'success' => false,
+		]);
+		die();
+	}
 
-function get_tax_terms($post)
+	$r = wp_insert_term($name, $tax);
+	if (isset($r['term_id'])) {
+
+		$attrs = get_wc_tax_attrs();
+		$type =  $tax && isset($attrs[$tax]) ? $attrs[$tax] : false;
+		$term = get_term($r['term_id'], $tax);
+		$swatch = get_swatch_data($term->term_id, $type);
+		$data =  [
+			'id' => $term->term_id,
+			'name' => $term->name,
+			'slug' => $term->slug,
+			'swatch' => $swatch,
+		];
+
+		wp_send_json([
+			'success' => true,
+			'data' => $data,
+		]);
+		die();
+	}
+	wp_send_json([
+		'success' => false,
+	]);
+	die();
+
+}
+
+function rest_get_tax_terms($post)
 {
 
 	$tax = isset($post['taxonomy']) ? sanitize_text_field($post['taxonomy']) : '';
@@ -107,7 +145,7 @@ function get_tax_terms($post)
 	]);
 }
 
-function update_term_swatch($post)
+function rest_update_term_swatch($post)
 {
 	$tax = isset($post['tax']) ? sanitize_text_field($post['tax']) : '';
 	$term_id = isset($post['term_id']) ? absint($post['term_id']) : '';
