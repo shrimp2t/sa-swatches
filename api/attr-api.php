@@ -89,7 +89,6 @@ function rest_add_term($post)
 		'success' => false,
 	]);
 	die();
-
 }
 
 function rest_get_tax_terms($post)
@@ -156,6 +155,9 @@ function rest_update_term_swatch($post)
 		'type' => $type,
 		'value' => $value,
 	];
+	if ($type === 'sa_image') {
+		$data['value'] = absint($data['value']);
+	}
 
 	update_term_meta(
 		$term_id,
@@ -163,9 +165,17 @@ function rest_update_term_swatch($post)
 		json_encode($data)
 	);
 
+	$term = get_term($term_id, $tax);
+	$swatch = get_swatch_data($term->term_id, $type);
+	$data =  [
+		'id' => $term->term_id,
+		'name' => $term->name,
+		'slug' => $term->slug,
+		'swatch' => $swatch,
+	];
+
 	wp_send_json([
 		'success' => true,
-		'term_id' => $term_id,
 		'data' => $data,
 	]);
 }

@@ -55,7 +55,7 @@ const sendReq = ({ url, path, method, data, body, params, signal }) => {
 	});
 };
 
-const Image = ({ term, type, onChange, clear }) => {
+const Image = ({ swatch, type, onChange, clear }) => {
 	const [image, setImage] = useState(null);
 
 	const frame = useMemo(() => {
@@ -100,23 +100,12 @@ const Image = ({ term, type, onChange, clear }) => {
 		frame.open();
 	};
 
-	useEffect(() => {
-		if (clear) {
-			jQuery(window).on("taxonomy_term_added", (e, res) => {
-				const t = res?.responses?.[1]?.supplemental?.term_id;
-				console.log("Tax_added", t, res);
-				setImage(null);
-				onChange?.(null);
-			});
-		}
-	}, []);
-
 	const handleRemove = () => {
 		setImage(false);
 		onChange?.(false);
 	};
 
-	const src = term?.swatch?.thumbnail || term?.swatch?.full;
+	const src = image?.thumbnail || image?.full || swatch?.thumbnail || swatch?.full;
 
 	return (
 		<div className="wc_swatch_image_wrap" data-type={type}>
@@ -221,14 +210,11 @@ const ColorSwatch = ({ color, onChange, confirm }) => {
 	);
 };
 
-const LisTermItem = ({
+const ListSelectedTermItem = ({
 	term,
 	onClick,
 	selectedList,
-	showClose = false,
 	onClose,
-	showChecked = false,
-	showMove = false,
 }) => {
 	const classes = ["term-item"];
 	const [isOpen, setOpen] = useState(false);
@@ -262,6 +248,7 @@ const LisTermItem = ({
 						style={{ background: `${term?.swatch?.value}` }}
 					></span>
 				) : null}
+
 				<span className="name">{term.name}</span>
 				<div className="actions">
 					<span className="move ic">
@@ -279,20 +266,11 @@ const LisTermItem = ({
 
 			{isOpen && (
 				<Modal
-					title={`Overite swatch settings`}
+					title={`Swatch settings`}
 					size="medium"
 					className="sa_swatch_modal"
-					style={{ width: 550 }}
+					style={{ width: 600 }}
 					onRequestClose={() => setOpen(false)}
-					headerActions={
-						<div className="sa_space">
-							<>
-								<button className="button">
-									Add New
-								</button>
-							</>
-						</div>
-					}
 				>
 
 					<div className="sa_modal_inner">
@@ -305,8 +283,45 @@ const LisTermItem = ({
 							/>
 						</div> : null}
 
+						<div className="box">
+							<h3>This product settings</h3>
+							<div className="term-item swatch_box">
+								{term?.swatch?.type === "sa_image" ? <Image swatch={term?.swatch} onChange={() => { }} /> : null}
+								{term?.swatch?.type === "sa_color" ? (
+									<ColorSwatch
+										confirm={true}
+										onChange={() => { }}
+										color={term?.swatch?.value}
+									/>
+								) : null}
+								<input type="text" style={{ flexBasis: '60%' }} placeholder="custom name" />
+								<button type="button" className="button">Save</button>
+								<button type="button" className="button">Reset</button>
+							</div>
+						</div>
 
-						EDit item....
+
+						<div className="sa_box">
+							<h3>Global settings</h3>
+							<div className="term-item swatch_box">
+								{term?.swatch?.type === "sa_image" ? (
+									<span className="img">
+										<img
+											src={term?.swatch?.thumbnail || term?.swatch?.full || ""}
+											alt=""
+										/>
+									</span>
+								) : null}
+								{term?.swatch?.type === "sa_color" ? (
+									<span
+										className="color"
+										style={{ background: `${term?.swatch?.value}` }}
+									></span>
+								) : null}
+								<span>{term?.name}</span>
+							</div>
+						</div>
+
 
 					</div>
 				</Modal>
@@ -324,9 +339,7 @@ const SortabeListTerms = ({
 	onSorted,
 	onClick,
 	selectedList,
-	showClose = false,
 	onClose,
-	showChecked = false,
 }) => {
 	return (
 		<ReactSortable
@@ -337,14 +350,12 @@ const SortabeListTerms = ({
 		>
 			{list.map((term) => {
 				return (
-					<LisTermItem
+					<ListSelectedTermItem
 						term={term}
 						showMove={true}
 						onClose={onClose}
 						onClick={onClick}
-						showClose={showClose}
 						selectedList={selectedList}
-						showChecked={showChecked}
 					/>
 				);
 			})}
@@ -352,7 +363,7 @@ const SortabeListTerms = ({
 	);
 };
 
-const ColSwatch = ({ term, tax, type }) => {
+const ColSwatch = ({ term, tax, type, setSelectedList }) => {
 	const onChange = (changeData) => {
 		let saveData = {
 			tax,
@@ -376,13 +387,24 @@ const ColSwatch = ({ term, tax, type }) => {
 		})
 			.then((res) => {
 				console.log("Update_meta", res);
+				if (res?.data) {
+					setSelectedList?.(prev => {
+						const next = prev.map(el => {
+							if (el.id === res?.data?.id) {
+								return res?.data;
+							}
+							return el;
+						});
+
+						return next;
+					});
+				}
 			})
 			.catch((e) => console.log(e));
 	};
 	return (
 		<>
-			{type === "sa_image" ? <td style={{ width: "40px" }}><Image term={term} onChange={onChange} /></td> : null}
-
+			{type === "sa_image" ? <td style={{ width: "40px" }}><Image swatch={term?.swatch} onChange={onChange} /></td> : null}
 			{type === "sa_color" ? (
 				<td style={{ width: "40px" }}><ColorSwatch
 					confirm={true}
@@ -557,7 +579,7 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 					}
 				>
 
-					<div className="sa_modal_inner">
+					<div className="sa_modal_inner" style={{ minHeight: '50vh' }}>
 						{loading ? <div className="loading">
 							<Spinner
 								style={{
@@ -584,7 +606,7 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 										return (
 											<tr key={term.id}>
 
-												<ColSwatch term={term} tax={taxonomy} type={type} />
+												<ColSwatch setSelectedList={setSelectedList} term={term} tax={taxonomy} type={type} />
 
 												<td>{term.name}</td>
 												<td className="actions">
