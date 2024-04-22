@@ -345,14 +345,14 @@ const ColSwatch = ({ term, tax, type }) => {
 	};
 	return (
 		<>
-			{type === "sa_image" ? <Image term={term} onChange={onChange} /> : null}
+			{type === "sa_image" ? <td style={{ width: "40px" }}><Image term={term} onChange={onChange} /></td> : null}
 
 			{type === "sa_color" ? (
-				<ColorSwatch
+				<td style={{ width: "40px" }}><ColorSwatch
 					confirm={true}
 					onChange={onChange}
 					color={term?.swatch?.value}
-				/>
+				/></td>
 			) : null}
 		</>
 	);
@@ -493,7 +493,7 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 					style={{ width: 550 }}
 					onRequestClose={() => setOpen(false)}
 					headerActions={
-						<>
+						<div className="sa_space">
 							{view !== "add" ? (
 								<>
 									<input
@@ -511,19 +511,19 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 									Cancel
 								</button>
 							)}
-						</>
+						</div>
 					}
 				>
-					<div className="modal-inner">
+					<div className="sa_modal_inner">
 						{view !== "add" ? (
 							<table className="sa_swatch_table wp-list-table widefat striped fixed table-view-list">
-								<thead>
+								{/* <thead>
 									<tr>
 										<th style={{ width: "40px" }}></th>
 										<th>Name</th>
 										<th className="actions"></th>
 									</tr>
-								</thead>
+								</thead> */}
 								<tbody>
 									{list.map((term) => {
 										const classes = ["term-item"];
@@ -537,9 +537,9 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 
 										return (
 											<tr key={term.id}>
-												<td>
-													<ColSwatch term={term} tax={taxonomy} type={type} />
-												</td>
+
+												<ColSwatch term={term} tax={taxonomy} type={type} />
+
 												<td>{term.name}</td>
 												<td className="actions">
 													<span

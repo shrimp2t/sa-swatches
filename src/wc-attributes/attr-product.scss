@@ -18,7 +18,15 @@
 		background: #fff;
 		border-radius: 3px;
 		position: relative;
-		min-width: 90px;
+		min-width: 70px;
+		min-height: 28px;
+
+		.name {
+			margin-left: auto;
+			margin-right: auto;
+			padding-right: 5px;
+			padding-left: 5px;
+		}
 
 		&.selected {
 			color: #2271b1;
@@ -50,7 +58,7 @@
 			right: 0;
 			transform: translate(0, -50%) scale(80%);
 			background: #f5f5f5;
-			border: 1px solid #ededed;
+			border: 1px solid #68abde;
 			border-radius: 3px;
 			padding: 5px;
 			opacity: 0;
@@ -128,16 +136,20 @@
 			padding-top: 5px;
 			padding-bottom: 5px;
 		}
+
 		.components-input-control__container {
 			width: 100%;
 		}
+
 		.components-input-control__input {
 			height: 25px !important;
 			min-height: 25px !important;
 		}
-		> div:nth-child(2) {
+
+		>div:nth-child(2) {
 			padding-top: 0px;
-			> div:nth-child(1) {
+
+			>div:nth-child(1) {
 				display: none;
 			}
 		}
@@ -150,11 +162,52 @@
 	}
 }
 
+.sa_space {
+	display: flex;
+	gap: 10px;
+}
+
+
+
+
+.components-modal__frame {
+	&.sa_swatch_modal {
+		.components-modal__content {
+			padding-left: 15px;
+			padding-right: 15px;
+			margin-top: 69px;
+		}
+
+		.components-modal__header {
+			border-bottom: 1px solid #c3c4c7 !important;
+			padding: 15px;
+			height: auto;
+		}
+
+		.sa_modal_inner {
+			min-height: 50vh;
+			display: block;
+			margin-top: 15px;
+		}
+
+		table {
+			border-spacing: 0;
+			width: 100%;
+			clear: both;
+			margin: 0;
+			border: 0px none !important;
+		}
+	}
+
+}
+
+
 .sa_swatch_table {
 	.actions {
 		width: 100px;
 		text-align: left;
 	}
+
 	td,
 	th {
 		vertical-align: middle;
@@ -162,6 +215,34 @@
 
 	tr {
 		cursor: pointer;
+
+		.ic {
+			display: inline-flex;
+			text-decoration: none;
+			font-size: 12px;
+			margin: 0;
+			padding: 5px 10px;
+			cursor: pointer;
+			border-width: 1px;
+			border-style: solid;
+			border-radius: 3px;
+			white-space: nowrap;
+			align-items: center;
+			box-sizing: border-box;
+			gap: 5px;
+			background: rgb(39, 130, 220);
+			color: #fff;
+			align-items: center;
+
+			&.close {
+				background: rgb(206, 18, 18);
+				color: #fff;
+			}
+
+			.dashicons {
+				transform: scale(0.8);
+			}
+		}
 
 		img {
 			width: 40px;
@@ -177,10 +258,5 @@
 			object-fit: cover;
 		}
 
-		.close {
-			&:hover {
-				color: red;
-			}
-		}
 	}
 }
