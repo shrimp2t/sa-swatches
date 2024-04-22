@@ -13,7 +13,7 @@
 		display: flex;
 		gap: 10px;
 		align-items: center;
-		border: 1px solid #ededed;
+		border: 1px solid #c3c4c7;
 		padding: 5px;
 		background: #fff;
 		border-radius: 3px;
@@ -196,6 +196,21 @@
 			clear: both;
 			margin: 0;
 			border: 0px none !important;
+		}
+		.add-form{
+			display: flex;
+			gap: 15px;
+			input {
+				width: 100%;
+			}
+		}
+		position: relative;
+		.loading {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			z-index: 99999;
+			transform: translate(-50%, -50%);
 		}
 	}
 

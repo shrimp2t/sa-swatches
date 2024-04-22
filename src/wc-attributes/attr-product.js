@@ -1,6 +1,6 @@
 import {
 	Button,
-	ColorPalette,
+	Spinner,
 	ColorPicker,
 	Popover,
 	Modal,
@@ -231,6 +231,8 @@ const LisTermItem = ({
 	showMove = false,
 }) => {
 	const classes = ["term-item"];
+	const [isOpen, setOpen] = useState(false);
+	const [loading, setLoading] = useState(false);
 	let isSelected = false;
 	if (selectedList?.length) {
 		if (selectedList.filter((i) => i.id === term.id).length) {
@@ -240,38 +242,77 @@ const LisTermItem = ({
 	}
 
 	return (
-		<div
-			className={classes.join(" ")}
-			onClick={() => onClick?.(term)}
-			key={term.id}
-		>
-			{term?.swatch?.type === "sa_image" ? (
-				<span className="img">
-					<img
-						src={term?.swatch?.thumbnail || term?.swatch?.full || ""}
-						alt=""
-					/>
-				</span>
-			) : null}
-			{term?.swatch?.type === "sa_color" ? (
-				<span
-					className="color"
-					style={{ background: `${term?.swatch?.value}` }}
-				></span>
-			) : null}
-			<span className="name">{term.name}</span>
-			<div className="actions">
-				<span className="move ic">
-					<span class="dashicons dashicons-move"></span>
-				</span>
-				<span className="edit ic">
-					<span class="dashicons dashicons-edit-page"></span>
-				</span>
-				<span className="close ic" onClick={() => onClose?.(term)}>
-					<span className="dashicons dashicons-no-alt"></span>
-				</span>
+		<>
+			<div
+				className={classes.join(" ")}
+				onClick={() => onClick?.(term)}
+				key={term.id}
+			>
+				{term?.swatch?.type === "sa_image" ? (
+					<span className="img">
+						<img
+							src={term?.swatch?.thumbnail || term?.swatch?.full || ""}
+							alt=""
+						/>
+					</span>
+				) : null}
+				{term?.swatch?.type === "sa_color" ? (
+					<span
+						className="color"
+						style={{ background: `${term?.swatch?.value}` }}
+					></span>
+				) : null}
+				<span className="name">{term.name}</span>
+				<div className="actions">
+					<span className="move ic">
+						<span class="dashicons dashicons-move"></span>
+					</span>
+					<span onClick={() => setOpen(true)} className="edit ic">
+						<span class="dashicons dashicons-edit-page"></span>
+					</span>
+					<span className="close ic" onClick={() => onClose?.(term)}>
+						<span className="dashicons dashicons-no-alt"></span>
+					</span>
+				</div>
 			</div>
-		</div>
+
+
+			{isOpen && (
+				<Modal
+					title={`Overite swatch settings`}
+					size="medium"
+					className="sa_swatch_modal"
+					style={{ width: 550 }}
+					onRequestClose={() => setOpen(false)}
+					headerActions={
+						<div className="sa_space">
+							<>
+								<button className="button">
+									Add New
+								</button>
+							</>
+						</div>
+					}
+				>
+
+					<div className="sa_modal_inner">
+						{loading ? <div className="loading">
+							<Spinner
+								style={{
+									height: 30,
+									width: 30
+								}}
+							/>
+						</div> : null}
+
+
+						EDit item....
+
+					</div>
+				</Modal>
+			)}
+
+		</>
 	);
 };
 
@@ -312,10 +353,7 @@ const SortabeListTerms = ({
 };
 
 const ColSwatch = ({ term, tax, type }) => {
-	// console.log("Load_data", data);
 	const onChange = (changeData) => {
-		// console.log("onChange__col", changeData);
-
 		let saveData = {
 			tax,
 			type,
@@ -327,8 +365,6 @@ const ColSwatch = ({ term, tax, type }) => {
 		if (type === "sa_color") {
 			saveData.value = changeData;
 		}
-
-		// console.log("saveData", saveData);
 
 		sendReq({
 			url: SA_WC_BLOCKS?.ajax,
@@ -359,6 +395,7 @@ const ColSwatch = ({ term, tax, type }) => {
 };
 
 const App = ({ title, taxonomy, selected, onChange }) => {
+	const [loading, setLoading] = useState(false);
 	const [isOpen, setOpen] = useState(false);
 	const [isChanged, setIsChanged] = useState(false);
 	const [loadSelected, setLoadSelected] = useState(false);
@@ -372,7 +409,7 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 	useEffect(() => {
 		const controller = new AbortController();
 		const signal = controller.signal;
-
+		setLoading(true);
 		const body = {
 			taxonomy,
 		};
@@ -411,7 +448,9 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 					setType(res?.type);
 				}
 			})
-			.catch((e) => console.log(e));
+			.catch((e) => console.log(e)).finally(() => {
+				setLoading(false)
+			});
 		return () => {
 			controller.abort();
 		};
@@ -451,6 +490,7 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 		if (!newTerm?.length) {
 			return;
 		}
+		setLoading(true);
 		sendReq({
 			url: SA_WC_BLOCKS?.ajax,
 			method: "post",
@@ -470,7 +510,9 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 				}
 				console.log("added_new_term", taxonomy, res);
 			})
-			.catch((e) => console.log(e));
+			.catch((e) => console.log(e)).finally(() => {
+				setLoading(false);
+			});
 	};
 
 	return (
@@ -514,16 +556,20 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 						</div>
 					}
 				>
+
 					<div className="sa_modal_inner">
+						{loading ? <div className="loading">
+							<Spinner
+								style={{
+									height: 30,
+									width: 30
+								}}
+							/>
+						</div> : null}
+
+
 						{view !== "add" ? (
 							<table className="sa_swatch_table wp-list-table widefat striped fixed table-view-list">
-								{/* <thead>
-									<tr>
-										<th style={{ width: "40px" }}></th>
-										<th>Name</th>
-										<th className="actions"></th>
-									</tr>
-								</thead> */}
 								<tbody>
 									{list.map((term) => {
 										const classes = ["term-item"];
@@ -553,7 +599,7 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 																	: "dashicons dashicons-plus"
 															}
 														></span>
-														{isSelected ? "Remove" : "Add"}
+														{isSelected ? "Remove" : "Select"}
 													</span>
 												</td>
 											</tr>
@@ -569,7 +615,7 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 									value={newTerm || ""}
 									placeholder="New option name"
 								/>
-								<button className="button" onClick={() => handleAddNew()}>
+								<button className="button button-primary" onClick={() => handleAddNew()}>
 									Save
 								</button>
 							</div>
