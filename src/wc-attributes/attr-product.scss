@@ -94,8 +94,8 @@
 		height: 40px;
 		display: block;
 		object-fit: cover;
+		border: 1px solid #68abde;
 	}
-
 }
 
 .wc_swatch_image {
@@ -105,6 +105,7 @@
 	align-items: center;
 	justify-content: center;
 	background: #fff;
+	border: 1px solid #68abde;
 
 	img {
 		width: 100%;
@@ -131,6 +132,10 @@
 		object-fit: cover;
 		display: block;
 	}
+}
+
+.sa_border {
+	border: 1px solid #d5d5d5;
 }
 
 .column-swatch {
@@ -166,10 +171,10 @@
 			min-height: 25px !important;
 		}
 
-		>div:nth-child(2) {
+		> div:nth-child(2) {
 			padding-top: 0px;
 
-			>div:nth-child(1) {
+			> div:nth-child(1) {
 				display: none;
 			}
 		}
@@ -187,9 +192,6 @@
 	gap: 10px;
 }
 
-
-
-
 .components-modal__frame {
 	&.sa_swatch_modal {
 		.components-modal__content {
@@ -205,7 +207,6 @@
 		}
 
 		.sa_modal_inner {
-		
 			display: block;
 			margin-top: 15px;
 		}
@@ -237,9 +238,7 @@
 			transform: translate(-50%, -50%);
 		}
 	}
-
 }
-
 
 .sa_swatch_table {
 	.actions {
@@ -296,6 +295,5 @@
 			display: block;
 			object-fit: cover;
 		}
-
 	}
 }

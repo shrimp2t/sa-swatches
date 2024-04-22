@@ -26,10 +26,13 @@ function admin_scripts()
 	wp_register_script('sa_attr_product', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
 	wp_register_style('sa_attr_product', $assets['files']['css'], [], $assets['version']);
 
+	global $post;
+
 	$config =  [
 		'root' => esc_url_raw(rest_url()),
 		'ajax' => add_query_arg(['action' => 'sa_wc_ajax', 'nonce' => wp_create_nonce('sa_wc_ajax')], admin_url('admin-ajax.php')),
 		'nonce' => wp_create_nonce('wp_rest'),
+		'pid' => $post->ID,
 	];
 
 	wp_localize_script('sa_attr_product', 'SA_WC_BLOCKS', $config);

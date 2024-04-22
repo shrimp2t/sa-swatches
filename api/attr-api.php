@@ -5,6 +5,7 @@ namespace SA_WC_BLOCKS\API\Attrs;
 use function SA_WC_BLOCKS\get_wc_tax_attrs;
 
 add_action('sa_wc_api/update_term_swatch', __NAMESPACE__ . '\rest_update_term_swatch');
+add_action('sa_wc_api/update_custom_swatch', __NAMESPACE__ . '\update_custom_swatch');
 add_action('sa_wc_api/get_terms', __NAMESPACE__ . '\rest_get_tax_terms');
 add_action('sa_wc_api/add_term', __NAMESPACE__ . '\rest_add_term');
 
@@ -47,6 +48,7 @@ function get_terms_data($terms, $type = null)
 			'id' => $term->term_id,
 			'name' => $term->name,
 			'slug' => $term->slug,
+			'tax' => $term->taxonomy,
 			'swatch' => $swatch,
 		];
 	}
@@ -76,6 +78,7 @@ function rest_add_term($post)
 			'id' => $term->term_id,
 			'name' => $term->name,
 			'slug' => $term->slug,
+			'tax' => $term->taxonomy,
 			'swatch' => $swatch,
 		];
 
@@ -150,6 +153,42 @@ function rest_update_term_swatch($post)
 	$term_id = isset($post['term_id']) ? absint($post['term_id']) : '';
 	$value = isset($post['value']) ? sanitize_text_field($post['value']) : '';
 	$type = isset($post['type']) ? sanitize_text_field($post['type']) : '';
+
+	$data = [
+		'type' => $type,
+		'value' => $value,
+	];
+	if ($type === 'sa_image') {
+		$data['value'] = absint($data['value']);
+	}
+
+	update_term_meta(
+		$term_id,
+		'_sa_wc_swatch',
+		json_encode($data)
+	);
+
+	$term = get_term($term_id, $tax);
+	$swatch = get_swatch_data($term->term_id, $type);
+	$data =  [
+		'id' => $term->term_id,
+		'name' => $term->name,
+		'slug' => $term->slug,
+		'swatch' => $swatch,
+	];
+
+	wp_send_json([
+		'success' => true,
+		'data' => $data,
+	]);
+}
+function update_custom_swatch($post)
+{
+	$tax = isset($post['tax']) ? sanitize_text_field($post['tax']) : '';
+	$term_id = isset($post['term_id']) ? absint($post['term_id']) : '';
+	$value = isset($post['value']) ? sanitize_text_field($post['value']) : '';
+	$type = isset($post['type']) ? sanitize_text_field($post['type']) : '';
+	$pid = isset($post['pid']) ? absint($post['pid']) : 0;
 
 	$data = [
 		'type' => $type,

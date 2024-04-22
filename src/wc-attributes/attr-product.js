@@ -105,11 +105,12 @@ const Image = ({ swatch, type, onChange, clear }) => {
 		onChange?.(false);
 	};
 
-	const src = image?.thumbnail || image?.full || swatch?.thumbnail || swatch?.full;
+	const src =
+		image?.thumbnail || image?.full || swatch?.thumbnail || swatch?.full;
 
 	return (
 		<div className="wc_swatch_image_wrap" data-type={type}>
-			<div onClick={handleOpen} className="wc_swatch_image">
+			<div onClick={handleOpen} className="wc_swatch_image sa_border">
 				{src ? (
 					<img src={src} alt="" />
 				) : (
@@ -163,7 +164,7 @@ const ColorSwatch = ({ color, onChange, confirm }) => {
 
 	return (
 		<>
-			<div className="wc_swatch_color">
+			<div className="wc_swatch_color sa_border">
 				<div
 					style={{ background: value, pointer: "cursor" }}
 					onClick={() => {
@@ -210,15 +211,12 @@ const ColorSwatch = ({ color, onChange, confirm }) => {
 	);
 };
 
-const ListSelectedTermItem = ({
-	term,
-	onClick,
-	selectedList,
-	onClose,
-}) => {
+const ListSelectedTermItem = ({ term, onClick, selectedList, onClose }) => {
 	const classes = ["term-item"];
 	const [isOpen, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const [customSwatch, setCustomSwatch] = useState(null);
+	const [customName, setCustomName] = useState(null);
 	let isSelected = false;
 	if (selectedList?.length) {
 		if (selectedList.filter((i) => i.id === term.id).length) {
@@ -226,6 +224,44 @@ const ListSelectedTermItem = ({
 			isSelected = true;
 		}
 	}
+	useEffect(() => {
+		setCustomSwatch(term?.custom_swatch);
+	}, []);
+
+	const handleSaveCustom = () => {
+		sendReq({
+			url: SA_WC_BLOCKS?.ajax,
+			method: "post",
+			data: {
+				tax: term?.tax,
+				term_id: term?.term_id,
+				type: term?.swatch?.type,
+				value:
+					term?.swatch?.type === "sa_image" ? customSwatch?.id : customSwatch,
+				custom_name: term?.swatch?.type,
+				pid: SA_WC_BLOCKS.pid,
+			},
+			params: {
+				endpoint: "update_custom_swatch",
+			},
+		})
+			.then((res) => {
+				console.log("Update_meta", res);
+				if (res?.data) {
+					setSelectedList?.((prev) => {
+						const next = prev.map((el) => {
+							if (el.id === res?.data?.id) {
+								return res?.data;
+							}
+							return el;
+						});
+
+						return next;
+					});
+				}
+			})
+			.catch((e) => console.log(e));
+	};
 
 	return (
 		<>
@@ -235,7 +271,7 @@ const ListSelectedTermItem = ({
 				key={term.id}
 			>
 				{term?.swatch?.type === "sa_image" ? (
-					<span className="img">
+					<span className="img sa_border">
 						<img
 							src={term?.swatch?.thumbnail || term?.swatch?.full || ""}
 							alt=""
@@ -244,7 +280,7 @@ const ListSelectedTermItem = ({
 				) : null}
 				{term?.swatch?.type === "sa_color" ? (
 					<span
-						className="color"
+						className="color sa_border"
 						style={{ background: `${term?.swatch?.value}` }}
 					></span>
 				) : null}
@@ -263,7 +299,6 @@ const ListSelectedTermItem = ({
 				</div>
 			</div>
 
-
 			{isOpen && (
 				<Modal
 					title={`Swatch settings`}
@@ -272,40 +307,62 @@ const ListSelectedTermItem = ({
 					style={{ width: 600 }}
 					onRequestClose={() => setOpen(false)}
 				>
-
 					<div className="sa_modal_inner">
-						{loading ? <div className="loading">
-							<Spinner
-								style={{
-									height: 30,
-									width: 30
-								}}
-							/>
-						</div> : null}
+						{loading ? (
+							<div className="loading">
+								<Spinner
+									style={{
+										height: 30,
+										width: 30,
+									}}
+								/>
+							</div>
+						) : null}
 
 						<div className="box">
 							<h3>This product settings</h3>
 							<div className="term-item swatch_box">
-								{term?.swatch?.type === "sa_image" ? <Image swatch={term?.swatch} onChange={() => { }} /> : null}
+								{term?.swatch?.type === "sa_image" ? (
+									<Image
+										swatch={customSwatch}
+										onChange={(changeData) => {
+											setCustomSwatch(changeData);
+										}}
+									/>
+								) : null}
 								{term?.swatch?.type === "sa_color" ? (
 									<ColorSwatch
 										confirm={true}
-										onChange={() => { }}
-										color={term?.swatch?.value}
+										onChange={(changeData) => {
+											setCustomSwatch(changeData);
+										}}
+										color={customSwatch?.value}
 									/>
 								) : null}
-								<input type="text" style={{ flexBasis: '60%' }} placeholder="custom name" />
-								<button type="button" className="button">Save</button>
-								<button type="button" className="button">Reset</button>
+								<input
+									type="text"
+									style={{ flexBasis: "60%" }}
+									onChange={(e) => setCustomName(e.target.value)}
+									placeholder="custom name"
+								/>
+								<button
+									type="button"
+									onClick={handleSaveCustom}
+									className="button"
+								>
+									Save
+								</button>
+								<button type="button" className="button">
+									Reset
+								</button>
 							</div>
 						</div>
-
 
 						<div className="sa_box">
 							<h3>Global settings</h3>
 							<div className="term-item swatch_box">
 								{term?.swatch?.type === "sa_image" ? (
-									<span className="img">
+									<span className="img sa_border">
 										<img
 											src={term?.swatch?.thumbnail || term?.swatch?.full || ""}
 											alt=""
@@ -314,19 +371,16 @@ const ListSelectedTermItem = ({
 								) : null}
 								{term?.swatch?.type === "sa_color" ? (
 									<span
-										className="color"
+										className="color sa_border"
 										style={{ background: `${term?.swatch?.value}` }}
 									></span>
 								) : null}
 								<span>{term?.name}</span>
 							</div>
 						</div>
-
-
 					</div>
 				</Modal>
 			)}
-
 		</>
 	);
 };
@@ -334,7 +388,7 @@ const ListSelectedTermItem = ({
 // Custom save Attribute meta here.
 // 	$attributes[] = apply_filters( 'woocommerce_admin_meta_boxes_prepare_attribute', $attribute, $data, $i );
 
-const SortabeListTerms = ({
+const SortableListTerms = ({
 	list,
 	onSorted,
 	onClick,
@@ -388,8 +442,8 @@ const ColSwatch = ({ term, tax, type, setSelectedList }) => {
 			.then((res) => {
 				console.log("Update_meta", res);
 				if (res?.data) {
-					setSelectedList?.(prev => {
-						const next = prev.map(el => {
+					setSelectedList?.((prev) => {
+						const next = prev.map((el) => {
 							if (el.id === res?.data?.id) {
 								return res?.data;
 							}
@@ -404,13 +458,19 @@ const ColSwatch = ({ term, tax, type, setSelectedList }) => {
 	};
 	return (
 		<>
-			{type === "sa_image" ? <td style={{ width: "40px" }}><Image swatch={term?.swatch} onChange={onChange} /></td> : null}
+			{type === "sa_image" ? (
+				<td style={{ width: "40px" }}>
+					<Image swatch={term?.swatch} onChange={onChange} />
+				</td>
+			) : null}
 			{type === "sa_color" ? (
-				<td style={{ width: "40px" }}><ColorSwatch
-					confirm={true}
-					onChange={onChange}
-					color={term?.swatch?.value}
-				/></td>
+				<td style={{ width: "40px" }}>
+					<ColorSwatch
+						confirm={true}
+						onChange={onChange}
+						color={term?.swatch?.value}
+					/>
+				</td>
 			) : null}
 		</>
 	);
@@ -470,8 +530,9 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 					setType(res?.type);
 				}
 			})
-			.catch((e) => console.log(e)).finally(() => {
-				setLoading(false)
+			.catch((e) => console.log(e))
+			.finally(() => {
+				setLoading(false);
 			});
 		return () => {
 			controller.abort();
@@ -532,14 +593,15 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 				}
 				console.log("added_new_term", taxonomy, res);
 			})
-			.catch((e) => console.log(e)).finally(() => {
+			.catch((e) => console.log(e))
+			.finally(() => {
 				setLoading(false);
 			});
 	};
 
 	return (
 		<>
-			<SortabeListTerms
+			<SortableListTerms
 				onSorted={onSorted}
 				list={selectedList}
 				showClose={true}
@@ -578,17 +640,17 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 						</div>
 					}
 				>
-
-					<div className="sa_modal_inner" style={{ minHeight: '50vh' }}>
-						{loading ? <div className="loading">
-							<Spinner
-								style={{
-									height: 30,
-									width: 30
-								}}
-							/>
-						</div> : null}
-
+					<div className="sa_modal_inner" style={{ minHeight: "50vh" }}>
+						{loading ? (
+							<div className="loading">
+								<Spinner
+									style={{
+										height: 30,
+										width: 30,
+									}}
+								/>
+							</div>
+						) : null}
 
 						{view !== "add" ? (
 							<table className="sa_swatch_table wp-list-table widefat striped fixed table-view-list">
@@ -605,8 +667,12 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 
 										return (
 											<tr key={term.id}>
-
-												<ColSwatch setSelectedList={setSelectedList} term={term} tax={taxonomy} type={type} />
+												<ColSwatch
+													setSelectedList={setSelectedList}
+													term={term}
+													tax={taxonomy}
+													type={type}
+												/>
 
 												<td>{term.name}</td>
 												<td className="actions">
@@ -637,7 +703,10 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 									value={newTerm || ""}
 									placeholder="New option name"
 								/>
-								<button className="button button-primary" onClick={() => handleAddNew()}>
+								<button
+									className="button button-primary"
+									onClick={() => handleAddNew()}
+								>
 									Save
 								</button>
 							</div>
