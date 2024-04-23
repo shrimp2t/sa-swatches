@@ -486,7 +486,7 @@ const ColSwatch = ({ term, tax, type, setSelectedList }) => {
 	);
 };
 
-const App = ({ title, taxonomy, selected, onChange, onLoad }) => {
+const App = ({ title, taxonomy, selected, onChange, onLoad, initList }) => {
 	const [loading, setLoading] = useState(false);
 	const [isOpen, setOpen] = useState(false);
 	const [isChanged, setIsChanged] = useState(false);
@@ -499,6 +499,15 @@ const App = ({ title, taxonomy, selected, onChange, onLoad }) => {
 	const [newTerm, setNewTerm] = useState("");
 
 	useEffect(() => {
+
+		if (initList) {
+			setLoadSelected(true);
+			setList(initList);
+			setSelectedList(initList);
+			return;
+		}
+
+
 		const controller = new AbortController();
 		const signal = controller.signal;
 		setLoading(true);
@@ -734,16 +743,32 @@ const App = ({ title, taxonomy, selected, onChange, onLoad }) => {
 };
 
 const init = () => {
-	jQuery(".sa_attr_swatches").each(function () {
+	jQuery(".sa_attr_swatches, textarea[name^='attribute_values[']").each(function () {
 		const el = jQuery(this);
 		if (el.hasClass("sa_added")) {
 			return;
 		}
+		const tag = el.prop('tagName');
+		const isCustomAttr = tag === 'TEXTAREA';
 		const parent = el.closest('table');
 		const div = jQuery("<span/>");
 		div.insertAfter(el);
 		const title = el.data("title");
-		const selected = el.data("selected");
+
+
+		const getCustomValues = () => {
+			const values = el.val().toString().split('|').map(i => {
+				return i.trim();
+			}).filter(i => i?.length).map(i => {
+				return {
+					id: i,
+					name: i,
+				}
+			});
+			return values;
+		}
+
+		let selected = !isCustomAttr ? el.data("selected") : getCustomValues();
 		const taxonomy = el.data("taxonomy");
 		const customInput = parent.find('input.sa_overwrite_swatches');
 		console.log("selected", selected, taxonomy);
@@ -756,10 +781,8 @@ const init = () => {
 			} catch (e) {
 				custom = {};
 			}
-
 			const opts = list.map((i) => {
 				const strId = `${i.id}`;
-
 				if (i?.custom_swatch || i?.custom_name) {
 					if (typeof custom[strId] === 'undefined' || !custom[strId]) {
 						custom[strId] = {};
@@ -769,12 +792,21 @@ const init = () => {
 				} else {
 					custom[strId] = false;
 				}
+				if (!isCustomAttr) {
+					return `<option selected="selected" value="${i.id}">${i.name}</option>`;
+				} else {
+					return i.id;
+				}
 
-				return `<option selected="selected" value="${i.id}">${i.name}</option>`;
 			});
 
 			customInput.val(JSON.stringify(custom));
-			el.html(opts.join(" "));
+			if (isCustomAttr) {
+				el.html(opts.join("|"));
+			} else {
+				el.html(opts.join(" "));
+			}
+
 		}
 
 		const onChange = (list) => {
@@ -793,6 +825,7 @@ const init = () => {
 				onChange={onChange}
 				onLoad={onLoad}
 				selected={selected}
+				initList={isCustomAttr ? selected : undefined}
 			/>,
 			div.get(0),
 		);
