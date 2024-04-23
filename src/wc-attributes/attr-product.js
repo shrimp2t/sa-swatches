@@ -211,7 +211,13 @@ const ColorSwatch = ({ color, onChange, confirm }) => {
 	);
 };
 
-const ListSelectedTermItem = ({ term, onClick, selectedList, onClose, setSelectedList }) => {
+const ListSelectedTermItem = ({
+	term,
+	onClick,
+	selectedList,
+	onClose,
+	setSelectedList,
+}) => {
 	const classes = ["term-item"];
 	const [isOpen, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -230,7 +236,8 @@ const ListSelectedTermItem = ({ term, onClick, selectedList, onClose, setSelecte
 	}, []);
 
 	const handleSaveCustom = () => {
-		const value = term?.swatch?.type === "sa_image" ? customSwatch?.id : customSwatch;
+		const value =
+			term?.swatch?.type === "sa_image" ? customSwatch?.id : customSwatch;
 		setSelectedList?.((prev) => {
 			const next = prev.map((el) => {
 				if (el.id === term.id) {
@@ -247,25 +254,23 @@ const ListSelectedTermItem = ({ term, onClick, selectedList, onClose, setSelecte
 			});
 			return next;
 		});
-
+		setOpen(false);
 	};
 
 	const handleClearCustom = () => {
-
 		setSelectedList?.((prev) => {
 			const next = prev.map((el) => {
 				if (el.id === term.id) {
-					delete el.custom_swatch
-					delete el.custom_name
+					delete el.custom_swatch;
+					delete el.custom_name;
 				}
 				return el;
 			});
 			return next;
 		});
 
-		setCustomName('');
+		setCustomName("");
 		setCustomSwatch(null);
-
 	};
 
 	return (
@@ -278,7 +283,13 @@ const ListSelectedTermItem = ({ term, onClick, selectedList, onClose, setSelecte
 				{term?.swatch?.type === "sa_image" ? (
 					<span className="img sa_border">
 						<img
-							src={customSwatch?.thumbnail || customSwatch?.full || term?.swatch?.thumbnail || term?.swatch?.full || ""}
+							src={
+								customSwatch?.thumbnail ||
+								customSwatch?.full ||
+								term?.swatch?.thumbnail ||
+								term?.swatch?.full ||
+								""
+							}
 							alt=""
 						/>
 					</span>
@@ -286,7 +297,9 @@ const ListSelectedTermItem = ({ term, onClick, selectedList, onClose, setSelecte
 				{term?.swatch?.type === "sa_color" ? (
 					<span
 						className="color sa_border"
-						style={{ background: `${customSwatch?.value || term?.swatch?.value}` }}
+						style={{
+							background: `${customSwatch?.value || term?.swatch?.value}`,
+						}}
 					></span>
 				) : null}
 
@@ -358,7 +371,11 @@ const ListSelectedTermItem = ({ term, onClick, selectedList, onClose, setSelecte
 								>
 									Save
 								</button>
-								<button type="button" onClick={() => handleClearCustom()} className="button">
+								<button
+									type="button"
+									onClick={() => handleClearCustom()}
+									className="button"
+								>
 									Reset
 								</button>
 							</div>
@@ -390,9 +407,6 @@ const ListSelectedTermItem = ({ term, onClick, selectedList, onClose, setSelecte
 		</>
 	);
 };
-
-// Custom save Attribute meta here.
-// 	$attributes[] = apply_filters( 'woocommerce_admin_meta_boxes_prepare_attribute', $attribute, $data, $i );
 
 const SortableListTerms = ({
 	list,
@@ -486,7 +500,16 @@ const ColSwatch = ({ term, tax, type, setSelectedList }) => {
 	);
 };
 
-const App = ({ title, taxonomy, selected, onChange, onLoad, initList }) => {
+const App = ({
+	title,
+	taxonomy,
+	selected,
+	onChange,
+	onLoad,
+	initList,
+	isCustom,
+	titleInput,
+}) => {
 	const [loading, setLoading] = useState(false);
 	const [isOpen, setOpen] = useState(false);
 	const [isChanged, setIsChanged] = useState(false);
@@ -497,18 +520,15 @@ const App = ({ title, taxonomy, selected, onChange, onLoad, initList }) => {
 	const [search, setSearch] = useState("");
 	const [view, setView] = useState("");
 	const [newTerm, setNewTerm] = useState("");
-
-	const isCustomAttr = !!initList;
+	const [modalTitle, setModalTitle] = useState(title);
 
 	useEffect(() => {
-
-		if (isCustomAttr) {
+		if (isCustom) {
 			setLoadSelected(true);
 			setList(initList);
 			setSelectedList(initList);
 			return;
 		}
-
 
 		const controller = new AbortController();
 		const signal = controller.signal;
@@ -569,6 +589,18 @@ const App = ({ title, taxonomy, selected, onChange, onLoad, initList }) => {
 		}
 	}, [selectedList]);
 
+	useEffect(() => {
+		if (isCustom) {
+			const title = titleInput.val();
+			setModalTitle(title);
+
+			titleInput.on("change", function () {
+				const title = titleInput.val();
+				setModalTitle(title);
+			});
+		}
+	}, []);
+
 	const handleAddItem = (item) => {
 		setIsChanged(true);
 		setSelectedList((prev) => {
@@ -597,6 +629,25 @@ const App = ({ title, taxonomy, selected, onChange, onLoad, initList }) => {
 		if (!newTerm?.length) {
 			return;
 		}
+
+		if (isCustom) {
+			let t = newTerm?.trim?.();
+			if (t?.length) {
+				const newItem = {
+					id: t,
+					name: t,
+				};
+
+				setList([newItem, ...list]);
+				setSelectedList([...selectedList, newItem]);
+				setView("");
+				setNewTerm("");
+				setOpen(false);
+				setLoading(false);
+				return;
+			}
+		}
+
 		setLoading(true);
 		sendReq({
 			url: SA_WC_BLOCKS?.ajax,
@@ -639,7 +690,7 @@ const App = ({ title, taxonomy, selected, onChange, onLoad, initList }) => {
 			</button>
 			{isOpen && (
 				<Modal
-					title={title}
+					title={modalTitle}
 					size="medium"
 					className="sa_swatch_modal"
 					style={{ width: 550 }}
@@ -745,93 +796,121 @@ const App = ({ title, taxonomy, selected, onChange, onLoad, initList }) => {
 };
 
 const init = () => {
-	jQuery(".sa_attr_swatches, textarea[name^='attribute_values[']").each(function () {
-		const el = jQuery(this);
-		if (el.hasClass("sa_added")) {
-			return;
-		}
-		const tag = el.prop('tagName');
-		const isCustomAttr = tag === 'TEXTAREA';
-		const parent = el.closest('table');
-		const div = jQuery("<span/>");
-		div.insertAfter(el);
-		const title = el.data("title");
+	jQuery("select.attribute_values, textarea[name^='attribute_values[']").each(
+		function () {
+			const el = jQuery(this);
 
-
-		const getCustomValues = () => {
-			const values = el.val().toString().split('|').map(i => {
-				return i.trim();
-			}).filter(i => i?.length).map(i => {
-				return {
-					id: i,
-					name: i,
-				}
-			});
-			return values;
-		}
-
-		let selected = !isCustomAttr ? el.data("selected") : getCustomValues();
-		const taxonomy = el.data("taxonomy");
-		const customInput = parent.find('input.sa_overwrite_swatches');
-		console.log("selected", selected, taxonomy);
-		el.addClass("sa_added sa_hide");
-
-		const handleChange = (list) => {
-			let custom = {};
-			try {
-				custom = JSON.parse(customInput.val());
-			} catch (e) {
-				custom = {};
+			if (el.hasClass("sa_added")) {
+				return;
 			}
-			const opts = list.map((i) => {
-				const strId = `${i.id}`;
-				if (i?.custom_swatch || i?.custom_name) {
-					if (typeof custom[strId] === 'undefined' || !custom[strId]) {
-						custom[strId] = {};
+
+			const parent = el.closest("table");
+			const tag = el.prop("tagName");
+			const isCustomAttr = tag === "TEXTAREA";
+
+			const div = jQuery("<span/>");
+			div.insertAfter(el);
+			const title =
+				el.data("title") || parent.find(".attribute_name strong").text();
+			const titleInput = parent.find("input.attribute_name");
+
+			const getCustomValues = () => {
+				const values = el
+					.val()
+					.toString()
+					.split("|")
+					.map((i) => {
+						return i.trim();
+					})
+					.filter((i) => i?.length)
+					.map((i) => {
+						return {
+							id: i,
+							name: i,
+						};
+					});
+				return values;
+			};
+
+			let selected = !isCustomAttr
+				? el.data("selected") || undefined
+				: getCustomValues();
+			const taxonomy = el.data("taxonomy");
+			const customInput = parent.find("input.sa_overwrite_swatches");
+			if (!selected && !isCustomAttr) {
+				selected = el.val();
+				jQuery(
+					".select_all_attributes, .select_no_attributes, .add_new_attribute",
+					parent,
+				).remove();
+
+				el.removeClass("wc-taxonomy-term-search");
+				if (jQuery.fn?.select2) {
+					try {
+						el.select2("destroy");
+					} catch (e) {}
+				}
+			}
+			console.log("selected", selected, taxonomy);
+			el.addClass("sa_added sa_hide");
+
+			const handleChange = (list) => {
+				let custom = {};
+				try {
+					custom = JSON.parse(customInput.val());
+				} catch (e) {
+					custom = {};
+				}
+				const opts = list.map((i) => {
+					const strId = `${i.id}`;
+					if (i?.custom_swatch || i?.custom_name) {
+						if (typeof custom[strId] === "undefined" || !custom[strId]) {
+							custom[strId] = {};
+						}
+						custom[strId]["swatch"] = i?.custom_swatch || false;
+						custom[strId]["name"] = i?.custom_name || false;
+					} else {
+						custom[strId] = false;
 					}
-					custom[strId]['swatch'] = i?.custom_swatch || false;
-					custom[strId]['name'] = i?.custom_name || false;
+					if (!isCustomAttr) {
+						return `<option selected="selected" value="${i.id}">${i.name}</option>`;
+					} else {
+						return i.id;
+					}
+				});
+
+				customInput.val(JSON.stringify(custom));
+				if (isCustomAttr) {
+					el.html(opts.join("|"));
 				} else {
-					custom[strId] = false;
+					el.html(opts.join(" "));
 				}
-				if (!isCustomAttr) {
-					return `<option selected="selected" value="${i.id}">${i.name}</option>`;
-				} else {
-					return i.id;
-				}
+			};
 
-			});
+			const onChange = (list) => {
+				handleChange(list);
+				el.trigger("change");
+			};
 
-			customInput.val(JSON.stringify(custom));
-			if (isCustomAttr) {
-				el.html(opts.join("|"));
-			} else {
-				el.html(opts.join(" "));
-			}
+			const onLoad = (list) => {
+				handleChange(list);
+			};
 
-		}
-
-		const onChange = (list) => {
-			handleChange(list)
-			el.trigger("change");
-		};
-
-		const onLoad = (list) => {
-			handleChange(list)
-		}
-
-		render(
-			<App
-				title={title}
-				taxonomy={taxonomy}
-				onChange={onChange}
-				onLoad={onLoad}
-				selected={selected}
-				initList={isCustomAttr ? selected : undefined}
-			/>,
-			div.get(0),
-		);
-	});
+			render(
+				<App
+					title={title}
+					taxonomy={taxonomy}
+					onChange={onChange}
+					onLoad={onLoad}
+					selected={selected}
+					isCustom={isCustomAttr}
+					initList={isCustomAttr ? selected : undefined}
+					titleInput={titleInput}
+				/>,
+				div.get(0),
+			);
+		},
+	);
 };
 init();
 
