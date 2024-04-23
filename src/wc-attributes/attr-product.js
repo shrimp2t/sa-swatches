@@ -538,15 +538,14 @@ const App = ({
 		};
 		if (!search?.length && selected?.length) {
 			if (!loadSelected) {
-				body.selected = Array.isArray(selected)
-					? selected.join(",")
-					: [selected];
+				body.selected = Array.isArray(selected) ? selected : [selected];
 			}
 		} else {
 			body.search = search;
 		}
 
 		body.pid = SA_WC_BLOCKS?.pid;
+		body.is_custom = isCustom ? 1 : null;
 
 		sendReq({
 			url: SA_WC_BLOCKS?.ajax,

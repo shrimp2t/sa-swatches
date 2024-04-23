@@ -10,7 +10,6 @@ add_action('sa_wc_api/get_terms', __NAMESPACE__ . '\rest_get_tax_terms');
 add_action('sa_wc_api/add_term', __NAMESPACE__ . '\rest_add_term');
 
 
-
 function get_image_data($image_id)
 {
 	$data = [];
@@ -102,7 +101,6 @@ function rest_add_term($post)
 
 	$r = wp_insert_term($name, $tax);
 	if (isset($r['term_id'])) {
-
 		$attrs = get_wc_tax_attrs();
 		$type =  $tax && isset($attrs[$tax]) ? $attrs[$tax] : false;
 		$term = get_term($r['term_id'], $tax);
@@ -131,35 +129,36 @@ function rest_get_tax_terms($post)
 {
 
 	$tax = isset($post['taxonomy']) ? sanitize_text_field($post['taxonomy']) : '';
-	$selected = isset($post['selected']) ? sanitize_text_field($post['selected']) : '';
+	$is_custom = isset($post['is_custom']) ? sanitize_text_field($post['is_custom']) : '';
+	$selected = isset($post['selected']) ? wp_unslash($post['selected']) : false;
 	$search = isset($post['search']) ? sanitize_text_field($post['search']) : '';
 	$pid = isset($post['pid']) ? sanitize_text_field($post['pid']) : '';
-	// $selected = explode(',', $selected);
-	// $selected = array_map('absint', $selected);
-
 	$attrs = get_wc_tax_attrs();
-	// $t = strpos($tax, 'pa_') ? substr($tax, 3) : $tax;
 	$type =  $tax && isset($attrs[$tax]) ? $attrs[$tax] : false;
 
-
-	$terms = get_terms(array(
-		'taxonomy' => $tax, //Custom taxonomy name
-		'hide_empty' => false,
-		'orderby'  => 'name',
-		'order'  => 'ASC',
-		'number' => 30,
-		'search' => $search,
-	));
-
-	if ($selected) {
-		$terms_selected = get_terms(array(
+	$terms = [];
+	$terms_selected = [];
+	if (!$is_custom) {
+		$terms = get_terms(array(
 			'taxonomy' => $tax, //Custom taxonomy name
 			'hide_empty' => false,
-			'orderby'  => 'include',
-			'include' => $selected,
+			'orderby'  => 'name',
+			'order'  => 'ASC',
+			'number' => 30,
+			'search' => $search,
 		));
-	} else {
-		$terms_selected = [];
+	}
+
+
+	if ($selected) {
+		if (!$is_custom) {
+			$terms_selected = get_terms(array(
+				'taxonomy' => $tax, //Custom taxonomy name
+				'hide_empty' => false,
+				'orderby'  => 'include',
+				'include' => $selected,
+			));
+		}
 	}
 
 

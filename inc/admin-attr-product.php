@@ -76,6 +76,7 @@ function woocommerce_product_option_terms($attribute_taxonomy, $i, $attribute)
 
 function extra_fields($attribute, $i)
 {
+
 ?>
 	<tr style="display:none !important;">
 		<td><input type="hidden" class="sa_overwrite_swatches checkbox" name="sa_overwrite_swatches[<?php echo esc_attr($i); ?>]" /></td>
