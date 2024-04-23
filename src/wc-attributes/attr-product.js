@@ -498,9 +498,11 @@ const App = ({ title, taxonomy, selected, onChange, onLoad, initList }) => {
 	const [view, setView] = useState("");
 	const [newTerm, setNewTerm] = useState("");
 
+	const isCustomAttr = !!initList;
+
 	useEffect(() => {
 
-		if (initList) {
+		if (isCustomAttr) {
 			setLoadSelected(true);
 			setList(initList);
 			setSelectedList(initList);
