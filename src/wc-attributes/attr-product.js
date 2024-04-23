@@ -211,7 +211,7 @@ const ColorSwatch = ({ color, onChange, confirm }) => {
 	);
 };
 
-const ListSelectedTermItem = ({ term, onClick, selectedList, onClose }) => {
+const ListSelectedTermItem = ({ term, onClick, selectedList, onClose, setSelectedList }) => {
 	const classes = ["term-item"];
 	const [isOpen, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -226,41 +226,46 @@ const ListSelectedTermItem = ({ term, onClick, selectedList, onClose }) => {
 	}
 	useEffect(() => {
 		setCustomSwatch(term?.custom_swatch);
+		setCustomName(term?.custom_name);
 	}, []);
 
 	const handleSaveCustom = () => {
-		sendReq({
-			url: SA_WC_BLOCKS?.ajax,
-			method: "post",
-			data: {
-				tax: term?.tax,
-				term_id: term?.term_id,
-				type: term?.swatch?.type,
-				value:
-					term?.swatch?.type === "sa_image" ? customSwatch?.id : customSwatch,
-				custom_name: term?.swatch?.type,
-				pid: SA_WC_BLOCKS.pid,
-			},
-			params: {
-				endpoint: "update_custom_swatch",
-			},
-		})
-			.then((res) => {
-				console.log("Update_meta", res);
-				if (res?.data) {
-					setSelectedList?.((prev) => {
-						const next = prev.map((el) => {
-							if (el.id === res?.data?.id) {
-								return res?.data;
-							}
-							return el;
-						});
-
-						return next;
-					});
+		const value = term?.swatch?.type === "sa_image" ? customSwatch?.id : customSwatch;
+		setSelectedList?.((prev) => {
+			const next = prev.map((el) => {
+				if (el.id === term.id) {
+					return {
+						...el,
+						custom_swatch: {
+							type: el?.swatch?.type,
+							value,
+						},
+						custom_name: customName,
+					};
 				}
-			})
-			.catch((e) => console.log(e));
+				return el;
+			});
+			return next;
+		});
+
+	};
+
+	const handleClearCustom = () => {
+
+		setSelectedList?.((prev) => {
+			const next = prev.map((el) => {
+				if (el.id === term.id) {
+					delete el.custom_swatch
+					delete el.custom_name
+				}
+				return el;
+			});
+			return next;
+		});
+
+		setCustomName('');
+		setCustomSwatch(null);
+
 	};
 
 	return (
@@ -273,7 +278,7 @@ const ListSelectedTermItem = ({ term, onClick, selectedList, onClose }) => {
 				{term?.swatch?.type === "sa_image" ? (
 					<span className="img sa_border">
 						<img
-							src={term?.swatch?.thumbnail || term?.swatch?.full || ""}
+							src={customSwatch?.thumbnail || customSwatch?.full || term?.swatch?.thumbnail || term?.swatch?.full || ""}
 							alt=""
 						/>
 					</span>
@@ -281,11 +286,11 @@ const ListSelectedTermItem = ({ term, onClick, selectedList, onClose }) => {
 				{term?.swatch?.type === "sa_color" ? (
 					<span
 						className="color sa_border"
-						style={{ background: `${term?.swatch?.value}` }}
+						style={{ background: `${customSwatch?.value || term?.swatch?.value}` }}
 					></span>
 				) : null}
 
-				<span className="name">{term.name}</span>
+				<span className="name">{customName || term.name}</span>
 				<div className="actions">
 					<span className="move ic">
 						<span class="dashicons dashicons-move"></span>
@@ -342,8 +347,9 @@ const ListSelectedTermItem = ({ term, onClick, selectedList, onClose }) => {
 								<input
 									type="text"
 									style={{ flexBasis: "60%" }}
+									value={customName}
 									onChange={(e) => setCustomName(e.target.value)}
-									placeholder="custom name"
+									placeholder="Custom name"
 								/>
 								<button
 									type="button"
@@ -352,7 +358,7 @@ const ListSelectedTermItem = ({ term, onClick, selectedList, onClose }) => {
 								>
 									Save
 								</button>
-								<button type="button" className="button">
+								<button type="button" onClick={() => handleClearCustom()} className="button">
 									Reset
 								</button>
 							</div>
@@ -393,6 +399,7 @@ const SortableListTerms = ({
 	onSorted,
 	onClick,
 	selectedList,
+	setSelectedList,
 	onClose,
 }) => {
 	return (
@@ -410,6 +417,7 @@ const SortableListTerms = ({
 						onClose={onClose}
 						onClick={onClick}
 						selectedList={selectedList}
+						setSelectedList={setSelectedList}
 					/>
 				);
 			})}
@@ -430,6 +438,8 @@ const ColSwatch = ({ term, tax, type, setSelectedList }) => {
 		if (type === "sa_color") {
 			saveData.value = changeData;
 		}
+
+		saveData.pid = SA_WC_BLOCKS?.pid;
 
 		sendReq({
 			url: SA_WC_BLOCKS?.ajax,
@@ -476,7 +486,7 @@ const ColSwatch = ({ term, tax, type, setSelectedList }) => {
 	);
 };
 
-const App = ({ title, taxonomy, selected, onChange }) => {
+const App = ({ title, taxonomy, selected, onChange, onLoad }) => {
 	const [loading, setLoading] = useState(false);
 	const [isOpen, setOpen] = useState(false);
 	const [isChanged, setIsChanged] = useState(false);
@@ -505,6 +515,8 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 			body.search = search;
 		}
 
+		body.pid = SA_WC_BLOCKS?.pid;
+
 		sendReq({
 			url: SA_WC_BLOCKS?.ajax,
 			method: "post",
@@ -525,6 +537,7 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 						setLoadSelected(true);
 						setSelectedList(res?.selected);
 					}
+					onLoad?.(res?.selected || []);
 				}
 				if (res?.selected) {
 					setType(res?.type);
@@ -583,6 +596,7 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 			data: {
 				taxonomy,
 				name: newTerm,
+				pid: SA_WC_BLOCKS?.pid,
 			},
 		})
 			.then((res) => {
@@ -604,6 +618,7 @@ const App = ({ title, taxonomy, selected, onChange }) => {
 			<SortableListTerms
 				onSorted={onSorted}
 				list={selectedList}
+				setSelectedList={setSelectedList}
 				showClose={true}
 				onClose={handleOnRemove}
 				taxonomy={taxonomy}
@@ -724,26 +739,59 @@ const init = () => {
 		if (el.hasClass("sa_added")) {
 			return;
 		}
+		const parent = el.closest('table');
 		const div = jQuery("<span/>");
 		div.insertAfter(el);
 		const title = el.data("title");
 		const selected = el.data("selected");
 		const taxonomy = el.data("taxonomy");
+		const customInput = parent.find('input.sa_overwrite_swatches');
 		console.log("selected", selected, taxonomy);
 		el.addClass("sa_added sa_hide");
-		const onChange = (ids) => {
-			console.log("Change_callled");
-			const opts = ids.map((i) => {
+
+		const handleChange = (list) => {
+			let custom = {};
+			try {
+				custom = JSON.parse(customInput.val());
+			} catch (e) {
+				custom = {};
+			}
+
+			const opts = list.map((i) => {
+				const strId = `${i.id}`;
+
+				if (i?.custom_swatch || i?.custom_name) {
+					if (typeof custom[strId] === 'undefined' || !custom[strId]) {
+						custom[strId] = {};
+					}
+					custom[strId]['swatch'] = i?.custom_swatch || false;
+					custom[strId]['name'] = i?.custom_name || false;
+				} else {
+					custom[strId] = false;
+				}
+
 				return `<option selected="selected" value="${i.id}">${i.name}</option>`;
 			});
 
-			el.html(opts.join(" ")).trigger("change");
+			customInput.val(JSON.stringify(custom));
+			el.html(opts.join(" "));
+		}
+
+		const onChange = (list) => {
+			handleChange(list)
+			el.trigger("change");
 		};
+
+		const onLoad = (list) => {
+			handleChange(list)
+		}
+
 		render(
 			<App
 				title={title}
 				taxonomy={taxonomy}
 				onChange={onChange}
+				onLoad={onLoad}
 				selected={selected}
 			/>,
 			div.get(0),

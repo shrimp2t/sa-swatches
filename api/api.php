@@ -12,9 +12,7 @@ function init()
 
 	$post = json_decode(file_get_contents('php://input'), true);
 	$endpoint =  isset($_REQUEST['endpoint']) ? sanitize_text_field($_REQUEST['endpoint']) : '';
-	$method =  $_REQUEST['method'] ? sanitize_text_field($_REQUEST['method']) : '';
-
-
+	$method =  isset($_REQUEST['method']) ? sanitize_text_field($_REQUEST['method']) : '';
 
 	do_action('sa_wc_api/' . $endpoint, $post);
 

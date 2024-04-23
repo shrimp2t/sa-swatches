@@ -9,6 +9,22 @@ add_action('sa_wc_api/update_custom_swatch', __NAMESPACE__ . '\update_custom_swa
 add_action('sa_wc_api/get_terms', __NAMESPACE__ . '\rest_get_tax_terms');
 add_action('sa_wc_api/add_term', __NAMESPACE__ . '\rest_add_term');
 
+
+
+function get_image_data($image_id)
+{
+	$data = [];
+	$thumb =  wp_get_attachment_image_src($image_id, 'thumbnail');
+	if ($thumb) {
+		$data['thumbnail'] =  $thumb[0];
+	}
+	$full =  wp_get_attachment_image_src($image_id, 'full');
+	if ($thumb) {
+		$data['full'] =  $full[0];
+	}
+	return $data;
+}
+
 function get_swatch_data($term_id, $type = null)
 {
 
@@ -23,34 +39,51 @@ function get_swatch_data($term_id, $type = null)
 	]);
 
 	if ($type === 'sa_image' && $data['value']) {
-		$thumb =  wp_get_attachment_image_src($data['value'], 'thumbnail');
-		if ($thumb) {
-			$data['thumbnail'] =  $thumb[0];
-		}
-		$full =  wp_get_attachment_image_src($data['value'], 'full');
-		if ($thumb) {
-			$data['full'] =  $full[0];
-		}
+		$image = get_image_data($data['value']);
+		$data = array_merge($data, $image);
 	}
 
 	return $data;
 }
 
 
-function get_terms_data($terms, $type = null)
+function get_terms_data($terms, $type = null, $pid = null, $tax = null)
 {
 
 	$list = [];
+	$overwrite_all =  $pid ? get_post_meta($pid, '_sa_custom_swatches', true) : [];
+	if (!is_array($overwrite_all)) {
+		$overwrite_all = [];
+	}
+
+	$overwrite =  $tax && isset($overwrite_all[$tax]) ? $overwrite_all[$tax] : [];
+
 	foreach ($terms as $term) {
 		$swatch = get_swatch_data($term->term_id, $type);
 		$swatch['type'] = $type;
-		$list[] = [
+		$item_data =  [
 			'id' => $term->term_id,
 			'name' => $term->name,
 			'slug' => $term->slug,
 			'tax' => $term->taxonomy,
 			'swatch' => $swatch,
 		];
+
+		if (isset($overwrite[$item_data['id']]) && $overwrite[$item_data['id']]) {
+			$custom =  $overwrite[$item_data['id']];
+			if (isset($custom['name']) && $custom['name']) {
+				$item_data['custom_name'] = $custom['name'];
+			}
+			if (isset($custom['swatch'])) {
+				$item_data['custom_swatch'] = $custom['swatch'];
+				if ($custom['swatch']['type'] === 'sa_image' && isset($custom['swatch']['value'])) {
+					$image = get_image_data($custom['swatch']['value']);
+					$item_data['custom_swatch'] = array_merge($item_data['custom_swatch'], $image);
+				}
+			}
+		}
+
+		$list[] = $item_data;
 	}
 
 	return $list;
@@ -100,6 +133,7 @@ function rest_get_tax_terms($post)
 	$tax = isset($post['taxonomy']) ? sanitize_text_field($post['taxonomy']) : '';
 	$selected = isset($post['selected']) ? sanitize_text_field($post['selected']) : '';
 	$search = isset($post['search']) ? sanitize_text_field($post['search']) : '';
+	$pid = isset($post['pid']) ? sanitize_text_field($post['pid']) : '';
 	// $selected = explode(',', $selected);
 	// $selected = array_map('absint', $selected);
 
@@ -142,8 +176,9 @@ function rest_get_tax_terms($post)
 		'success' => true,
 		'type' => $type,
 		'tax' => $tax,
-		'data' => get_terms_data($terms, $type),
-		'selected' => get_terms_data($terms_selected, $type),
+		'data' => get_terms_data($terms, $type, $pid, $tax),
+		'pid' => $pid,
+		'selected' => get_terms_data($terms_selected, $type, $pid, $tax),
 	]);
 }
 
