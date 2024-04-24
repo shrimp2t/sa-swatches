@@ -192,7 +192,13 @@
 	display: flex;
 	gap: 10px;
 }
-
+.sa_swatch_modal {
+	.button,
+	button {
+		display: inline-flex;
+		align-items: center;
+	}
+}
 .components-modal__frame {
 	&.sa_swatch_modal {
 		.components-modal__content {

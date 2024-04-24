@@ -526,7 +526,6 @@ const App = ({
 	const [selectedList, setSelectedList] = useState([]);
 	const [type, setType] = useState(false);
 	const [search, setSearch] = useState("");
-	const [view, setView] = useState("");
 	const [newTerm, setNewTerm] = useState("");
 	const [modalTitle, setModalTitle] = useState(title);
 
@@ -578,6 +577,11 @@ const App = ({
 						console.log("Load_selected", res?.selected);
 						setSelectedList(res?.selected);
 					}
+
+					if (isCustom && !res?.data?.length) {
+						setList(res?.selected || []);
+					}
+
 					onLoad?.(res?.selected || []);
 				}
 				if (res?.selected) {
@@ -650,7 +654,6 @@ const App = ({
 
 				setList([newItem, ...list]);
 				setSelectedList([...selectedList, newItem]);
-				setView("");
 				setNewTerm("");
 				setOpen(false);
 				setLoading(false);
@@ -675,7 +678,7 @@ const App = ({
 				if (res?.data) {
 					setList([res.data, ...list]);
 					setNewTerm("");
-					setView("");
+					setOpen(true);
 				}
 				console.log("added_new_term", taxonomy, res);
 			})
@@ -712,7 +715,7 @@ const App = ({
 					onRequestClose={() => setOpen(false)}
 					headerActions={
 						<div className="sa_space">
-							{view !== "add" ? (
+							{isOpen !== "add" ? (
 								<>
 									<input
 										type="search"
@@ -720,12 +723,18 @@ const App = ({
 										value={search || ""}
 										placeholder="Search"
 									/>
-									<button onClick={() => setView("add")} className="button">
+									<button onClick={() => setOpen("add")} className="button">
 										Add New
+									</button>
+									<button
+										onClick={() => setOpen("settings")}
+										className="button"
+									>
+										<span class="dashicons dashicons-admin-generic"></span>
 									</button>
 								</>
 							) : (
-								<button onClick={() => setView("")} className="button">
+								<button onClick={() => setOpen(true)} className="button">
 									Cancel
 								</button>
 							)}
@@ -744,7 +753,7 @@ const App = ({
 							</div>
 						) : null}
 
-						{view !== "add" ? (
+						{isOpen !== "add" ? (
 							<table className="sa_swatch_table wp-list-table widefat striped fixed table-view-list">
 								<tbody>
 									{list.map((term) => {
