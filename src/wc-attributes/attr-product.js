@@ -237,7 +237,9 @@ const ListSelectedTermItem = ({
 
 	const handleSaveCustom = () => {
 		const value =
-			term?.swatch?.type === "sa_image" ? customSwatch?.id : customSwatch;
+			term?.swatch?.type === "sa_image"
+				? customSwatch?.id
+				: customSwatch?.value;
 		setSelectedList?.((prev) => {
 			const next = prev.map((el) => {
 				if (el.id === term.id) {
@@ -344,15 +346,21 @@ const ListSelectedTermItem = ({
 									<Image
 										swatch={customSwatch}
 										onChange={(changeData) => {
-											setCustomSwatch(changeData);
+											setCustomSwatch((prev) => {
+												const next = { ...prev, ...changeData };
+												return next;
+											});
 										}}
 									/>
 								) : null}
 								{term?.swatch?.type === "sa_color" ? (
 									<ColorSwatch
-										confirm={true}
+										confirm={false}
 										onChange={(changeData) => {
-											setCustomSwatch(changeData);
+											setCustomSwatch((prev) => {
+												const next = { ...prev, value: changeData };
+												return next;
+											});
 										}}
 										color={customSwatch?.value}
 									/>
@@ -523,12 +531,11 @@ const App = ({
 	const [modalTitle, setModalTitle] = useState(title);
 
 	useEffect(() => {
-		if (isCustom) {
-			setLoadSelected(true);
-			setList(initList);
-			setSelectedList(initList);
-			return;
-		}
+		// if (isCustom) {
+		// 	// setLoadSelected(true);
+		// 	setList(initList);
+		// 	// setSelectedList(initList);
+		// }
 
 		const controller = new AbortController();
 		const signal = controller.signal;
@@ -546,6 +553,9 @@ const App = ({
 
 		body.pid = SA_WC_BLOCKS?.pid;
 		body.is_custom = isCustom ? 1 : null;
+		if (isCustom) {
+			body.taxonomy = modalTitle;
+		}
 
 		sendReq({
 			url: SA_WC_BLOCKS?.ajax,
@@ -565,6 +575,7 @@ const App = ({
 				if (!loadSelected) {
 					if (res?.selected) {
 						setLoadSelected(true);
+						console.log("Load_selected", res?.selected);
 						setSelectedList(res?.selected);
 					}
 					onLoad?.(res?.selected || []);
@@ -684,9 +695,14 @@ const App = ({
 				onClose={handleOnRemove}
 				taxonomy={taxonomy}
 			/>
-			<button type="button" className="button" onClick={() => setOpen(true)}>
-				Select Options
-			</button>
+			<div className="sa_space">
+				<button type="button" className="button" onClick={() => setOpen(true)}>
+					Select Options
+				</button>
+				<button type="button" className="button" onClick={() => setOpen(true)}>
+					Settings
+				</button>
+			</div>
 			{isOpen && (
 				<Modal
 					title={modalTitle}
@@ -809,9 +825,12 @@ const init = () => {
 
 			const div = jQuery("<span/>");
 			div.insertAfter(el);
-			const title =
+			let title =
 				el.data("title") || parent.find(".attribute_name strong").text();
 			const titleInput = parent.find("input.attribute_name");
+			if (isCustomAttr) {
+				title = titleInput.val();
+			}
 
 			const getCustomValues = () => {
 				const values = el
@@ -821,13 +840,7 @@ const init = () => {
 					.map((i) => {
 						return i.trim();
 					})
-					.filter((i) => i?.length)
-					.map((i) => {
-						return {
-							id: i,
-							name: i,
-						};
-					});
+					.filter((i) => i?.length);
 				return values;
 			};
 
@@ -844,11 +857,11 @@ const init = () => {
 				).remove();
 
 				el.removeClass("wc-taxonomy-term-search");
-				if (jQuery.fn?.select2) {
-					try {
-						el.select2("destroy");
-					} catch (e) {}
-				}
+				// if (jQuery.fn?.select2) {
+				// 	try {
+				// 		el.select2("destroy");
+				// 	} catch (e) {}
+				// }
 			}
 			console.log("selected", selected, taxonomy);
 			el.addClass("sa_added sa_hide");

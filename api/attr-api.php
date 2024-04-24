@@ -88,6 +88,52 @@ function get_terms_data($terms, $type = null, $pid = null, $tax = null)
 	return $list;
 }
 
+
+function get_custom_terms_data($terms, $type = null, $pid = null, $tax = null)
+{
+
+	$list = [];
+	$overwrite_all =  $pid ? get_post_meta($pid, '_sa_custom_swatches', true) : [];
+	if (!is_array($overwrite_all)) {
+		$overwrite_all = [];
+	}
+
+	$overwrite =  $tax && isset($overwrite_all[$tax]) ? $overwrite_all[$tax] : [];
+
+	foreach ($terms as $term) {
+		$swatch = [];
+		$swatch['type'] = $type;
+		$item_data =  [
+			'id' => $term->term_id,
+			'name' => $term->name,
+			'slug' => $term->slug,
+			'tax' => $term->taxonomy,
+			'swatch' => $swatch,
+		];
+
+		if (isset($overwrite[$item_data['id']]) && $overwrite[$item_data['id']]) {
+			$custom =  $overwrite[$item_data['id']];
+			if (isset($custom['name']) && $custom['name']) {
+				$item_data['custom_name'] = $custom['name'];
+			}
+			if (isset($custom['swatch'])) {
+				$item_data['custom_swatch'] = $custom['swatch'];
+				if ($custom['swatch']['type'] === 'sa_image' && isset($custom['swatch']['value'])) {
+					$image = get_image_data($custom['swatch']['value']);
+					$item_data['custom_swatch'] = array_merge($item_data['custom_swatch'], $image);
+				}
+			}
+		}
+
+		$list[] = $item_data;
+	}
+
+	return $list;
+}
+
+
+
+
 function rest_add_term($post)
 {
 	$tax = isset($post['taxonomy']) ? sanitize_text_field($post['taxonomy']) : '';
@@ -125,6 +171,8 @@ function rest_add_term($post)
 	die();
 }
 
+
+
 function rest_get_tax_terms($post)
 {
 
@@ -133,8 +181,11 @@ function rest_get_tax_terms($post)
 	$selected = isset($post['selected']) ? wp_unslash($post['selected']) : false;
 	$search = isset($post['search']) ? sanitize_text_field($post['search']) : '';
 	$pid = isset($post['pid']) ? sanitize_text_field($post['pid']) : '';
+	$type = isset($post['type']) ? sanitize_text_field($post['type']) : '';
 	$attrs = get_wc_tax_attrs();
-	$type =  $tax && isset($attrs[$tax]) ? $attrs[$tax] : false;
+	if (!$type) {
+		$type =  $tax && isset($attrs[$tax]) ? $attrs[$tax] : false;
+	}
 
 	$terms = [];
 	$terms_selected = [];
@@ -158,9 +209,16 @@ function rest_get_tax_terms($post)
 				'orderby'  => 'include',
 				'include' => $selected,
 			));
+		} else {
+			foreach ($selected as $term) {
+				$terms_selected[] = (object) [
+					'term_id' => $term,
+					'name' => $term,
+					'slug' => $term,
+				];
+			}
 		}
 	}
-
 
 	if (is_wp_error($terms)) {
 		$terms  = [];
@@ -170,14 +228,23 @@ function rest_get_tax_terms($post)
 		$terms_selected = [];
 	}
 
+	$data = [];
+	$selected_data = [];
+	if (!$is_custom) {
+		$data = get_terms_data($terms, $type, $pid, $tax);
+		$selected_data = get_terms_data($terms_selected, $type, $pid, $tax);
+	} else {
+		$data = get_custom_terms_data($terms, $type, $pid, $tax);
+		$selected_data = get_custom_terms_data($terms_selected, $type, $pid, $tax);
+	}
 
 	wp_send_json([
 		'success' => true,
 		'type' => $type,
 		'tax' => $tax,
-		'data' => get_terms_data($terms, $type, $pid, $tax),
+		'data' => $data,
 		'pid' => $pid,
-		'selected' => get_terms_data($terms_selected, $type, $pid, $tax),
+		'selected' => $selected_data,
 	]);
 }
 
