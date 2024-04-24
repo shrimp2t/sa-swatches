@@ -715,7 +715,7 @@ const App = ({
 					onRequestClose={() => setOpen(false)}
 					headerActions={
 						<div className="sa_space">
-							{isOpen !== "add" ? (
+							{!["add", "settings"].includes(isOpen) ? (
 								<>
 									<input
 										type="search"
@@ -753,7 +753,46 @@ const App = ({
 							</div>
 						) : null}
 
-						{isOpen !== "add" ? (
+						{isOpen === "add" ? (
+							<div>
+								<div className="add-form">
+									<input
+										type="text"
+										onChange={(e) => setNewTerm(e.target.value)}
+										value={newTerm || ""}
+										placeholder="New option name"
+									/>
+									<button
+										className="button button-primary"
+										onClick={() => handleAddNew()}
+									>
+										Save
+									</button>
+								</div>
+							</div>
+						) : null}
+
+						{isOpen === "settings" ? (
+							<div className="settings-form">
+								<h3>Settings</h3>
+								<input
+									type="text"
+									onChange={(e) => setNewTerm(e.target.value)}
+									value={newTerm || ""}
+									placeholder="New option name"
+								/>
+								<div>
+									<button
+										className="button button-primary"
+										onClick={() => handleAddNew()}
+									>
+										Save
+									</button>
+								</div>
+							</div>
+						) : null}
+
+						{!["add", "settings"].includes(isOpen) ? (
 							<table className="sa_swatch_table wp-list-table widefat striped fixed table-view-list">
 								<tbody>
 									{list.map((term) => {
@@ -796,22 +835,7 @@ const App = ({
 									})}
 								</tbody>
 							</table>
-						) : (
-							<div className="add-form">
-								<input
-									type="text"
-									onChange={(e) => setNewTerm(e.target.value)}
-									value={newTerm || ""}
-									placeholder="New option name"
-								/>
-								<button
-									className="button button-primary"
-									onClick={() => handleAddNew()}
-								>
-									Save
-								</button>
-							</div>
-						)}
+						) : null}
 					</div>
 				</Modal>
 			)}
