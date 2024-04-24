@@ -35,6 +35,7 @@ function admin_scripts()
 		'ajax' => add_query_arg(['action' => 'sa_wc_ajax', 'nonce' => wp_create_nonce('sa_wc_ajax')], admin_url('admin-ajax.php')),
 		'nonce' => wp_create_nonce('wp_rest'),
 		'pid' => $post->ID,
+		'att_types' => wc_get_attribute_types(),
 	];
 
 	wp_localize_script('sa_attr_product', 'SA_WC_BLOCKS', $config);

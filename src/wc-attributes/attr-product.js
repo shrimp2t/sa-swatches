@@ -755,6 +755,7 @@ const App = ({
 
 						{isOpen === "add" ? (
 							<div>
+								<h3>Add new option</h3>
 								<div className="add-form">
 									<input
 										type="text"
@@ -775,12 +776,17 @@ const App = ({
 						{isOpen === "settings" ? (
 							<div className="settings-form">
 								<h3>Settings</h3>
-								<input
-									type="text"
-									onChange={(e) => setNewTerm(e.target.value)}
-									value={newTerm || ""}
-									placeholder="New option name"
-								/>
+								<div class="form-item">
+									<label>Swatch type</label>
+									<select>
+										<option value={``}>Default</option>
+										{Object.keys(SA_WC_BLOCKS.att_types).map((key) => {
+											return <option value={key} key={key}>{SA_WC_BLOCKS.att_types[key]}</option>;
+										})}
+									</select>
+								</div>
+
+
 								<div>
 									<button
 										className="button button-primary"
