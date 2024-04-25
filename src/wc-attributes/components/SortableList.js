@@ -34,20 +34,19 @@ const ListSelectedTermItem = ({
     setCustomName(term?.custom_name);
   }, []);
 
+
+
+  useEffect(() => {
+    handleSaveCustom();
+  }, [customSwatch, customName]);
+
   const handleSaveCustom = () => {
-    const value =
-      term?.swatch?.type === "sa_image"
-        ? customSwatch?.id
-        : customSwatch?.value;
     setSelectedList?.((prev) => {
       const next = prev.map((el) => {
         if (el.id === term.id) {
           return {
             ...el,
-            custom_swatch: {
-              type: el?.swatch?.type,
-              value,
-            },
+            custom_swatch: customSwatch,
             custom_name: customName,
           };
         }
@@ -55,7 +54,7 @@ const ListSelectedTermItem = ({
       });
       return next;
     });
-    setOpen(false);
+
   };
 
   const handleClearCustom = () => {
@@ -74,6 +73,8 @@ const ListSelectedTermItem = ({
     setCustomSwatch(null);
   };
 
+  const lastSwatch = { ...(term?.swatch || {}), ...(customSwatch || {}) }
+
   return (
     <>
       <div
@@ -81,25 +82,23 @@ const ListSelectedTermItem = ({
         onClick={() => onClick?.(term)}
         key={term.id}
       >
-        {term?.swatch?.type === "sa_image" ? (
+        {lastSwatch?.type === "sa_image" ? (
           <span className="img sa_border">
             <img
               src={
-                customSwatch?.thumbnail ||
-                customSwatch?.full ||
-                term?.swatch?.thumbnail ||
-                term?.swatch?.full ||
+                lastSwatch?.thumbnail ||
+                lastSwatch?.full ||
                 ""
               }
               alt=""
             />
           </span>
         ) : null}
-        {term?.swatch?.type === "sa_color" ? (
+        {lastSwatch?.type === "sa_color" ? (
           <span
             className="color sa_border"
             style={{
-              background: `${customSwatch?.value || term?.swatch?.value}`,
+              background: `${lastSwatch?.value}`,
             }}
           ></span>
         ) : null}
@@ -138,53 +137,91 @@ const ListSelectedTermItem = ({
               </div>
             ) : null}
 
-            <div className="box">
+            <div className="box ">
               <h3>This product settings</h3>
-              <div className="term-item swatch_box">
-                {term?.swatch?.type === "sa_image" ? (
-                  <ImagePicker
-                    swatch={customSwatch}
-                    onChange={(changeData) => {
+              <div className="term-item__swatch_box settings-form">
+
+                <div class="form-item">
+                  <label className="form_label">Swatch type</label>
+                  <div className="form_value">
+                    <select value={customSwatch?.type || ''} defaultValue={``} onChange={(e) => {
+                      let t = e.target.value;
+                      if (!t?.length) {
+                        t = term?.swatch?.type;
+                      }
                       setCustomSwatch((prev) => {
-                        const next = { ...prev, ...changeData };
+                        const next = { ...prev, type: t };
                         return next;
                       });
-                    }}
-                  />
-                ) : null}
-                {term?.swatch?.type === "sa_color" ? (
-                  <ColorPicker
-                    confirm={false}
-                    onChange={(changeData) => {
-                      setCustomSwatch((prev) => {
-                        const next = { ...prev, value: changeData };
-                        return next;
-                      });
-                    }}
-                    color={customSwatch?.value}
-                  />
-                ) : null}
-                <input
-                  type="text"
-                  style={{ flexBasis: "60%" }}
-                  value={customName}
-                  onChange={(e) => setCustomName(e.target.value)}
-                  placeholder="Custom name"
-                />
-                <button
-                  type="button"
-                  onClick={handleSaveCustom}
-                  className="button"
-                >
-                  Save
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleClearCustom()}
-                  className="button"
-                >
-                  Reset
-                </button>
+                    }}>
+                      <option value={``}>Default</option>
+                      {Object.keys(SA_WC_BLOCKS.att_types).map((key) => {
+                        return <option value={key} key={key}>{SA_WC_BLOCKS.att_types[key]}</option>;
+                      })}
+                    </select>
+                  </div>
+
+                </div>
+                <div class="form-item">
+
+                  <label className="form_label">
+                    Swatch
+                  </label>
+                  <div className="form_value">
+                    {lastSwatch?.type === "sa_image" ? (
+                      <ImagePicker
+                        swatch={customSwatch}
+                        onChange={(changeData) => {
+                          setCustomSwatch((prev) => {
+                            const next = { ...prev, ...changeData };
+                            return next;
+                          });
+                        }}
+                      />
+                    ) : null}
+                    {lastSwatch?.type === "sa_color" ? (
+                      <ColorPicker
+                        confirm={false}
+                        onChange={(changeData) => {
+                          setCustomSwatch((prev) => {
+                            const next = { ...prev, value: changeData };
+                            return next;
+                          });
+                        }}
+                        color={customSwatch?.value || ''}
+                      />
+                    ) : null}
+                  </div>
+
+                </div>
+
+
+                <div class="form-item">
+                  <label className="form_label">
+                    Custom name
+                  </label>
+                  <div className="form_value">
+                    <input
+                      type="text"
+                      style={{ flexBasis: "60%" }}
+                      value={customName}
+                      onChange={(e) => setCustomName(e.target.value)}
+                      placeholder="Custom name"
+                    />
+                  </div>
+                </div>
+
+
+                <div className="form-action">
+
+                  <button
+                    type="button"
+                    onClick={() => handleClearCustom()}
+                    className="button"
+                  >
+                    Reset
+                  </button>
+                </div>
               </div>
             </div>
 

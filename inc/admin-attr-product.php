@@ -80,7 +80,10 @@ function extra_fields($attribute, $i)
 
 ?>
 	<tr style="display:none !important;">
-		<td><input type="hidden" class="sa_overwrite_swatches checkbox" name="sa_overwrite_swatches[<?php echo esc_attr($i); ?>]" /></td>
+		<td>
+			<input type="hidden" class="sa_overwrite_swatches checkbox" name="sa_overwrite_swatches[<?php echo esc_attr($i); ?>]" />
+			<input type="hidden" class="sa_attribute_settings checkbox" name="sa_attr_settings[<?php echo esc_attr($i); ?>]" />
+		</td>
 	</tr>
 <?php
 }
@@ -105,6 +108,7 @@ function save_attribute_custom_meta($product)
 
 	$post_id = $product->get_id();
 	$key = '_sa_custom_swatches';
+	$key_settings = '_sa_attr_settings';
 	try {
 		parse_str(wp_unslash($_POST['data']), $data);
 		if (!is_array($data)) {
@@ -116,14 +120,24 @@ function save_attribute_custom_meta($product)
 		}
 
 		$overwrite_swatches = isset($data['sa_overwrite_swatches']) && is_array($data['sa_overwrite_swatches']) ? $data['sa_overwrite_swatches'] : [];
+		$settings = isset($data['sa_attr_settings']) && is_array($data['sa_attr_settings']) ? $data['sa_attr_settings'] : [];
 		$save_data = [];
+		$save_settings = [];
 		foreach ($overwrite_swatches  as $k => $v) {
 			$name = isset($attribute_names[$k]) ? $attribute_names[$k] : false;
 			if ($name) {
 				$save_data[$name] = json_decode($v, true);
 			}
 		}
+		foreach ($settings  as $k => $v) {
+			$name = isset($attribute_names[$k]) ? $attribute_names[$k] : false;
+			if ($name) {
+				$save_settings[$name] = json_decode($v, true);
+				unset($save_settings[$name]['_t']);
+			}
+		}
 		update_post_meta($post_id, $key, $save_data);
+		update_post_meta($post_id, $key_settings, $save_settings);
 	} catch (Exception $e) {
 
 		update_post_meta($post_id, $key, []);

@@ -33,6 +33,7 @@ const App = ({
 	const [search, setSearch] = useState("");
 	const [newTerm, setNewTerm] = useState("");
 	const [modalTitle, setModalTitle] = useState(title);
+	const [settings, setSettings] = useState({});
 
 	useEffect(() => {
 
@@ -97,11 +98,19 @@ const App = ({
 		};
 	}, [search]);
 
+	// When selected item changes
 	useEffect(() => {
 		if (isChanged) {
 			onChange(selectedList);
 		}
 	}, [selectedList]);
+
+	//When settings changes
+	useEffect(() => {
+		if (settings?._t) {
+			onSettingChange?.(settings);
+		}
+	}, [settings]);
 
 	// When custom taxonomy title change.
 	useEffect(() => {
@@ -258,7 +267,7 @@ const App = ({
 						) : null}
 
 						{isOpen === "settings" ? (
-							<SwatchSettings onSettingChange={onSettingChange} />
+							<SwatchSettings values={settings} onChange={setSettings} />
 						) : null}
 
 						{!["add", "settings"].includes(isOpen) ? (
@@ -272,6 +281,7 @@ const App = ({
 };
 
 const init = () => {
+	const $save_button = jQuery('button.save_attributes');
 	jQuery("select.attribute_values, textarea[name^='attribute_values[']").each(
 		function () {
 			const el = jQuery(this);
@@ -310,6 +320,7 @@ const init = () => {
 				: getCustomValues();
 			const taxonomy = el.data("taxonomy");
 			const customInput = parent.find("input.sa_overwrite_swatches");
+			const settingsInput = parent.find("input.sa_attribute_settings");
 			if (!selected && !isCustomAttr) {
 				selected = el.val();
 				jQuery(
@@ -358,6 +369,10 @@ const init = () => {
 			const onChange = (list) => {
 				handleChange(list);
 				el.trigger("change");
+
+
+				$save_button.removeClass('disabled');
+				$save_button.removeAttr('aria-disabled');
 			};
 
 			const onLoad = (list) => {
@@ -365,7 +380,10 @@ const init = () => {
 			};
 
 			const onSettingChange = (values) => {
-
+				console.log('onSettingChange', values);
+				settingsInput.val(JSON.stringify(values)).trigger('change');
+				$save_button.removeClass('disabled');
+				$save_button.removeAttr('aria-disabled');
 			}
 
 			render(

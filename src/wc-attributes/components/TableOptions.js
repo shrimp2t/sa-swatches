@@ -1,5 +1,3 @@
-
-import React from "react";
 import req from "../../commo/req";
 import ImagePicker from "./ImagePicker";
 import ColorPicker from "./ColorPicker";
