@@ -1,15 +1,11 @@
-import {
-	Button,
-	ColorPalette,
-	ColorPicker,
-	Popover,
-} from "@wordpress/components";
+import { Button, ColorPalette, Popover } from "@wordpress/components";
 // import { SketchPicker } from 'react-color';
 // import { Popover } from "react-tiny-popover";
 
 import React from "react";
 import { render, useState, useMemo, useEffect } from "@wordpress/element";
-import "./attr-manager.scss";
+import ColorPicker from "./components/ColorPicker";
+import "./attr-style.scss";
 
 const sendReq = ({ url, path, method, data, body, params }) => {
 	return new Promise((resolve, reject) => {
@@ -176,79 +172,6 @@ const Image2 = ({ id, type, onChange, clear }) => {
 	);
 };
 
-const ColorSwatch = ({ color, onChange, confirm }) => {
-	const [value, setValue] = useState(color);
-	const [isVisible, setIsVisible] = useState(false);
-
-	const handleOnChange = (color) => {
-		setValue(color);
-		if (!confirm) {
-			onChange?.(color);
-		}
-	};
-	const handleOnClear = () => {
-		setValue("");
-		if (confirm) {
-			onChange?.("");
-		}
-	};
-
-	const handleOnOk = () => {
-		if (confirm) {
-			onChange?.(value);
-			setIsVisible(false);
-		}
-	};
-
-	return (
-		<>
-			<div className="wc_swatch_color">
-				<div
-					style={{ background: value, pointer: "cursor" }}
-					onClick={() => {
-						setIsVisible(!isVisible);
-					}}
-				></div>
-				{isVisible && (
-					<Popover
-						className="wc_swatch_color_picker"
-						onClickOutside={() => {
-							setIsVisible(false);
-						}}
-						onClose={() => {
-							setIsVisible(false);
-						}}
-					>
-						<ColorPicker color={value} onChange={handleOnChange} />
-						{confirm && (
-							<div className="act">
-								<Button
-									isDestructive
-									onClick={handleOnClear}
-									size="small"
-									variant="secondary"
-								>
-									Clear
-								</Button>
-								<Button
-									onClick={() => setValue(color)}
-									size="small"
-									variant="secondary"
-								>
-									Reset
-								</Button>
-								<Button size="small" onClick={handleOnOk} variant="primary">
-									Save
-								</Button>
-							</div>
-						)}
-					</Popover>
-				)}
-			</div>
-		</>
-	);
-};
-
 const App = () => {
 	const onChange = (data) => {
 		console.log("onChange", data);
@@ -272,8 +195,8 @@ const App = () => {
 			) : null}
 
 			{SA_WC_BLOCKS?.current_tax?.type === "sa_color" ? (
-				<ColorSwatch
-					color={window.SA_WC_BLOCKS?.current_term?.value}
+				<ColorPicker
+					value={window.SA_WC_BLOCKS?.current_term}
 					onChange={onChange}
 				/>
 			) : null}
@@ -284,18 +207,13 @@ const App = () => {
 const AppCol = ({ data, term_id }) => {
 	// console.log("Load_data", data);
 	const onChange = (changeData) => {
-		// console.log("onChange__col", changeData);
+		console.log("onChange__col", changeData);
 
 		let saveData = {
 			...SA_WC_BLOCKS.current_tax,
+			...changeData,
 			term_id,
 		};
-		if (SA_WC_BLOCKS?.current_tax?.type === "sa_image") {
-			saveData.value = changeData.id;
-		}
-		if (SA_WC_BLOCKS?.current_tax?.type === "sa_color") {
-			saveData.value = changeData;
-		}
 
 		// console.log("saveData", saveData);
 
@@ -319,7 +237,7 @@ const AppCol = ({ data, term_id }) => {
 			) : null}
 
 			{SA_WC_BLOCKS?.current_tax?.type === "sa_color" ? (
-				<ColorSwatch confirm={true} onChange={onChange} color={data?.value} />
+				<ColorPicker confirm={true} onChange={onChange} value={data} />
 			) : null}
 		</>
 	);

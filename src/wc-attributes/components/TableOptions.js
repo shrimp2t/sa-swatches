@@ -5,16 +5,11 @@ import ColorPicker from "./ColorPicker";
 const ColSwatch = ({ term, tax, type, setSelectedList }) => {
 	const onChange = (changeData) => {
 		let saveData = {
+			...changeData,
 			tax,
 			type,
 			term_id: term.id,
 		};
-		if (type === "sa_image") {
-			saveData.value = changeData.id;
-		}
-		if (type === "sa_color") {
-			saveData.value = changeData;
-		}
 
 		saveData.pid = SA_WC_BLOCKS?.pid;
 
@@ -46,16 +41,16 @@ const ColSwatch = ({ term, tax, type, setSelectedList }) => {
 	return (
 		<>
 			{type === "sa_image" ? (
-				<td style={{ width: "40px" }}>
+				<td>
 					<ImagePicker swatch={term?.swatch} onChange={onChange} />
 				</td>
 			) : null}
 			{type === "sa_color" ? (
-				<td style={{ width: "40px" }}>
+				<td>
 					<ColorPicker
 						confirm={true}
 						onChange={onChange}
-						color={term?.swatch?.value}
+						value={term?.swatch}
 					/>
 				</td>
 			) : null}
@@ -63,52 +58,58 @@ const ColSwatch = ({ term, tax, type, setSelectedList }) => {
 	);
 };
 
+const TableOptions = ({
+	handleAddItem,
+	selectedList,
+	setSelectedList,
+	taxonomy,
+	type,
+	list,
+}) => {
+	return (
+		<table className="sa_swatch_table wp-list-table widefat striped fixed table-view-list">
+			<tbody>
+				{list.map((term) => {
+					const classes = ["term-item"];
+					let isSelected = false;
+					if (selectedList?.length) {
+						if (selectedList.filter((i) => i.id === term.id).length) {
+							classes.push("selected");
+							isSelected = true;
+						}
+					}
 
+					return (
+						<tr key={term.id}>
+							<ColSwatch
+								setSelectedList={setSelectedList}
+								term={term}
+								tax={taxonomy}
+								type={type}
+							/>
 
-const TableOptions = ({handleAddItem, selectedList, setSelectedList, taxonomy, type, list}) => {
-
-  return <table className="sa_swatch_table wp-list-table widefat striped fixed table-view-list">
-    <tbody>
-      {list.map((term) => {
-        const classes = ["term-item"];
-        let isSelected = false;
-        if (selectedList?.length) {
-          if (selectedList.filter((i) => i.id === term.id).length) {
-            classes.push("selected");
-            isSelected = true;
-          }
-        }
-
-        return (
-          <tr key={term.id}>
-            <ColSwatch
-              setSelectedList={setSelectedList}
-              term={term}
-              tax={taxonomy}
-              type={type}
-            />
-
-            <td>{term.name}</td>
-            <td className="actions">
-              <span
-                onClick={() => handleAddItem(term)}
-                className={isSelected ? " close ic" : " add ic"}
-              >
-                <span
-                  className={
-                    isSelected
-                      ? "dashicons dashicons-no-alt"
-                      : "dashicons dashicons-plus"
-                  }
-                ></span>
-                {isSelected ? "Remove" : "Select"}
-              </span>
-            </td>
-          </tr>
-        );
-      })}
-    </tbody>
-  </table>
-}
+							<td>{term.name}</td>
+							<td className="actions">
+								<span
+									onClick={() => handleAddItem(term)}
+									className={isSelected ? " close ic" : " add ic"}
+								>
+									<span
+										className={
+											isSelected
+												? "dashicons dashicons-no-alt"
+												: "dashicons dashicons-plus"
+										}
+									></span>
+									{isSelected ? "Remove" : "Select"}
+								</span>
+							</td>
+						</tr>
+					);
+				})}
+			</tbody>
+		</table>
+	);
+};
 
 export default TableOptions;

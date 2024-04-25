@@ -252,13 +252,21 @@ function rest_update_term_swatch($post)
 {
 	$tax = isset($post['tax']) ? sanitize_text_field($post['tax']) : '';
 	$term_id = isset($post['term_id']) ? absint($post['term_id']) : '';
+
 	$value = isset($post['value']) ? sanitize_text_field($post['value']) : '';
 	$type = isset($post['type']) ? sanitize_text_field($post['type']) : '';
+	$more = isset($post['more']) ? wp_unslash($post['more']) : '';
 
 	$data = [
 		'type' => $type,
 		'value' => $value,
 	];
+
+	if ($more) {
+		$data['more'] = $more;
+	}
+
+
 	if ($type === 'sa_image') {
 		$data['value'] = absint($data['value']);
 	}

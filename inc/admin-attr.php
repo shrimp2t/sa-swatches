@@ -8,7 +8,11 @@ use function SA_WC_BLOCKS\get_wc_tax_attrs;
 function get_swatch_data($term_id)
 {
 
-	$data = json_decode(get_term_meta($term_id, '_sa_wc_swatch', true), true);
+	$data =  get_term_meta($term_id, '_sa_wc_swatch', true);
+	if (!is_array($data)) {
+		$data = json_decode($data, true);
+	}
+
 	if (!is_array($data)) {
 		$data = [];
 	}
@@ -68,7 +72,10 @@ function save_term_fields($term_id)
 function get_term_swatch($term_id)
 {
 	$data = get_term_meta($term_id, '_sa_wc_swatch', true);
-	$data = json_decode($data);
+	if (!is_array($data)) {
+		$data = json_decode($data);
+	}
+
 	if (!is_array($data)) {
 		$data = [];
 	}

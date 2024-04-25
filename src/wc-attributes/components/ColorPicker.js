@@ -2,80 +2,141 @@ import {
 	Button,
 	ColorPicker as ColorPickerWP,
 	Popover,
+	Modal,
 } from "@wordpress/components";
 
-import { useState } from "@wordpress/element";
+import { useEffect, useState } from "@wordpress/element";
+import ColorPickerItem from "./ColorPickerItem";
 
-
-
-
-const ColorPicker = ({ color, onChange, confirm }) => {
-	const [value, setValue] = useState(color);
+const ColorPicker = ({ value, onChange, confirm }) => {
+	const [values, setValues] = useState(() => {
+		const more = value?.more?.map?.((v) => ({
+			v: v || "",
+			t: Date.now(),
+		}));
+		let l = [
+			{
+				v: value?.value || "",
+				t: Date.now(),
+			},
+			...(more || []),
+		];
+		return l;
+	});
+	const [changed, setChanged] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
 
-	const handleOnChange = (color) => {
-		setValue(color);
-		if (!confirm) {
-			onChange?.(color);
-		}
-	};
-	const handleOnClear = () => {
-		setValue("");
-		if (confirm) {
-			onChange?.("");
-		}
-	};
+	useEffect(() => {
+		let t = null;
+		if (changed) {
+			t = setTimeout(() => {
+				console.log("Call_Change___");
 
-	const handleOnOk = () => {
-		if (confirm) {
-			onChange?.(value);
-			setIsVisible(false);
+				const newValue = { ...value, value: "" };
+				if (values?.length) {
+					newValue.value = values[0].v;
+				}
+
+				if (values?.length > 1) {
+					newValue.more = [];
+					newValue.value = values[0].v;
+					for (let i = 1; i < values.length; i++) {
+						newValue.more.push(values[i].v);
+					}
+				}
+
+				onChange?.(newValue);
+			}, 600);
 		}
-	};
+
+		return () => {
+			if (t) {
+				clearTimeout(t);
+			}
+		};
+	}, [changed]);
 
 	return (
 		<>
-			<div className="wc_swatch_color sa_border">
+			<div className="">
 				<div
-					style={{ background: value, pointer: "cursor" }}
+					className="wc_swatch_colors sa_space sa_wrap"
 					onClick={() => {
 						setIsVisible(!isVisible);
 					}}
-				></div>
+				>
+					{values.map((i) => {
+						return (
+							<div key={i.t} className="wc_swatch_color sa_border">
+								<div style={{ background: i.v, pointer: "cursor" }}></div>
+							</div>
+						);
+					})}
+				</div>
+
 				{isVisible && (
-					<Popover
-						className="wc_swatch_color_picker"
+					<Modal
+						title="Select Color"
+						className="sa_swatch_modal"
 						onClickOutside={() => {
 							setIsVisible(false);
 						}}
-						onClose={() => {
+						onRequestClose={() => {
 							setIsVisible(false);
 						}}
-					>
-						<ColorPickerWP color={value} onChange={handleOnChange} />
-						{confirm && (
-							<div className="act">
-								<Button
-									isDestructive
-									onClick={handleOnClear}
-									size="small"
-									variant="secondary"
+						headerActions={
+							<div className="sa_space">
+								<button
+									className="button"
+									onClick={(e) => {
+										setChanged(Date.now());
+										setValues((prev) => {
+											return [...prev, { t: Date.now(), v: "" }];
+										});
+									}}
 								>
-									Clear
-								</Button>
-								<Button
-									onClick={() => setValue(color)}
-									size="small"
-									variant="secondary"
-								>
-									Reset
-								</Button>
-								<Button size="small" onClick={handleOnOk} variant="primary">
-									Save
-								</Button>
+									Add
+								</button>
 							</div>
-						)}
-					</Popover>
+						}
+					>
+						<div className="sa_space sa_wrap">
+							{values.map((i, index) => {
+								return (
+									<div key={i.t} className="color_item">
+										<ColorPickerItem
+											size="x2"
+											color={i.v || ""}
+											onChange={(value) => {
+												setChanged(Date.now());
+												setValues((prev) => {
+													const next = [...prev];
+													next[index].v = value;
+													return next;
+												});
+											}}
+										/>
+										<span
+											className="ic remove"
+											onClick={() => {
+												setChanged(Date.now());
+												setValues((prev) => {
+													if (prev?.length < 2) {
+														return prev;
+													}
+													const next = [...prev];
+													next.splice(index, 1);
+													return next;
+												});
+											}}
+										>
+											<span className="dashicons dashicons-no-alt"></span>
+										</span>
+									</div>
+								);
+							})}
+						</div>
+					</Modal>
 				)}
 			</div>
 		</>

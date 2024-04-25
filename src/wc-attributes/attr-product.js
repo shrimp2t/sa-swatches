@@ -5,7 +5,7 @@ import {
 
 import React from "react";
 import { render, useState, useEffect } from "@wordpress/element";
-import "./attr-product.scss";
+import "./attr-style.scss";
 import req from "../commo/req";
 import NewOption from "./components/NewOption";
 import SwatchSettings from "./components/SwatchSettings";

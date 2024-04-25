@@ -130,10 +130,8 @@ add_action('init', __NAMESPACE__ . '\blocks_init');
 
 function add_attribute_types($options)
 {
-	$options['sa_select'] = __('Select 2');
 	$options['sa_color'] = __('Color');
 	$options['sa_image'] = __('Image');
-	$options['sa_button'] = __('Buton');
 	return $options;
 }
 add_filter('product_attributes_type_selector', __NAMESPACE__ . '\add_attribute_types', 9999);
