@@ -82,6 +82,7 @@
 	display: flex;
 	gap: 10px;
 	align-items: center;
+
 	img {
 		width: 40px;
 		height: 40px;
@@ -172,10 +173,10 @@
 			min-height: 25px !important;
 		}
 
-		> div:nth-child(2) {
+		>div:nth-child(2) {
 			padding-top: 0px;
 
-			> div:nth-child(1) {
+			>div:nth-child(1) {
 				display: none;
 			}
 		}
@@ -192,17 +193,31 @@
 	display: flex;
 	gap: 10px;
 }
+
 .sa_swatch_modal {
+
 	.button,
 	button {
 		display: inline-flex;
 		align-items: center;
 	}
+
+	.settings-form {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
 	.form-item {
 		display: flex;
-		
+		gap: 15px;
+
+		.form_value {
+			margin-left: auto;
+		}
 	}
 }
+
 .components-modal__frame {
 	&.sa_swatch_modal {
 		.components-modal__content {

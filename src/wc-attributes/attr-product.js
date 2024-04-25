@@ -4,14 +4,13 @@ import {
 } from "@wordpress/components";
 
 import React from "react";
-import { render, useState, useMemo, useEffect } from "@wordpress/element";
+import { render, useState, useEffect } from "@wordpress/element";
 import "./attr-product.scss";
 import req from "../commo/req";
 import NewOption from "./components/NewOption";
 import SwatchSettings from "./components/SwatchSettings";
 import SortableList from "./components/SortableList";
 import TableOptions from "./components/TableOptions";
-
 
 const App = ({
 	title,
@@ -22,6 +21,7 @@ const App = ({
 	initList,
 	isCustom,
 	titleInput,
+	onSettingChange,
 }) => {
 	const [loading, setLoading] = useState(false);
 	const [isOpen, setOpen] = useState(false);
@@ -35,11 +35,6 @@ const App = ({
 	const [modalTitle, setModalTitle] = useState(title);
 
 	useEffect(() => {
-		// if (isCustom) {
-		// 	// setLoadSelected(true);
-		// 	setList(initList);
-		// 	// setSelectedList(initList);
-		// }
 
 		const controller = new AbortController();
 		const signal = controller.signal;
@@ -108,6 +103,7 @@ const App = ({
 		}
 	}, [selectedList]);
 
+	// When custom taxonomy title change.
 	useEffect(() => {
 		if (isCustom) {
 			const title = titleInput.val();
@@ -193,7 +189,7 @@ const App = ({
 			});
 	};
 
-	const tableProps = {handleAddItem, selectedList, setSelectedList, taxonomy, type, list};
+	const tableProps = { handleAddItem, selectedList, setSelectedList, taxonomy, type, list };
 
 	return (
 		<>
@@ -208,9 +204,6 @@ const App = ({
 			<div className="sa_space">
 				<button type="button" className="button" onClick={() => setOpen(true)}>
 					Select Options
-				</button>
-				<button type="button" className="button" onClick={() => setOpen(true)}>
-					Settings
 				</button>
 			</div>
 			{isOpen && (
@@ -231,7 +224,7 @@ const App = ({
 										placeholder="Search"
 									/>
 									<button onClick={() => setOpen("add")} className="button">
-										Add New
+										<span class="dashicons dashicons-plus"></span>
 									</button>
 									<button
 										onClick={() => setOpen("settings")}
@@ -261,15 +254,15 @@ const App = ({
 						) : null}
 
 						{isOpen === "add" ? (
-							<NewOption setNewTerm={setNewTerm} handleAddNew={handleAddNew}/>
+							<NewOption setNewTerm={setNewTerm} newTerm={newTerm} handleAddNew={handleAddNew} />
 						) : null}
 
 						{isOpen === "settings" ? (
-							<SwatchSettings/>
+							<SwatchSettings onSettingChange={onSettingChange} />
 						) : null}
 
 						{!["add", "settings"].includes(isOpen) ? (
-							<TableOptions {...tableProps}/>
+							<TableOptions {...tableProps} />
 						) : null}
 					</div>
 				</Modal>
@@ -325,11 +318,6 @@ const init = () => {
 				).remove();
 
 				el.removeClass("wc-taxonomy-term-search");
-				// if (jQuery.fn?.select2) {
-				// 	try {
-				// 		el.select2("destroy");
-				// 	} catch (e) {}
-				// }
 			}
 			console.log("selected", selected, taxonomy);
 			el.addClass("sa_added sa_hide");
@@ -361,7 +349,7 @@ const init = () => {
 
 				customInput.val(JSON.stringify(custom));
 				if (isCustomAttr) {
-					el.html(opts.join("|"));
+					el.val(opts.join("|"));
 				} else {
 					el.html(opts.join(" "));
 				}
@@ -376,12 +364,17 @@ const init = () => {
 				handleChange(list);
 			};
 
+			const onSettingChange = (values) => {
+
+			}
+
 			render(
 				<App
 					title={title}
 					taxonomy={taxonomy}
 					onChange={onChange}
 					onLoad={onLoad}
+					onSettingChange={onSettingChange}
 					selected={selected}
 					isCustom={isCustomAttr}
 					initList={isCustomAttr ? selected : undefined}
