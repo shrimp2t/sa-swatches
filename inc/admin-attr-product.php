@@ -126,12 +126,14 @@ function save_attribute_custom_meta($product)
 		foreach ($overwrite_swatches  as $k => $v) {
 			$name = isset($attribute_names[$k]) ? $attribute_names[$k] : false;
 			if ($name) {
+				$name = sanitize_title($name);
 				$save_data[$name] = json_decode($v, true);
 			}
 		}
 		foreach ($settings  as $k => $v) {
 			$name = isset($attribute_names[$k]) ? $attribute_names[$k] : false;
 			if ($name) {
+				$name = sanitize_title($name);
 				$save_settings[$name] = json_decode($v, true);
 				unset($save_settings[$name]['_t']);
 			}

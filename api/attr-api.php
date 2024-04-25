@@ -55,6 +55,9 @@ function get_terms_data($terms, $type = null, $pid = null, $tax = null)
 		$overwrite_all = [];
 	}
 
+
+	$tax = sanitize_title($tax);
+
 	$overwrite =  $tax && isset($overwrite_all[$tax]) ? $overwrite_all[$tax] : [];
 
 	foreach ($terms as $term) {
@@ -97,7 +100,7 @@ function get_custom_terms_data($terms, $type = null, $pid = null, $tax = null)
 	if (!is_array($overwrite_all)) {
 		$overwrite_all = [];
 	}
-
+	$tax = sanitize_title($tax);
 	$overwrite =  $tax && isset($overwrite_all[$tax]) ? $overwrite_all[$tax] : [];
 
 	foreach ($terms as $term) {
