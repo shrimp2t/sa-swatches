@@ -198,6 +198,10 @@
 		display: inline-flex;
 		align-items: center;
 	}
+	.form-item {
+		display: flex;
+		
+	}
 }
 .components-modal__frame {
 	&.sa_swatch_modal {
