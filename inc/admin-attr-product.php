@@ -141,7 +141,6 @@ function save_attribute_custom_meta($product)
 		update_post_meta($post_id, $key, $save_data);
 		update_post_meta($post_id, $key_settings, $save_settings);
 	} catch (Exception $e) {
-
 		update_post_meta($post_id, $key, []);
 	}
 }

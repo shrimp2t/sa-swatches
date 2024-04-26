@@ -137,3 +137,40 @@ function add_attribute_types($options)
 add_filter('product_attributes_type_selector', __NAMESPACE__ . '\add_attribute_types', 9999);
 
 
+function load_template($template, $template_name)
+{
+	if ('single-product/add-to-cart/variable.php' === $template_name) {
+		$new_file = SA_WC_BLOCKS_PATH . '/wc-templates/' . $template_name;
+		if (file_exists($new_file)) {
+			return $new_file;
+		}
+	}
+
+	return $template;
+}
+
+
+add_filter('wc_get_template', __NAMESPACE__ . '\load_template', 99999, 2);
+
+
+function scripts()
+{
+	$assets = get_assets('swatches');
+	if (!$assets) {
+		return;
+	}
+	$assets['dependencies'][] = 'jquery';
+	wp_enqueue_media();
+	wp_register_script('sa_wc_swatches', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
+	wp_register_style('sa_wc_swatches', $assets['files']['css'], [], $assets['version']);
+	wp_enqueue_script('sa_wc_swatches');
+	wp_enqueue_style('sa_wc_swatches');
+
+	$configs =  [
+		'ajax' => add_query_arg(['action' => 'sa_wc_ajax', 'nonce' => wp_create_nonce('sa_wc_ajax')], admin_url('admin-ajax.php')),
+	];
+
+	wp_localize_script('sa_wc_swatches', 'SA_WC_SWATCHES', $configs);
+}
+
+add_action('wp_enqueue_scripts', __NAMESPACE__ . '\scripts');

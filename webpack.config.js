@@ -13,6 +13,7 @@ module.exports = [
 			admin: "./src/admin/admin.js",
 			["attr-product"]: "./src/wc-attributes/attr-product.js",
 			["attr-manager"]: "./src/wc-attributes/attr-manager.js",
+			["swatches"]: "./src/frontend/swatches.js",
 		},
 		output: {
 			...defaultConfig.output,

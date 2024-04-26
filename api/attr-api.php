@@ -5,9 +5,10 @@ namespace SA_WC_BLOCKS\API\Attrs;
 use function SA_WC_BLOCKS\get_wc_tax_attrs;
 
 add_action('sa_wc_api/update_term_swatch', __NAMESPACE__ . '\rest_update_term_swatch');
-add_action('sa_wc_api/update_custom_swatch', __NAMESPACE__ . '\update_custom_swatch');
+add_action('sa_wc_api/update_custom_swatch', __NAMESPACE__ . '\rest_update_custom_swatch');
 add_action('sa_wc_api/get_terms', __NAMESPACE__ . '\rest_get_tax_terms');
 add_action('sa_wc_api/add_term', __NAMESPACE__ . '\rest_add_term');
+add_action('sa_wc_api/get_product_attrs', __NAMESPACE__ . '\rest_get_product_attrs');
 
 
 function get_image_data($image_id)
@@ -55,9 +56,7 @@ function get_terms_data($terms, $type = null, $pid = null, $tax = null)
 		$overwrite_all = [];
 	}
 
-
 	$tax = sanitize_title($tax);
-
 	$overwrite =  $tax && isset($overwrite_all[$tax]) ? $overwrite_all[$tax] : [];
 
 	foreach ($terms as $term) {
@@ -139,6 +138,9 @@ function get_custom_terms_data($terms, $type = null, $pid = null, $tax = null)
 
 function rest_add_term($post)
 {
+	if (!current_user_can('edit_products')) {
+		wp_die(-1);
+	}
 	$tax = isset($post['taxonomy']) ? sanitize_text_field($post['taxonomy']) : '';
 	$name = isset($post['name']) ? sanitize_text_field($post['name']) : '';
 	if (!$name) {
@@ -178,7 +180,9 @@ function rest_add_term($post)
 
 function rest_get_tax_terms($post)
 {
-
+	if (!current_user_can('edit_products')) {
+		wp_die(-1);
+	}
 	$tax = isset($post['taxonomy']) ? sanitize_text_field($post['taxonomy']) : '';
 	$is_custom = isset($post['is_custom']) ? sanitize_text_field($post['is_custom']) : '';
 	$selected = isset($post['selected']) ? wp_unslash($post['selected']) : false;
@@ -218,6 +222,7 @@ function rest_get_tax_terms($post)
 					'term_id' => $term,
 					'name' => $term,
 					'slug' => $term,
+					'taxonomy' => $tax,
 				];
 			}
 		}
@@ -253,6 +258,9 @@ function rest_get_tax_terms($post)
 
 function rest_update_term_swatch($post)
 {
+	if (!current_user_can('edit_products')) {
+		wp_die(-1);
+	}
 	$tax = isset($post['tax']) ? sanitize_text_field($post['tax']) : '';
 	$term_id = isset($post['term_id']) ? absint($post['term_id']) : '';
 
@@ -268,7 +276,6 @@ function rest_update_term_swatch($post)
 	if ($more) {
 		$data['more'] = $more;
 	}
-
 
 	if ($type === 'sa_image') {
 		$data['value'] = absint($data['value']);
@@ -294,8 +301,14 @@ function rest_update_term_swatch($post)
 		'data' => $data,
 	]);
 }
-function update_custom_swatch($post)
+
+function rest_update_custom_swatch($post)
 {
+
+	if (!current_user_can('edit_products')) {
+		wp_die(-1);
+	}
+
 	$tax = isset($post['tax']) ? sanitize_text_field($post['tax']) : '';
 	$term_id = isset($post['term_id']) ? absint($post['term_id']) : '';
 	$value = isset($post['value']) ? sanitize_text_field($post['value']) : '';
@@ -329,4 +342,68 @@ function update_custom_swatch($post)
 		'success' => true,
 		'data' => $data,
 	]);
+}
+
+
+function get_product_attributes($product)
+{
+	$attributes = $product->get_variation_attributes();
+	$attrs = get_wc_tax_attrs();
+	$attr_data = [];
+
+	foreach ($attributes as $attribute_name => $options) {
+		$key =  sanitize_title($attribute_name);
+		$attr_data[$key] = [
+			'label' => wc_attribute_label($attribute_name),
+			'name' => 'attribute_' . $key,
+			'id' => $key,
+			'default' => $product->get_variation_default_attribute($attribute_name),
+			'selected' => false,
+		];
+		$options = [];
+		$type =  $attribute_name && isset($attrs[$attribute_name]) ? $attrs[$attribute_name] : false;
+
+		$attr_data[$key]['selected'] = isset($_REQUEST[$attr_data[$key]['name']]) ? wc_clean(wp_unslash($_REQUEST[$attr_data[$key]['name']])) : $attr_data[$key]['default'];
+
+		if ($product && taxonomy_exists($attribute_name)) {
+			$attr_data[$key]['tax'] = $attribute_name;
+			// Get terms if this is a taxonomy - ordered. We need the names too.
+			$terms = wc_get_product_terms(
+				$product->get_id(),
+				$attribute_name,
+				array(
+					'fields' => 'all',
+				)
+			);
+
+			$options = get_terms_data($terms, $type, $product->get_id(), $attribute_name);
+		} else {
+			$attr_data[$key]['tax'] = false;
+			$custom_terms = [];
+			foreach ($options as $term) {
+				$custom_terms[] = (object) [
+					'term_id' => $term,
+					'name' => $term,
+					'slug' => $term,
+					'taxonomy' => $attribute_name,
+				];
+			}
+
+			$options = get_custom_terms_data($custom_terms, $type, $product->get_id(), $attribute_name);
+		}
+		$attr_data[$key]['options'] = $options;
+	}
+
+	return $attr_data;
+}
+
+
+function rest_get_product_attrs($post)
+{
+	$pid = isset($_GET['pid']) ? sanitize_text_field($_GET['pid']) : '';
+	$product = wc_get_product($pid);
+
+	$data = get_product_attributes($product);
+	wp_send_json($data);
+	die();
 }
