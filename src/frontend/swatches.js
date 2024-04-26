@@ -323,8 +323,9 @@ jQuery(($) => {
 		const appEl = $("<div/>");
 		appEl.insertAfter(table);
 		const settings = {
-			layout: "separate", // inline | separate
+			layout: "separate", // inline | separate, modal_thumb
 			show_attr_desc: true, // Show attribute description.
+			show_attr_label: true,
 		};
 		const layout = "sa_layout_inline"; // sa_layout_separate
 		appEl.addClass("sa_attr_product");
