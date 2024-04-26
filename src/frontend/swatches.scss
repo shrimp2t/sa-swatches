@@ -1,6 +1,7 @@
 body {
 	--sa-border-width: 1px;
 	--sa-border-radius: 3px;
+	--sa-check-active-bg: #1896e5;
 }
 
 .sa_attr_product {
@@ -11,6 +12,7 @@ body {
 	.sa_attr {
 		display: flex;
 		gap: 1em;
+		align-items: center;
 	}
 
 	.sa_attr_values {
@@ -52,7 +54,7 @@ body {
 			&::before {
 				content: "";
 				position: absolute;
-				background: #1896e5;
+				background: var(--sa-check-active-bg);
 				z-index: 1;
 				width: 40px;
 				height: 60px;
@@ -61,7 +63,7 @@ body {
 		}
 
 		&.sa_selected {
-			border: var(--sa-border-width) solid #1896e5;
+			border: var(--sa-border-width) solid var(--sa-check-active-bg);
 		}
 		&.sa_inactive {
 			border-color: #c0bfbf;
