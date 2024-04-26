@@ -52,6 +52,13 @@ const Option = ({ option, attrName }) => {
 		isChecked = true;
 	}
 
+	const swatch = {
+		...(option?.swatch || {}),
+		...(option?.custom_swatch || {}),
+	};
+
+	classes.push("type_" + swatch?.type);
+
 	return (
 		<div
 			className={classes.join(" ")}
@@ -61,6 +68,37 @@ const Option = ({ option, attrName }) => {
 				}
 			}}
 		>
+			{swatch?.type === "sa_color" ? (
+				<span className="sa_swatch sa_color">
+					<div className="sa_color_inner">
+						<span
+							className="sa_color_item"
+							style={{ background: `${swatch?.value}` }}
+						></span>
+
+						{swatch?.more?.length ? (
+							<>
+								{swatch?.more.map((c) => (
+									<span
+										key={c}
+										className="sa_color_item"
+										style={{ background: `${c}` }}
+									></span>
+								))}
+							</>
+						) : null}
+					</div>
+				</span>
+			) : null}
+
+			{swatch?.type === "sa_image" ? (
+				<span className="sa_swatch sa_image">
+					<span className="sa_image_item">
+						<img alt="" src={swatch?.thumbnail || swatch?.full} />
+					</span>
+				</span>
+			) : null}
+
 			{option?.name}
 			{isChecked && (
 				<div className="sa_icon">
@@ -132,7 +170,6 @@ function cleanObj(obj) {
 }
 
 const findMatchingVariations = (variations, attributes) => {
-	console.log("findMatchingVariations_attrs", attributes);
 	if (!Object.keys(attributes).length) {
 		return variations;
 	}
@@ -229,7 +266,6 @@ const App = ({ pid, variants }) => {
 
 	useEffect(() => {
 		const findArgs = cleanObj({ ...selected, __t: null, __c: null });
-		let matchVariants = [];
 		const activeAttrOptions = {};
 		Object.values(attrs).map((attr) => {
 			const args = { ...findArgs };
@@ -240,7 +276,6 @@ const App = ({ pid, variants }) => {
 		});
 
 		setAvailableAttrs(activeAttrOptions);
-		console.log("activeAttrOptions", activeAttrOptions, matchVariants);
 	}, [selected]);
 
 	const contentValues = {
