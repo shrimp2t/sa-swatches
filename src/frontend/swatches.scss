@@ -25,7 +25,8 @@ body {
 	.sa_attr_option {
 		cursor: pointer;
 		border: var(--sa-border-width) solid #ededed;
-		padding: 10px;
+		padding: 8px 15px;
+		line-height: 1.2;
 		border-radius: var(--sa-border-radius);
 		position: relative;
 
@@ -37,15 +38,15 @@ body {
 			color: #fff;
 			line-height: 1;
 			overflow: hidden;
-			height: 24px;
-			width: 24px;
+			height: 22px;
+			width: 22px;
 			display: block;
 			border-bottom-right-radius: var(--sa-border-radius);
 			svg {
 				z-index: 3;
 				position: absolute;
-				bottom: -4px;
-				right: -4px;
+				bottom: -5px;
+				right: -5px;
 				transform: scale(0.6);
 			}
 			&::before {
