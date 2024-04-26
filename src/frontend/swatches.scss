@@ -1,4 +1,30 @@
-.ppppp {
+.sa_attr_product {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 
-  color: #334;
+  .sa_attr {
+    display: flex;
+    gap: 1em;
+  }
+
+  .sa_attr_values {
+    margin-left: auto;
+  }
+  
+}
+
+.sa_attr_options {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap;
+  .sa_attr_option {
+    cursor: pointer;
+    border: 1px solid #ededed;
+    padding:  10px;
+    border-radius: 3px;
+    &.sa_selected {
+      border-color: #1896e5;
+    }
+  }
 }

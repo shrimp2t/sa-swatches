@@ -351,7 +351,8 @@ function get_product_attributes($product)
 	$attrs = get_wc_tax_attrs();
 	$attr_data = [];
 
-	foreach ($attributes as $attribute_name => $options) {
+
+	foreach ($attributes as $attribute_name => $attr_options) {
 		$key =  sanitize_title($attribute_name);
 		$attr_data[$key] = [
 			'label' => wc_attribute_label($attribute_name),
@@ -380,7 +381,7 @@ function get_product_attributes($product)
 		} else {
 			$attr_data[$key]['tax'] = false;
 			$custom_terms = [];
-			foreach ($options as $term) {
+			foreach ($attr_options as $term) {
 				$custom_terms[] = (object) [
 					'term_id' => $term,
 					'name' => $term,
@@ -404,6 +405,6 @@ function rest_get_product_attrs($post)
 	$product = wc_get_product($pid);
 
 	$data = get_product_attributes($product);
-	wp_send_json($data);
+	wp_send_json_success($data);
 	die();
 }

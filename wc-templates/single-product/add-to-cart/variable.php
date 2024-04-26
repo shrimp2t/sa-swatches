@@ -28,13 +28,6 @@ $variations_attr = function_exists('wc_esc_json') ? wc_esc_json($variations_json
 
 do_action('woocommerce_before_add_to_cart_form');
 
-
-
-$attr_data = get_product_attributes($product);
-
-var_dump($attr_data);
-
-
 ?>
 <form class="variations_form cart" action="<?php echo esc_url(apply_filters('woocommerce_add_to_cart_form_action', $product->get_permalink())); ?>" method="post" enctype='multipart/form-data' data-product_id="<?php echo absint($product->get_id()); ?>" data-product_variations="<?php echo $variations_attr; // WPCS: XSS ok. 
                                                                                                                                                                                                                                                                                       ?>">
