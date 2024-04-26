@@ -127,9 +127,27 @@ const AttrOptions = ({ attr }) => {
 };
 
 const AttrItem = ({ attr }) => {
+	const { attrs, selected } = useAppContext();
+
+	let selectedLabel = "";
+	const selectedVal = selected?.[attr?.name] || false;
+
+	if (selectedVal) {
+		const { options = [] } = attrs?.[attr.id] || {};
+		for (let i = 0; i < options.length; i++) {
+			if (selectedVal === options[i].slug) {
+				selectedLabel = options[i].name;
+				break;
+			}
+		}
+	}
+
 	return (
 		<div className={["sa_attr", attr.name].join(" ")}>
-			<div className="sa_attr_label">{attr?.label}</div>
+			<div className="sa_attr_label">
+				<span className="sa_label_title">{attr?.label}</span>:
+				<span className="sa_label_val">{selectedLabel}</span>
+			</div>
 			<div className="sa_attr_values">
 				<AttrOptions attr={attr} />
 			</div>
@@ -282,6 +300,7 @@ const App = ({ pid, variants }) => {
 		selected,
 		setSelected,
 		defaults,
+		attrs,
 		availableAttrs,
 	};
 
