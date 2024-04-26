@@ -2,27 +2,36 @@ body {
 	--sa-border-width: 1px;
 	--sa-border-radius: 3px;
 	--sa-check-active-bg: #1896e5;
+	--sa-gap: 10px;
 }
 
 .sa_attr_product {
 	display: flex;
 	flex-direction: column;
-	gap: 1em;
+	gap: var(--sa-gap);
 
 	.sa_attr {
 		display: flex;
-		gap: 1em;
-		align-items: center;
+		gap: var(--sa-gap);
 	}
 
-	.sa_attr_values {
-		margin-left: auto;
+	&.sa_layout_separate {
+		.sa_attr {
+			flex-direction: column;
+		}
+	}
+
+	&.sa_layout_inline {
+		align-items: center;
+		.sa_attr_values {
+			margin-left: auto;
+		}
 	}
 }
 
 .sa_attr_options {
 	display: flex;
-	gap: 1em;
+	gap: var(--sa-gap);
 	flex-wrap: wrap;
 	.sa_attr_option {
 		cursor: pointer;

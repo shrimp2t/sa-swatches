@@ -303,7 +303,13 @@ jQuery(($) => {
 		console.log(form.data("product_id"));
 		const appEl = $("<div/>");
 		appEl.insertAfter(table);
+		const settings = {
+			layout: "separate", // inline | separate
+			show_attr_desc: true, // Show attribute description.
+		};
+		const layout = "sa_layout_inline"; // sa_layout_separate
 		appEl.addClass("sa_attr_product");
+		appEl.addClass("sa_layout_" + settings.layout);
 		const onChange = (selected) => {
 			Object.keys(selected).map((name) => {
 				const v = selected[name] || false;
