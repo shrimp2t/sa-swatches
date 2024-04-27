@@ -67,7 +67,7 @@ const Option = ({ option, attrName, clickable = true }) => {
 		...(option?.custom_swatch || {}),
 	};
 
-	classes.push("type_" + swatch?.type);
+	classes.push("type_" + (swatch?.type || "mixed"));
 
 	const divProps = {
 		className: classes.join(" "),
