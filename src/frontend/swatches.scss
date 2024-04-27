@@ -72,12 +72,12 @@ body {
 		border: var(--sa-border-width) solid var(--sa-check-active-bg);
 	}
 	&.sa_inactive {
-		border-color: #c0bfbf;
+		border-color: #c18080;
 		background: #f1f1f1;
-		opacity: 0.5;
+		opacity: 0.8;
 		.sa_icon {
 			&::before {
-				background: #c0bfbf !important;
+				background: #c18080 !important;
 			}
 		}
 	}

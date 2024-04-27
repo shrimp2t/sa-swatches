@@ -103,57 +103,62 @@ const Option = ({ option, attrName, clickable = true, settings = {} }) => {
 	}
 
 	return (
-		<div className="sa_opt_wrap" style={css}>
-			<div {...divProps}>
-				{swatch?.type === "sa_color" ? (
-					<span className="sa_swatch_wrap">
-						<span className="sa_swatch sa_color">
-							<div className="sa_color_inner">
-								<span
-									className="sa_color_item"
-									style={{ background: `${swatch?.value}` }}
-								></span>
+		<>
+			<div className="sa_opt_wrap" style={css}>
+				<div {...divProps}>
+					{swatch?.type === "sa_color" ? (
+						<span className="sa_swatch_wrap">
+							<span className="sa_swatch sa_color">
+								<div className="sa_color_inner">
+									<span
+										className="sa_color_item"
+										style={{ background: `${swatch?.value}` }}
+									></span>
 
-								{swatch?.more?.length ? (
-									<>
-										{swatch?.more.map((c) => (
-											<span
-												key={c}
-												className="sa_color_item"
-												style={{ background: `${c}` }}
-											></span>
-										))}
-									</>
-								) : null}
-							</div>
-						</span>
-					</span>
-				) : null}
-
-				{swatch?.type === "sa_image" ? (
-					<span className="sa_swatch_wrap">
-						<span className="sa_swatch sa_image">
-							<span className="sa_image_item">
-								<img alt="" src={swatch?.thumbnail || swatch?.full} />
+									{swatch?.more?.length ? (
+										<>
+											{swatch?.more.map((c) => (
+												<span
+													key={c}
+													className="sa_color_item"
+													style={{ background: `${c}` }}
+												></span>
+											))}
+										</>
+									) : null}
+								</div>
 							</span>
 						</span>
-					</span>
-				) : null}
+					) : null}
 
-				{willShowLabel && (
-					<span className="sa_opt_label">
-						{option?.custom_name || option?.name}
-					</span>
-				)}
+					{swatch?.type === "sa_image" ? (
+						<span className="sa_swatch_wrap">
+							<span className="sa_swatch sa_image">
+								<span className="sa_image_item">
+									<img alt="" src={swatch?.thumbnail || swatch?.full} />
+								</span>
+							</span>
+						</span>
+					) : null}
 
-				{isChecked && (
-					<div className="sa_icon">
-						<IconCheck />
-					</div>
-				)}
+					{willShowLabel && (
+						<span className="sa_opt_label">
+							{option?.custom_name || option?.name}
+						</span>
+					)}
+
+					{isChecked && (
+						<div className="sa_icon">
+							<IconCheck />
+						</div>
+					)}
+				</div>
 			</div>
-			<Tooltip id={tooltipId}>{option?.custom_name || option?.name}</Tooltip>
-		</div>
+
+			<Tooltip className="sa_tooltip" style={{ zIndex: 999999 }} id={tooltipId}>
+				{option?.custom_name || option?.name}
+			</Tooltip>
+		</>
 	);
 };
 
@@ -219,14 +224,19 @@ const AttrItem = ({ attr }) => {
 				{settings.layout === "modal" ? (
 					<>
 						<div onClick={() => setIsOpen(true)}>
-							<Option option={option} attrName={attr.name} clickable={false} />
+							<Option
+								option={option}
+								attrName={attr.name}
+								clickable={false}
+								settings={settings?.option}
+							/>
 						</div>
 						<Drawer
 							open={isOpen}
 							onClose={() => setIsOpen(false)}
 							direction="right"
 							className="sa_attr_modal_values"
-							zIndex={99999}
+							zIndex={999900}
 							size={450}
 							lockBackgroundScroll={true}
 						>
@@ -343,7 +353,7 @@ jQuery(($) => {
 		const appEl = $("<div/>");
 		appEl.insertAfter(table);
 		const settings = {
-			layout: "separate", // inline | separate | modal
+			layout: "modal", // inline | separate | modal
 			show_attr_desc: true, // Show attribute description.
 			show_attr_label: true,
 
