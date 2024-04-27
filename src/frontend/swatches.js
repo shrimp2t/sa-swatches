@@ -304,7 +304,7 @@ jQuery(($) => {
 		const appEl = $("<div/>");
 		appEl.insertAfter(table);
 		const settings = {
-			layout: "separate", // inline | separate | modal
+			layout: "modal", // inline | separate | modal
 			show_attr_desc: true, // Show attribute description.
 			show_attr_label: true,
 		};
