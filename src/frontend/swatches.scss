@@ -14,8 +14,10 @@ body {
 
 	.sa_attr {
 		display: flex;
-
 		gap: var(--sa-gap);
+		.sa_label_val {
+			margin-left: 1em;
+		}
 	}
 }
 

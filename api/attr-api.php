@@ -354,7 +354,7 @@ function get_product_attributes($product)
 
 	foreach ($attributes as $attribute_name => $attr_options) {
 		$key =  sanitize_title($attribute_name);
-		$type =  $attribute_name && isset($attrs[$attribute_name]) ? $attrs[$attribute_name] : 'mixed';
+		$type =  $attribute_name && isset($attrs[$attribute_name]) ? $attrs[$attribute_name] : null;
 		$attr_data[$key] = [
 			'label' => wc_attribute_label($attribute_name),
 			'name' => 'attribute_' . $key,

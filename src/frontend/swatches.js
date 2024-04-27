@@ -172,8 +172,11 @@ const AttrItem = ({ attr }) => {
 			].join(" ")}
 		>
 			<div className="sa_attr_label">
-				<span className="sa_label_title">{attr?.label}</span>
-				{showColon ? ":" : ""}
+				<span className="sa_label_title">
+					{attr?.label}
+					{showColon ? <span className="colon">:</span> : ""}
+				</span>
+
 				{showValue && <span className="sa_label_val">{selectedLabel}</span>}
 			</div>
 			<div className="sa_attr_values">
