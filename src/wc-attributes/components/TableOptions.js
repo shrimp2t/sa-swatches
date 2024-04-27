@@ -1,4 +1,4 @@
-import req from "../../commo/req";
+import req from "../../common/req";
 import ImagePicker from "./ImagePicker";
 import ColorPicker from "./ColorPicker";
 

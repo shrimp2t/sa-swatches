@@ -1,11 +1,18 @@
 import "./swatches.scss";
 
-import req from "../commo/req";
+import req from "../common/req";
 import { render, useState, useEffect } from "@wordpress/element";
 import { AppContext, useAppContext } from "./components/context";
 import IconCheck from "./components/IconCheck";
+import {
+	cleanObj,
+	findMatchingVariations,
+	findActiveAttrOptions,
+} from "./common/variants";
+import Drawer from "react-modern-drawer";
+import "react-modern-drawer/dist/index.css";
 
-const Option = ({ option, attrName }) => {
+const Option = ({ option, attrName, clickable = true }) => {
 	const { setSelected, defaults, selected, availableAttrs } = useAppContext();
 	const onCLick = (value) => {
 		setSelected((prev) => {
@@ -31,19 +38,22 @@ const Option = ({ option, attrName }) => {
 			availableAttrs?.[attrName]?.includes(option?.slug) ||
 			availableAttrs?.[attrName]?.includes("")
 		) {
-			classes.push("sa_active");
 			isActive = true;
 		} else {
 			// if (selected?.__c !== attrName) {
-			classes.push("sa_inactive");
 			isActive = false;
 			isClickable = false;
 			// }
 		}
 	} else {
-		classes.push("sa_inactive");
 		isActive = false;
 		isClickable = false;
+	}
+
+	if (isActive) {
+		classes.push("sa_active");
+	} else {
+		classes.push("sa_inactive");
 	}
 
 	if (selectedVal === option?.slug) {
@@ -59,15 +69,20 @@ const Option = ({ option, attrName }) => {
 
 	classes.push("type_" + swatch?.type);
 
+	const divProps = {
+		className: classes.join(" "),
+	};
+
+	if (clickable && isClickable) {
+		divProps.onClick = () => {
+			if (isClickable) {
+				onCLick(option?.slug);
+			}
+		};
+	}
+
 	return (
-		<div
-			className={classes.join(" ")}
-			onClick={() => {
-				if (isClickable) {
-					onCLick(option?.slug);
-				}
-			}}
-		>
+		<div {...divProps}>
 			{swatch?.type === "sa_color" ? (
 				<span className="sa_swatch sa_color">
 					<div className="sa_color_inner">
@@ -127,112 +142,69 @@ const AttrOptions = ({ attr }) => {
 };
 
 const AttrItem = ({ attr }) => {
-	const { attrs, selected } = useAppContext();
+	const { attrs, selected, settings } = useAppContext();
+	const [isOpen, setIsOpen] = useState(false);
 
 	let selectedLabel = "";
 	const selectedVal = selected?.[attr?.name] || false;
+	let option = false;
 
 	if (selectedVal) {
 		const { options = [] } = attrs?.[attr.id] || {};
 		for (let i = 0; i < options.length; i++) {
 			if (selectedVal === options[i].slug) {
+				option = options[i];
 				selectedLabel = options[i].name;
 				break;
 			}
 		}
 	}
 
+	let showColon = ["separate"].includes(settings.layout);
+	let showValue = ["separate"].includes(settings.layout);
+
 	return (
-		<div className={["sa_attr", attr.name].join(" ")}>
+		<div
+			className={[
+				"sa_attr",
+				attr.name,
+				"atype-" + (attr?.type || "mixed"),
+			].join(" ")}
+		>
 			<div className="sa_attr_label">
-				<span className="sa_label_title">{attr?.label}</span>:
-				<span className="sa_label_val">{selectedLabel}</span>
+				<span className="sa_label_title">{attr?.label}</span>
+				{showColon ? ":" : ""}
+				{showValue && <span className="sa_label_val">{selectedLabel}</span>}
 			</div>
 			<div className="sa_attr_values">
-				<AttrOptions attr={attr} />
+				{settings.layout === "modal" ? (
+					<>
+						<div onClick={() => setIsOpen(true)}>
+							<Option option={option} attrName={attr.name} clickable={false} />
+						</div>
+						<Drawer
+							open={isOpen}
+							onClose={() => setIsOpen(false)}
+							direction="right"
+							className="sa_attr_modal_values"
+							zIndex={99999}
+							size={450}
+							lockBackgroundScroll={true}
+						>
+							<div className="sa_modal_inner">
+								<AttrOptions attr={attr} />
+							</div>
+						</Drawer>
+					</>
+				) : (
+					<AttrOptions attr={attr} />
+				)}
 			</div>
 		</div>
 	);
 };
 
-// Ajax Search find_matching_product_variation
-
-const isMatch = function (variation_attributes, attributes) {
-	var match = true;
-	for (var attr_name in variation_attributes) {
-		if (variation_attributes.hasOwnProperty(attr_name)) {
-			var val1 = variation_attributes[attr_name];
-			var val2 = attributes[attr_name];
-
-			if (
-				val1 !== undefined &&
-				val2 !== undefined &&
-				val1.length !== 0 &&
-				val2.length !== 0 &&
-				val1 !== val2
-			) {
-				match = false;
-			}
-		}
-	}
-	return match;
-};
-
-function cleanObj(obj) {
-	for (var propName in obj) {
-		if (obj[propName] === null || obj[propName] === undefined) {
-			delete obj[propName];
-		}
-	}
-	return obj;
-}
-
-const findMatchingVariations = (variations, attributes) => {
-	if (!Object.keys(attributes).length) {
-		return variations;
-	}
-	const matching = [];
-	for (let i = 0; i < variations.length; i++) {
-		const variation = variations[i];
-		if (isMatch(variation.attributes, attributes)) {
-			matching.push(variation);
-		}
-	}
-	return matching;
-};
-
-const findActiveAttrOptions = (variations, currentAttrName) => {
-	const activeAttrOptions = [];
-
-	for (const num in variations) {
-		if (typeof variations[num] !== "undefined") {
-			const variationAttributes = variations[num].attributes;
-
-			for (const attrName in variationAttributes) {
-				if (attrName !== currentAttrName) {
-					continue;
-				}
-
-				if (typeof activeAttrOptions[attrName] === "undefined") {
-					activeAttrOptions[attrName] = [];
-				}
-
-				if (variationAttributes.hasOwnProperty(attrName)) {
-					let attrVal = variationAttributes[attrName];
-					if (variations[num].variation_is_active) {
-						if (!activeAttrOptions.includes(attrVal)) {
-							activeAttrOptions.push(attrVal);
-						}
-					}
-				}
-			}
-		}
-	}
-
-	return activeAttrOptions;
-};
-
-const App = ({ pid, variants }) => {
+const App = ({ pid, variants, settings }) => {
 	const [attrs, setAttrs] = useState({});
 	const [selected, setSelected] = useState({});
 	const [defaults, setDefaults] = useState({});
@@ -302,13 +274,19 @@ const App = ({ pid, variants }) => {
 		defaults,
 		attrs,
 		availableAttrs,
+		settings,
 	};
+
+	const classes = ["sa_attr_product"];
+	classes.push("sa_layout_" + settings.layout);
 
 	return (
 		<AppContext.Provider value={contentValues}>
-			{Object.values(attrs).map((attr) => (
-				<AttrItem key={attr.id} attr={attr} />
-			))}
+			<div className={classes.join(" ")}>
+				{Object.values(attrs).map((attr) => (
+					<AttrItem key={attr.id} attr={attr} />
+				))}
+			</div>
 		</AppContext.Provider>
 	);
 };
@@ -323,13 +301,11 @@ jQuery(($) => {
 		const appEl = $("<div/>");
 		appEl.insertAfter(table);
 		const settings = {
-			layout: "separate", // inline | separate, modal_thumb
+			layout: "separate", // inline | separate | modal
 			show_attr_desc: true, // Show attribute description.
 			show_attr_label: true,
 		};
-		const layout = "sa_layout_inline"; // sa_layout_separate
-		appEl.addClass("sa_attr_product");
-		appEl.addClass("sa_layout_" + settings.layout);
+
 		const onChange = (selected) => {
 			Object.keys(selected).map((name) => {
 				const v = selected[name] || false;
@@ -345,6 +321,7 @@ jQuery(($) => {
 			variants,
 			useAjax,
 			onChange,
+			settings,
 		};
 
 		render(<App {...args} />, appEl.get(0));
