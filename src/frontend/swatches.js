@@ -10,10 +10,13 @@ import {
 	findActiveAttrOptions,
 } from "./common/variants";
 import Drawer from "react-modern-drawer";
+import { Tooltip } from "react-tooltip";
 import "react-modern-drawer/dist/index.css";
+import "react-tooltip/dist/react-tooltip.css";
 
-const Option = ({ option, attrName, clickable = true }) => {
-	const { setSelected, defaults, selected, availableAttrs } = useAppContext();
+const Option = ({ option, attrName, clickable = true, settings = {} }) => {
+	const { setSelected, defaults, selected, availableAttrs, appId } =
+		useAppContext();
 	const onCLick = (value) => {
 		setSelected((prev) => {
 			if (prev?.[attrName] === value) {
@@ -32,6 +35,8 @@ const Option = ({ option, attrName, clickable = true }) => {
 	let isActive = true;
 	let isClickable = true;
 	let isChecked = false;
+
+	classes.push(`sa_opt_layout_${settings.layout}`);
 
 	if (availableAttrs?.[attrName]) {
 		if (
@@ -69,8 +74,10 @@ const Option = ({ option, attrName, clickable = true }) => {
 
 	classes.push("type_" + (swatch?.type || "mixed"));
 
+	const tooltipId = `${appId}-${attrName}-${option.slug}`;
 	const divProps = {
 		className: classes.join(" "),
+		"data-tooltip-id": tooltipId,
 	};
 
 	if (clickable && isClickable) {
@@ -81,52 +88,80 @@ const Option = ({ option, attrName, clickable = true }) => {
 		};
 	}
 
+	let css = {};
+	const { showLabel = true, col = 0 } = settings;
+	if (col > 0 && ["box"].includes(settings?.layout)) {
+		css = {
+			flexBasis: `${100 / col}%`,
+			width: `${100 / col}%`,
+		};
+	}
+
+	let willShowLabel = showLabel;
+	if (!showLabel && !["sa_image", "sa_color"].includes(swatch?.type)) {
+		willShowLabel = true;
+	}
+
 	return (
-		<div {...divProps}>
-			{swatch?.type === "sa_color" ? (
-				<span className="sa_swatch sa_color">
-					<div className="sa_color_inner">
-						<span
-							className="sa_color_item"
-							style={{ background: `${swatch?.value}` }}
-						></span>
+		<div className="sa_opt_wrap" style={css}>
+			<div {...divProps}>
+				{swatch?.type === "sa_color" ? (
+					<span className="sa_swatch_wrap">
+						<span className="sa_swatch sa_color">
+							<div className="sa_color_inner">
+								<span
+									className="sa_color_item"
+									style={{ background: `${swatch?.value}` }}
+								></span>
 
-						{swatch?.more?.length ? (
-							<>
-								{swatch?.more.map((c) => (
-									<span
-										key={c}
-										className="sa_color_item"
-										style={{ background: `${c}` }}
-									></span>
-								))}
-							</>
-						) : null}
-					</div>
-				</span>
-			) : null}
-
-			{swatch?.type === "sa_image" ? (
-				<span className="sa_swatch sa_image">
-					<span className="sa_image_item">
-						<img alt="" src={swatch?.thumbnail || swatch?.full} />
+								{swatch?.more?.length ? (
+									<>
+										{swatch?.more.map((c) => (
+											<span
+												key={c}
+												className="sa_color_item"
+												style={{ background: `${c}` }}
+											></span>
+										))}
+									</>
+								) : null}
+							</div>
+						</span>
 					</span>
-				</span>
-			) : null}
+				) : null}
 
-			{option?.name}
-			{isChecked && (
-				<div className="sa_icon">
-					<IconCheck />
-				</div>
-			)}
+				{swatch?.type === "sa_image" ? (
+					<span className="sa_swatch_wrap">
+						<span className="sa_swatch sa_image">
+							<span className="sa_image_item">
+								<img alt="" src={swatch?.thumbnail || swatch?.full} />
+							</span>
+						</span>
+					</span>
+				) : null}
+
+				{willShowLabel && (
+					<span className="sa_opt_label">
+						{option?.custom_name || option?.name}
+					</span>
+				)}
+
+				{isChecked && (
+					<div className="sa_icon">
+						<IconCheck />
+					</div>
+				)}
+			</div>
+			<Tooltip id={tooltipId}>{option?.custom_name || option?.name}</Tooltip>
 		</div>
 	);
 };
 
-const AttrOptions = ({ attr }) => {
+const AttrOptions = ({ attr, settings }) => {
+	const classes = ["sa_attr_options"];
+	classes.push("sa_opts_l_" + settings?.layout);
 	return (
-		<div className="sa_attr_options">
+		<div className={classes.join(" ")}>
 			{attr?.options.map((option) => {
 				return (
 					<Option
@@ -134,6 +169,7 @@ const AttrOptions = ({ attr }) => {
 						attrName={attr.name}
 						attrId={attr.id}
 						option={option}
+						settings={settings}
 					/>
 				);
 			})}
@@ -195,12 +231,12 @@ const AttrItem = ({ attr }) => {
 							lockBackgroundScroll={true}
 						>
 							<div className="sa_modal_inner">
-								<AttrOptions attr={attr} />
+								<AttrOptions attr={attr} settings={settings?.modal?.option} />
 							</div>
 						</Drawer>
 					</>
 				) : (
-					<AttrOptions attr={attr} />
+					<AttrOptions attr={attr} settings={settings?.option} />
 				)}
 			</div>
 		</div>
@@ -208,6 +244,7 @@ const AttrItem = ({ attr }) => {
 };
 
 const App = ({ pid, variants, settings }) => {
+	const [appId, setAppId] = useState("");
 	const [attrs, setAttrs] = useState({});
 	const [selected, setSelected] = useState({});
 	const [defaults, setDefaults] = useState({});
@@ -216,6 +253,7 @@ const App = ({ pid, variants, settings }) => {
 
 	// Get Attrs settings.
 	useEffect(() => {
+		setAppId(`_${pid}_${Date.now()}`);
 		req({
 			url: SA_WC_SWATCHES.ajax,
 			params: {
@@ -272,6 +310,7 @@ const App = ({ pid, variants, settings }) => {
 	}, [selected]);
 
 	const contentValues = {
+		appId,
 		selected,
 		setSelected,
 		defaults,
@@ -304,9 +343,22 @@ jQuery(($) => {
 		const appEl = $("<div/>");
 		appEl.insertAfter(table);
 		const settings = {
-			layout: "modal", // inline | separate | modal
+			layout: "separate", // inline | separate | modal
 			show_attr_desc: true, // Show attribute description.
 			show_attr_label: true,
+
+			option: {
+				layout: "box", // box || inline
+				col: 6,
+				showLabel: false,
+			},
+
+			modal: {
+				option: {
+					layout: "box",
+					col: 3,
+				},
+			},
 		};
 
 		const onChange = (selected) => {

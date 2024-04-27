@@ -1,5 +1,5 @@
 body {
-	--sa-border-width: 1px;
+	--sa-border-width: 2px;
 	--sa-border-radius: 3px;
 	--sa-check-active-bg: #1896e5;
 	--sa-gap: 10px;
@@ -92,7 +92,7 @@ body {
 		width: 100%;
 		height: 100%;
 		display: flex;
-		transform: rotate(45deg) scale(2);
+		transform: rotate(45deg) scale(1.45);
 	}
 	.sa_color_item {
 		flex-basis: 100%;
@@ -111,6 +111,53 @@ body {
 		}
 	}
 }
+// -- Option layout -----------------------
+.sa_modal_inner,
+.sa_attr {
+	* {
+		box-sizing: border-box;
+	}
+}
+
+.sa_attr_options {
+	&.sa_opts_l_box {
+		gap: 0px;
+		margin: calc(0px - var(--sa-gap) / 2);
+		.sa_opt_wrap {
+			padding: calc(var(--sa-gap) / 2);
+		}
+
+		.sa_swatch_wrap {
+			position: relative;
+			padding-top: 100%;
+			width: 100%;
+			display: block;
+		}
+		.sa_attr_option {
+			width: 100%;
+			padding: 5px;
+			.sa_opt_label {
+				overflow: hidden;
+				width: 100%;
+				display: flex;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+			flex-direction: column;
+			.sa_swatch {
+				position: absolute;
+				top: 0px;
+				bottom: 0px;
+				right: 0px;
+				left: 0px;
+				width: auto;
+				height: auto;
+			}
+		}
+	}
+}
+
+// ======= SWATCHES FORM LAYOUT=============
 
 // separate layout -----------------------
 .sa_layout_separate {
