@@ -2,6 +2,7 @@ body {
 	--sa-border-width: 2px;
 	--sa-border-radius: 3px;
 	--sa-check-active-bg: #1896e5;
+	--sa-border-color: #ededed;
 	--sa-gap: 10px;
 	--sa-row-gap: 1.5em;
 }
@@ -29,7 +30,7 @@ body {
 
 .sa_attr_option {
 	cursor: pointer;
-	border: var(--sa-border-width) solid #ededed;
+	border: var(--sa-border-width) solid var(--sa-border-color);
 	padding: 8px 10px;
 	&.sa_no_label {
 		padding: 5px;
@@ -40,6 +41,30 @@ body {
 	display: inline-flex;
 	align-items: center;
 	gap: 10px;
+
+	.sa_checkbox {
+		width: 16px;
+		height: 16px;
+		display: inline-flex;
+		border: var(--sa-border-width) solid var(--sa-border-color);
+		border-radius: 100px;
+		background: #fff;
+		position: relative;
+		margin: 0 6px;
+		&::before {
+			content: "";
+			width: calc(100% + 6px);
+			height: calc(100% + 6px);
+			display: block;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			border: var(--sa-border-width) solid var(--sa-border-color);
+			border-radius: 100px;
+			opacity: 0;
+		}
+	}
 
 	.sa_icon {
 		position: absolute;
@@ -73,6 +98,13 @@ body {
 
 	&.sa_selected {
 		border: var(--sa-border-width) solid var(--sa-check-active-bg);
+		.sa_checkbox {
+			background: var(--sa-check-active-bg);
+			&::before {
+				border-color: var(--sa-check-active-bg);
+				opacity: 1;
+			}
+		}
 	}
 	&.sa_inactive {
 		border-color: #c18080;
@@ -84,6 +116,13 @@ body {
 			}
 		}
 	}
+}
+
+.sa_opt_label,
+.sa_checkbox_wrap {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
 }
 
 .sa_swatch {
@@ -185,7 +224,7 @@ body {
 
 // List layout -----------------------
 .sa_attr_options {
-	&.sa_opts_l_list {
+	&.sa_opts_l_checkbox {
 		.sa_opt_wrap,
 		.sa_attr_option {
 			flex-basis: 100%;

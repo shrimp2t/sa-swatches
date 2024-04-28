@@ -88,28 +88,37 @@ const Option = ({
 
 	classes.push("type_" + (swatch?.type || "mixed"));
 
+	const isBox = ["box"].includes(settings?.layout);
 	let css = {};
 	let cssSwatch = {};
+	let cssSwatchLabel = {};
 	const { showLabel = true, col = 0, size = 0 } = settings;
-	if (col > 0 && ["box"].includes(settings?.layout)) {
+	if (col > 0 && isBox) {
 		css = {
 			flexBasis: `${100 / col}%`,
 			width: `${100 / col}%`,
 		};
 	}
 
-	if (size > 0 && !["box"].includes(settings?.layout)) {
+	if (size > 0 && !isBox) {
 		cssSwatch = {
 			width: size,
 			height: size,
 		};
+		cssSwatchLabel = {
+			minHeight: size,
+		};
 	}
 
-	console.log("cssSwatch", cssSwatch);
+	const hasSwatch = ["sa_image", "sa_color"].includes(swatch?.type);
 
 	let willShowLabel = showLabel;
-	if (!showLabel && !["sa_image", "sa_color"].includes(swatch?.type)) {
+	if (!showLabel && !hasSwatch) {
 		willShowLabel = true;
+	}
+
+	if (!checkActive && !selectedVal && willShowLabel) {
+		willShowLabel = false;
 	}
 
 	if (!showLabel) {
@@ -134,6 +143,11 @@ const Option = ({
 		<>
 			<div className="sa_opt_wrap" style={css}>
 				<div {...divProps}>
+					{checkActive && ["checkbox"].includes(settings?.layout) && (
+						<span className="sa_checkbox_wrap">
+							<span className="sa_checkbox"></span>
+						</span>
+					)}
 					{swatch?.type === "sa_color" ? (
 						<span className="sa_swatch_wrap">
 							<span className="sa_swatch sa_color" style={cssSwatch}>
@@ -177,8 +191,8 @@ const Option = ({
 						</span>
 					)}
 
-					{willShowLabel && !noSelect && (
-						<span className="sa_opt_label">
+					{willShowLabel && (
+						<span className="sa_opt_label" style={cssSwatchLabel}>
 							{option?.custom_name || option?.name}
 						</span>
 					)}
@@ -392,20 +406,20 @@ jQuery(($) => {
 		const appEl = $("<div/>");
 		appEl.insertAfter(table);
 		const settings = {
-			layout: "modal", // inline | separate | modal
+			layout: "separate", // inline | separate | modal
 			show_attr_desc: true, // Show attribute description.
 			show_attr_label: true,
 
 			option: {
-				layout: "inline", // box || inline | list
+				layout: "box", // box || inline | checkbox
 				col: 6, // apply for layout [box] only.
 				size: 30, // not apply for [box] layout.
-				showLabel: true,
+				showLabel: false,
 			},
 
 			modal: {
 				option: {
-					layout: "list",
+					layout: "checkbox",
 					col: 3,
 					size: 35,
 				},
