@@ -14,7 +14,15 @@ import { Tooltip } from "react-tooltip";
 import "react-modern-drawer/dist/index.css";
 import "react-tooltip/dist/react-tooltip.css";
 
-const Option = ({ option, attrName, clickable = true, settings = {} }) => {
+const Option = ({
+	option,
+	attrName,
+	clickable = true,
+	settings = {},
+	checkActive = true,
+	showIcon = true,
+	noSelect = false,
+}) => {
 	const { setSelected, defaults, selected, availableAttrs, appId } =
 		useAppContext();
 	const onCLick = (value) => {
@@ -55,10 +63,16 @@ const Option = ({ option, attrName, clickable = true, settings = {} }) => {
 		isClickable = false;
 	}
 
-	if (isActive) {
-		classes.push("sa_active");
-	} else {
-		classes.push("sa_inactive");
+	if (checkActive) {
+		if (isActive) {
+			classes.push("sa_active");
+		} else {
+			classes.push("sa_inactive");
+		}
+	}
+
+	if (!selectedVal) {
+		classes.push("sa_not_select");
 	}
 
 	if (selectedVal === option?.slug) {
@@ -74,6 +88,34 @@ const Option = ({ option, attrName, clickable = true, settings = {} }) => {
 
 	classes.push("type_" + (swatch?.type || "mixed"));
 
+	let css = {};
+	let cssSwatch = {};
+	const { showLabel = true, col = 0, size = 0 } = settings;
+	if (col > 0 && ["box"].includes(settings?.layout)) {
+		css = {
+			flexBasis: `${100 / col}%`,
+			width: `${100 / col}%`,
+		};
+	}
+
+	if (size > 0 && !["box"].includes(settings?.layout)) {
+		cssSwatch = {
+			width: size,
+			height: size,
+		};
+	}
+
+	console.log("cssSwatch", cssSwatch);
+
+	let willShowLabel = showLabel;
+	if (!showLabel && !["sa_image", "sa_color"].includes(swatch?.type)) {
+		willShowLabel = true;
+	}
+
+	if (!showLabel) {
+		classes.push("sa_no_label");
+	}
+
 	const tooltipId = `${appId}-${attrName}-${option.slug}`;
 	const divProps = {
 		className: classes.join(" "),
@@ -88,27 +130,13 @@ const Option = ({ option, attrName, clickable = true, settings = {} }) => {
 		};
 	}
 
-	let css = {};
-	const { showLabel = true, col = 0 } = settings;
-	if (col > 0 && ["box"].includes(settings?.layout)) {
-		css = {
-			flexBasis: `${100 / col}%`,
-			width: `${100 / col}%`,
-		};
-	}
-
-	let willShowLabel = showLabel;
-	if (!showLabel && !["sa_image", "sa_color"].includes(swatch?.type)) {
-		willShowLabel = true;
-	}
-
 	return (
 		<>
 			<div className="sa_opt_wrap" style={css}>
 				<div {...divProps}>
 					{swatch?.type === "sa_color" ? (
 						<span className="sa_swatch_wrap">
-							<span className="sa_swatch sa_color">
+							<span className="sa_swatch sa_color" style={cssSwatch}>
 								<div className="sa_color_inner">
 									<span
 										className="sa_color_item"
@@ -133,7 +161,7 @@ const Option = ({ option, attrName, clickable = true, settings = {} }) => {
 
 					{swatch?.type === "sa_image" ? (
 						<span className="sa_swatch_wrap">
-							<span className="sa_swatch sa_image">
+							<span className="sa_swatch sa_image" style={cssSwatch}>
 								<span className="sa_image_item">
 									<img alt="" src={swatch?.thumbnail || swatch?.full} />
 								</span>
@@ -141,13 +169,21 @@ const Option = ({ option, attrName, clickable = true, settings = {} }) => {
 						</span>
 					) : null}
 
-					{willShowLabel && (
+					{noSelect && !selectedVal && (
+						<span className="sa_swatch_wrap">
+							<span className="sa_swatch sa_no" style={cssSwatch}>
+								<span className="sa_no_item">{"..."}</span>
+							</span>
+						</span>
+					)}
+
+					{willShowLabel && !noSelect && (
 						<span className="sa_opt_label">
 							{option?.custom_name || option?.name}
 						</span>
 					)}
 
-					{isChecked && (
+					{showIcon && isChecked && (
 						<div className="sa_icon">
 							<IconCheck />
 						</div>
@@ -228,6 +264,9 @@ const AttrItem = ({ attr }) => {
 								option={option}
 								attrName={attr.name}
 								clickable={false}
+								checkActive={false}
+								showIcon={false}
+								noSelect={true}
 								settings={settings?.option}
 							/>
 						</div>
@@ -358,15 +397,17 @@ jQuery(($) => {
 			show_attr_label: true,
 
 			option: {
-				layout: "box", // box || inline
-				col: 6,
-				showLabel: false,
+				layout: "inline", // box || inline | list
+				col: 6, // apply for layout [box] only.
+				size: 30, // not apply for [box] layout.
+				showLabel: true,
 			},
 
 			modal: {
 				option: {
-					layout: "box",
+					layout: "list",
 					col: 3,
+					size: 35,
 				},
 			},
 		};
