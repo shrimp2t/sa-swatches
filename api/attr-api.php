@@ -7,9 +7,9 @@ use function SA_WC_BLOCKS\get_wc_tax_attrs;
 add_action('sa_wc_api/update_term_swatch', __NAMESPACE__ . '\rest_update_term_swatch');
 add_action('sa_wc_api/update_custom_swatch', __NAMESPACE__ . '\rest_update_custom_swatch');
 add_action('sa_wc_api/get_terms', __NAMESPACE__ . '\rest_get_tax_terms');
+add_action('sa_wc_api/get_attr_settings', __NAMESPACE__ . '\rest_get_attr_settings');
 add_action('sa_wc_api/add_term', __NAMESPACE__ . '\rest_add_term');
 add_action('sa_wc_api/get_product_attrs', __NAMESPACE__ . '\rest_get_product_attrs');
-
 
 function get_image_data($image_id)
 {
@@ -255,6 +255,24 @@ function rest_get_tax_terms($post)
 		'selected' => $selected_data,
 	]);
 }
+function rest_get_attr_settings($post)
+{
+	if (!current_user_can('edit_products')) {
+		wp_die(-1);
+	}
+
+	$pid = isset($post['pid']) ? absint($post['pid']) : 0;
+
+	$data =  get_post_meta($pid, '_sa_attr_settings', true);
+	if (!is_array($data)) {
+		$data = [];
+	}
+	wp_send_json([
+		'success' => true,
+		'data' => (object) $data,
+		'pid' => $pid,
+	]);
+}
 
 function rest_update_term_swatch($post)
 {
@@ -351,10 +369,12 @@ function get_product_attributes($product)
 	$attrs = get_wc_tax_attrs();
 	$attr_data = [];
 
+	$all_settings =  get_post_meta($product->get_id(), '_sa_attr_settings', true);
 
 	foreach ($attributes as $attribute_name => $attr_options) {
 		$key =  sanitize_title($attribute_name);
 		$type =  $attribute_name && isset($attrs[$attribute_name]) ? $attrs[$attribute_name] : null;
+		$settings = isset($all_settings[$key]) ?  $all_settings[$key] : [];
 		$attr_data[$key] = [
 			'label' => wc_attribute_label($attribute_name),
 			'name' => 'attribute_' . $key,
@@ -362,6 +382,7 @@ function get_product_attributes($product)
 			'default' => $product->get_variation_default_attribute($attribute_name),
 			'selected' => false,
 			'type' => $type,
+			'settings' => (object)$settings,
 		];
 		$options = [];
 

@@ -294,12 +294,24 @@ const AttrItem = ({ attr }) => {
 							lockBackgroundScroll={true}
 						>
 							<div className="sa_modal_inner">
-								<AttrOptions attr={attr} settings={settings?.modal?.option} />
+								<AttrOptions
+									attr={attr}
+									settings={{
+										...(settings?.modal?.option || {}),
+										...(attr?.settings || {}),
+									}}
+								/>
 							</div>
 						</Drawer>
 					</>
 				) : (
-					<AttrOptions attr={attr} settings={settings?.option} />
+					<AttrOptions
+						attr={attr}
+						settings={{
+							...(settings?.option || {}),
+							...(attr?.settings || {}),
+						}}
+					/>
 				)}
 			</div>
 		</div>
@@ -396,7 +408,6 @@ const App = ({ pid, variants, settings }) => {
 	);
 };
 
-console.log("___load");
 jQuery(($) => {
 	$(".variations_form").each(function () {
 		const form = $(this);
@@ -411,10 +422,10 @@ jQuery(($) => {
 			show_attr_label: true,
 
 			option: {
-				layout: "box", // box || inline | checkbox
+				layout: "inline", // box || inline | checkbox
 				col: 6, // apply for layout [box] only.
 				size: 30, // not apply for [box] layout.
-				showLabel: false,
+				label: 'show',//  show | hide | <>empty
 			},
 
 			modal: {

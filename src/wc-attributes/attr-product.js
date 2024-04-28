@@ -1,7 +1,4 @@
-import {
-	Spinner,
-	Modal,
-} from "@wordpress/components";
+import { Spinner, Modal } from "@wordpress/components";
 
 import React from "react";
 import { render, useState, useEffect } from "@wordpress/element";
@@ -36,7 +33,15 @@ const App = ({
 	const [settings, setSettings] = useState({});
 
 	useEffect(() => {
+		jQuery(document.body).on("sa_product_attr_settings", (evt, data) => {
+			console.log("sa_product_attr_settings__on", taxonomy, data?.[taxonomy]);
+			setSettings((prev) => {
+				return { ...prev, ...(data?.[taxonomy] || {}) };
+			});
+		});
+	}, []);
 
+	useEffect(() => {
 		const controller = new AbortController();
 		const signal = controller.signal;
 		setLoading(true);
@@ -107,9 +112,7 @@ const App = ({
 
 	//When settings changes
 	useEffect(() => {
-		if (settings?._t) {
-			onSettingChange?.(settings);
-		}
+		onSettingChange?.(settings);
 	}, [settings]);
 
 	// When custom taxonomy title change.
@@ -198,7 +201,14 @@ const App = ({
 			});
 	};
 
-	const tableProps = { handleAddItem, selectedList, setSelectedList, taxonomy, type, list };
+	const tableProps = {
+		handleAddItem,
+		selectedList,
+		setSelectedList,
+		taxonomy,
+		type,
+		list,
+	};
 
 	return (
 		<>
@@ -213,6 +223,13 @@ const App = ({
 			<div className="sa_space">
 				<button type="button" className="button" onClick={() => setOpen(true)}>
 					Select Options
+				</button>
+				<button
+					type="button"
+					className="button"
+					onClick={() => setOpen("settings")}
+				>
+					Settings
 				</button>
 			</div>
 			{isOpen && (
@@ -263,7 +280,11 @@ const App = ({
 						) : null}
 
 						{isOpen === "add" ? (
-							<NewOption setNewTerm={setNewTerm} newTerm={newTerm} handleAddNew={handleAddNew} />
+							<NewOption
+								setNewTerm={setNewTerm}
+								newTerm={newTerm}
+								handleAddNew={handleAddNew}
+							/>
 						) : null}
 
 						{isOpen === "settings" ? (
@@ -280,8 +301,8 @@ const App = ({
 	);
 };
 
-const init = () => {
-	const $save_button = jQuery('button.save_attributes');
+const saInit = () => {
+	const $save_button = jQuery("button.save_attributes");
 	jQuery("select.attribute_values, textarea[name^='attribute_values[']").each(
 		function () {
 			const el = jQuery(this);
@@ -370,9 +391,8 @@ const init = () => {
 				handleChange(list);
 				el.trigger("change");
 
-
-				$save_button.removeClass('disabled');
-				$save_button.removeAttr('aria-disabled');
+				$save_button.removeClass("disabled");
+				$save_button.removeAttr("aria-disabled");
 			};
 
 			const onLoad = (list) => {
@@ -380,11 +400,11 @@ const init = () => {
 			};
 
 			const onSettingChange = (values) => {
-				console.log('onSettingChange', values);
-				settingsInput.val(JSON.stringify(values)).trigger('change');
-				$save_button.removeClass('disabled');
-				$save_button.removeAttr('aria-disabled');
-			}
+				console.log("onSettingChange", values);
+				settingsInput.val(JSON.stringify(values)).trigger("change");
+				$save_button.removeClass("disabled");
+				$save_button.removeAttr("aria-disabled");
+			};
 
 			render(
 				<App
@@ -403,11 +423,39 @@ const init = () => {
 		},
 	);
 };
-init();
+
+const saLoadSettings = () => {
+	setTimeout(() => {
+		req({
+			url: SA_WC_BLOCKS?.ajax,
+			method: "post",
+			params: {
+				endpoint: "get_attr_settings",
+			},
+			data: {
+				pid: SA_WC_BLOCKS?.pid,
+			},
+		})
+			.then((res) => {
+				jQuery(document.body).trigger("sa_product_attr_settings", [
+					res?.data || {},
+				]);
+			})
+			.catch((e) => console.log(e))
+			.finally(() => {});
+	}, 1000);
+};
+
+saInit();
+saLoadSettings();
 
 jQuery(document.body).on("woocommerce_added_attribute", function () {
-	init();
+	saInit();
+	saLoadSettings();
 });
 jQuery(document.body).on("woocommerce_attributes_saved", function () {
-	init();
+	saInit();
+	saLoadSettings();
 });
+
+// load_settings.
