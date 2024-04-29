@@ -439,6 +439,7 @@ jQuery(($) => {
 		const form = $(this);
 		const pid = form.data("product_id");
 		const table = form.find(".variations");
+		table.hide();
 		const appEl = $("<div/>");
 		appEl.insertAfter(table);
 		const settings = {
