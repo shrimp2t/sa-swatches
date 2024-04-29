@@ -3,7 +3,11 @@ import { useState, useEffect } from "@wordpress/element";
 const SwatchSettings = ({ onChange, values }) => {
 	const handleOnChange = (key, value) => {
 		onChange((prev) => {
-			return { ...prev, [key]: value, _t: Date.now() };
+			const next = { ...prev, [key]: value, _t: Date.now() };
+			if (["", null, undefined].includes(value)) {
+				delete next[key];
+			}
+			return next;
 		});
 	};
 
@@ -20,39 +24,19 @@ const SwatchSettings = ({ onChange, values }) => {
 			<h3>Settings</h3>
 
 			<div class="form-item">
-				<label className="form_label">Swatch type</label>
-				<div className="form_value">
-					<select
-						value={values?.type}
-						defaultValue={``}
-						onChange={(e) => {
-							handleOnChange("type", e.target.value);
-						}}
-					>
-						<option value={``}>Default</option>
-						{Object.keys(types).map((key) => {
-							return (
-								<option value={key} key={key}>
-									{types[key]}
-								</option>
-							);
-						})}
-					</select>
-				</div>
-			</div>
-			<div class="form-item">
 				<label className="form_label">Label</label>
 				<div className="form_value">
 					<select
-						value={values?.label}
+						value={values?.label || ""}
 						defaultValue={""}
 						onChange={(e) => {
-							handleOnChange("showLabel", e.target.value);
+							const v = e.target.value;
+							handleOnChange("label", v);
 						}}
 					>
 						<option value={""}>Default</option>
-						<option value={"show"}>Show</option>
-						<option value={"hide"}>Hide</option>
+						<option value={"yes"}>Show</option>
+						<option value={"no"}>Hide</option>
 					</select>
 				</div>
 			</div>
@@ -82,6 +66,8 @@ const SwatchSettings = ({ onChange, values }) => {
 					<input
 						value={values?.col}
 						type="number"
+						placeholder="Auto"
+						step={1}
 						onChange={(e) => {
 							handleOnChange("col", e.target.value);
 						}}

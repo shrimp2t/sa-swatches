@@ -166,13 +166,17 @@ body {
 }
 
 .sa_attr_options {
-	&.sa_opts_l_box {
+	&.sa_opts_col {
 		gap: 0px;
 		margin: calc(0px - var(--sa-gap) / 2);
 		.sa_opt_wrap {
 			padding: calc(var(--sa-gap) / 2);
 		}
+	}
+}
 
+.sa_attr_options {
+	&.sa_opts_l_box {
 		.sa_swatch_wrap {
 			position: relative;
 			padding-top: 100%;

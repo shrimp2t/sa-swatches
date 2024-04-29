@@ -92,8 +92,10 @@ const Option = ({
 	let css = {};
 	let cssSwatch = {};
 	let cssSwatchLabel = {};
-	const { showLabel = true, col = 0, size = 0 } = settings;
-	if (col > 0 && isBox) {
+	const { label: showLabel = "yes", col = 0, size = 0 } = settings;
+
+	if (col > 0) {
+		// classes.push("sa_col");
 		css = {
 			flexBasis: `${100 / col}%`,
 			width: `${100 / col}%`,
@@ -101,18 +103,22 @@ const Option = ({
 	}
 
 	if (size > 0 && !isBox) {
+		console.log("___size", size > 0, settings?.layout);
 		cssSwatch = {
 			width: size,
 			height: size,
 		};
 		cssSwatchLabel = {
 			minHeight: size,
+			minWidth: size,
 		};
 	}
 
+	console.log("___size", size > 0, settings?.layout, cssSwatchLabel);
+
 	const hasSwatch = ["sa_image", "sa_color"].includes(swatch?.type);
 
-	let willShowLabel = showLabel;
+	let willShowLabel = showLabel !== "no";
 	if (!showLabel && !hasSwatch) {
 		willShowLabel = true;
 	}
@@ -121,7 +127,7 @@ const Option = ({
 		willShowLabel = false;
 	}
 
-	if (!showLabel) {
+	if (!willShowLabel) {
 		classes.push("sa_no_label");
 	}
 
@@ -215,6 +221,9 @@ const Option = ({
 const AttrOptions = ({ attr, settings }) => {
 	const classes = ["sa_attr_options"];
 	classes.push("sa_opts_l_" + settings?.layout);
+	if (settings?.col > 0) {
+		classes.push("sa_opts_col");
+	}
 	return (
 		<div className={classes.join(" ")}>
 			{attr?.options.map((option) => {
@@ -254,6 +263,8 @@ const AttrItem = ({ attr }) => {
 	let showColon = ["separate"].includes(settings.layout);
 	let showValue = ["separate"].includes(settings.layout);
 
+	console.log("attr?.settings", attr?.settings);
+
 	return (
 		<div
 			className={[
@@ -281,7 +292,10 @@ const AttrItem = ({ attr }) => {
 								checkActive={false}
 								showIcon={false}
 								noSelect={true}
-								settings={settings?.option}
+								settings={{
+									...(settings?.option || {}),
+									...(attr?.settings || {}),
+								}}
 							/>
 						</div>
 						<Drawer
@@ -425,7 +439,7 @@ jQuery(($) => {
 				layout: "inline", // box || inline | checkbox
 				col: 6, // apply for layout [box] only.
 				size: 30, // not apply for [box] layout.
-				label: 'show',//  show | hide | <>empty
+				label: "show", //  show | hide | <>empty
 			},
 
 			modal: {
