@@ -26,6 +26,7 @@ require_once SA_WC_BLOCKS_PATH . '/inc/functions.php';
 require_once SA_WC_BLOCKS_PATH . '/api/api.php';
 require_once SA_WC_BLOCKS_PATH . '/inc/admin-attr.php';
 require_once SA_WC_BLOCKS_PATH . '/inc/admin-attr-product.php';
+require_once SA_WC_BLOCKS_PATH . '/inc/wc-settings.php';
 
 function render_block_core_archives()
 {

@@ -127,7 +127,7 @@ const Option = ({
 		classes.push("sa_no_label");
 	}
 
-	const tooltipId = `${appId}-${attrName}-${option.slug}`;
+	const tooltipId = `${appId}-${attrName}-${option.slug}-${checkActive}`;
 	const divProps = {
 		className: classes.join(" "),
 		"data-tooltip-id": tooltipId,
@@ -443,9 +443,9 @@ jQuery(($) => {
 		const appEl = $("<div/>");
 		appEl.insertAfter(table);
 		const settings = {
-			layout: "inline", // inline | separate | modal
+			layout: "modal", // inline | separate | modal
 			show_attr_desc: true, // Show attribute description.
-			show_attr_label: true,
+			show_attr_label: false,
 
 			option: {
 				layout: "inline", // box || inline | checkbox
