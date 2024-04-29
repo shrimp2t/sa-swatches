@@ -332,7 +332,6 @@ const App = ({ pid, variants, settings, form }) => {
 	const [selected, setSelected] = useState({});
 	const [defaults, setDefaults] = useState({});
 	const [availableAttrs, setAvailableAttrs] = useState([]);
-	const [matches, setMatches] = useState([]);
 
 	useEffect(() => {
 		form.on("sa_variants", (evt, data) => {
@@ -404,6 +403,11 @@ const App = ({ pid, variants, settings, form }) => {
 
 	useEffect(() => {
 		handleCheckVariants(attrs, selected, variants);
+
+		Object.keys(selected).map((name) => {
+			const v = selected[name] || false;
+			form.find(`[name="${name}"]`).val(v);
+		});
 	}, [selected]);
 
 	const contentValues = {
