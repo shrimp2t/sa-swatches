@@ -5,6 +5,7 @@ body {
 	--sa-border-color: #ededed;
 	--sa-gap: 10px;
 	--sa-row-gap: 1.5em;
+	--sa-attr-label-width: 120px;
 }
 
 .sa_attr_product {
@@ -172,6 +173,9 @@ body {
 		.sa_opt_wrap {
 			padding: calc(var(--sa-gap) / 2);
 		}
+		.sa_attr_option {
+			width: 100%;
+		}
 	}
 }
 
@@ -219,10 +223,10 @@ body {
 // Inline layout -----------------------
 .sa_layout_inline {
 	.sa_attr_label {
-		flex-basis: 150px;
+		flex-basis: var(--sa-attr-label-width);
 	}
 	.sa_attr_values {
-		flex-basis: calc(100% - 150px);
+		flex-basis: calc(100% - var(--sa-attr-label-width));
 	}
 }
 

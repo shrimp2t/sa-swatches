@@ -95,7 +95,6 @@ const Option = ({
 	const { label: showLabel = "yes", col = 0, size = 0 } = settings;
 
 	if (col > 0) {
-		// classes.push("sa_col");
 		css = {
 			flexBasis: `${100 / col}%`,
 			width: `${100 / col}%`,
@@ -103,18 +102,15 @@ const Option = ({
 	}
 
 	if (size > 0 && !isBox) {
-		console.log("___size", size > 0, settings?.layout);
 		cssSwatch = {
-			width: size,
-			height: size,
+			width: `${size}px`,
+			height: `${size}px`,
 		};
 		cssSwatchLabel = {
-			minHeight: size,
-			minWidth: size,
+			minHeight: `${size}px`,
+			minWidth: `${size}px`,
 		};
 	}
-
-	console.log("___size", size > 0, settings?.layout, cssSwatchLabel);
 
 	const hasSwatch = ["sa_image", "sa_color"].includes(swatch?.type);
 
@@ -263,8 +259,6 @@ const AttrItem = ({ attr }) => {
 	let showColon = ["separate"].includes(settings.layout);
 	let showValue = ["separate"].includes(settings.layout);
 
-	console.log("attr?.settings", attr?.settings);
-
 	return (
 		<div
 			className={[
@@ -332,7 +326,7 @@ const AttrItem = ({ attr }) => {
 	);
 };
 
-const App = ({ pid, variants, settings }) => {
+const App = ({ pid, variants, settings, form }) => {
 	const [appId, setAppId] = useState("");
 	const [attrs, setAttrs] = useState({});
 	const [selected, setSelected] = useState({});
@@ -350,13 +344,43 @@ const App = ({ pid, variants, settings }) => {
 				pid,
 			},
 		}).then((res) => {
-			console.log("Data", res);
+			// console.log("Data", res);
 			if (res?.success && res?.data) {
 				setAttrs(res.data);
 			}
-			console.log("Data", Object.keys(res).join(" | "));
+			// console.log("Data", Object.keys(res).join(" | "));
 		});
 	}, [pid]);
+
+	const handleCheckVariants = (attrs, selected, variants) => {
+		const findArgs = cleanObj({ ...selected, __t: null, __c: null });
+		const activeAttrOptions = {};
+		Object.values(attrs).map((attr) => {
+			const args = { ...findArgs };
+			delete args[attr.name];
+			const found = findMatchingVariations(variants, args);
+			const activeOpts = findActiveAttrOptions(found, attr.name);
+			console.log("activeOpts", attr.name, args, activeOpts);
+			activeAttrOptions[attr.name] = activeOpts;
+		});
+
+		console.log("activeAttrOptions", findArgs, activeAttrOptions, variants);
+		setAvailableAttrs(activeAttrOptions);
+
+		if (Object.keys(attrs).length === Object.keys(findArgs).length) {
+			const matchingVariations = findMatchingVariations(variants, findArgs);
+			const [variation] = matchingVariations;
+			form.trigger("update_variation_values");
+			console.log("variations", matchingVariations);
+			if (variation) {
+				form.trigger("found_variation", [variation]);
+			} else {
+				form.trigger("reset_data");
+			}
+		} else {
+			console.log("variations____no");
+		}
+	};
 
 	useEffect(() => {
 		let obj = {};
@@ -367,35 +391,15 @@ const App = ({ pid, variants, settings }) => {
 			obj[attr.name] = attr?.default;
 		});
 		setDefaults(obj);
-
-		const activeAttrOptions = {};
-
-		Object.values(attrs).map((attr) => {
-			const args = {};
-			delete args[attr.name];
-			const found = findMatchingVariations(variants, args);
-			const activeOpts = findActiveAttrOptions(found, attr.name);
-			activeAttrOptions[attr.name] = activeOpts;
-		});
-
 		if (!selected?.__t) {
 			setSelected(obj);
 		}
-		setAvailableAttrs(activeAttrOptions);
+
+		handleCheckVariants(attrs, selected, variants);
 	}, [attrs]);
 
 	useEffect(() => {
-		const findArgs = cleanObj({ ...selected, __t: null, __c: null });
-		const activeAttrOptions = {};
-		Object.values(attrs).map((attr) => {
-			const args = { ...findArgs };
-			delete args[attr.name];
-			const found = findMatchingVariations(variants, args);
-			const activeOpts = findActiveAttrOptions(found, attr.name);
-			activeAttrOptions[attr.name] = activeOpts;
-		});
-
-		setAvailableAttrs(activeAttrOptions);
+		handleCheckVariants(attrs, selected, variants);
 	}, [selected]);
 
 	const contentValues = {
@@ -431,15 +435,15 @@ jQuery(($) => {
 		const appEl = $("<div/>");
 		appEl.insertAfter(table);
 		const settings = {
-			layout: "separate", // inline | separate | modal
+			layout: "inline", // inline | separate | modal
 			show_attr_desc: true, // Show attribute description.
 			show_attr_label: true,
 
 			option: {
 				layout: "inline", // box || inline | checkbox
-				col: 6, // apply for layout [box] only.
-				size: 30, // not apply for [box] layout.
-				label: "show", //  show | hide | <>empty
+				// col: 6, // apply for layout [box] only.
+				// size: 30, // not apply for [box] layout.
+				// label: "yes", //  yes | no | <>empty
 			},
 
 			modal: {
@@ -467,6 +471,7 @@ jQuery(($) => {
 			useAjax,
 			onChange,
 			settings,
+			form,
 		};
 
 		render(<App {...args} />, appEl.get(0));

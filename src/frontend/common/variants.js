@@ -26,7 +26,7 @@ export const cleanObj = (obj) => {
 		}
 	}
 	return obj;
-}
+};
 
 export const findMatchingVariations = (variations, attributes) => {
 	if (!Object.keys(attributes).length) {
@@ -42,7 +42,7 @@ export const findMatchingVariations = (variations, attributes) => {
 	return matching;
 };
 
-export  const findActiveAttrOptions = (variations, currentAttrName) => {
+export const findActiveAttrOptions = (variations, currentAttrName) => {
 	const activeAttrOptions = [];
 
 	for (const num in variations) {
@@ -62,6 +62,7 @@ export  const findActiveAttrOptions = (variations, currentAttrName) => {
 					let attrVal = variationAttributes[attrName];
 					if (variations[num].variation_is_active) {
 						if (!activeAttrOptions.includes(attrVal)) {
+							console.log("PUHSSSS", attrVal);
 							activeAttrOptions.push(attrVal);
 						}
 					}

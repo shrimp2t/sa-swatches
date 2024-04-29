@@ -50,6 +50,7 @@ const SwatchSettings = ({ onChange, values }) => {
 							handleOnChange("layout", e.target.value);
 						}}
 					>
+						<option value={""}>Default</option>
 						{Object.keys(types).map((key) => {
 							return (
 								<option value={key} key={key}>
