@@ -334,6 +334,12 @@ const App = ({ pid, variants, settings, form }) => {
 	const [availableAttrs, setAvailableAttrs] = useState([]);
 	const [matches, setMatches] = useState([]);
 
+	useEffect(() => {
+		form.on("sa_variants", (evt, data) => {
+			variants = data;
+		});
+	}, []);
+
 	// Get Attrs settings.
 	useEffect(() => {
 		setAppId(`_${pid}_${Date.now()}`);
@@ -360,25 +366,23 @@ const App = ({ pid, variants, settings, form }) => {
 			delete args[attr.name];
 			const found = findMatchingVariations(variants, args);
 			const activeOpts = findActiveAttrOptions(found, attr.name);
-			console.log("activeOpts", attr.name, args, activeOpts);
 			activeAttrOptions[attr.name] = activeOpts;
 		});
 
-		console.log("activeAttrOptions", findArgs, activeAttrOptions, variants);
 		setAvailableAttrs(activeAttrOptions);
 
 		if (Object.keys(attrs).length === Object.keys(findArgs).length) {
 			const matchingVariations = findMatchingVariations(variants, findArgs);
 			const [variation] = matchingVariations;
 			form.trigger("update_variation_values");
-			console.log("variations", matchingVariations);
 			if (variation) {
 				form.trigger("found_variation", [variation]);
 			} else {
 				form.trigger("reset_data");
 			}
 		} else {
-			console.log("variations____no");
+			form.trigger("update_variation_values");
+			form.trigger("reset_data");
 		}
 	};
 
@@ -431,7 +435,6 @@ jQuery(($) => {
 		const form = $(this);
 		const pid = form.data("product_id");
 		const table = form.find(".variations");
-		console.log(form.data("product_id"));
 		const appEl = $("<div/>");
 		appEl.insertAfter(table);
 		const settings = {
@@ -463,8 +466,25 @@ jQuery(($) => {
 		};
 
 		const variants = form.data("product_variations");
-		console.log("variants", variants);
 		const useAjax = false === variants;
+
+		if (useAjax) {
+			req({
+				url: SA_WC_SWATCHES.ajax,
+				params: {
+					endpoint: "get_variants",
+					pid,
+				},
+				method: "get",
+			})
+				.then((res) => {
+					if (res?.success && res?.data?.length) {
+						form.trigger("sa_variants", [res?.data]);
+					}
+				})
+				.catch((e) => {});
+		}
+
 		const args = {
 			pid,
 			variants,

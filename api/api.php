@@ -3,6 +3,7 @@
 namespace SA_WC_BLOCKS\API;
 
 require_once __DIR__ . '/attr-api.php';
+require_once __DIR__ . '/product-api.php';
 
 add_action('wp_ajax_sa_wc_ajax', __NAMESPACE__ . '\init');
 add_action('wp_ajax_nopriv_sa_wc_ajax', __NAMESPACE__ . '\init');

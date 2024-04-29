@@ -62,7 +62,6 @@ export const findActiveAttrOptions = (variations, currentAttrName) => {
 					let attrVal = variationAttributes[attrName];
 					if (variations[num].variation_is_active) {
 						if (!activeAttrOptions.includes(attrVal)) {
-							console.log("PUHSSSS", attrVal);
 							activeAttrOptions.push(attrVal);
 						}
 					}
