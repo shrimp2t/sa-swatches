@@ -44,3 +44,16 @@ function get_wc_tax_attrs()
 	$GLOBALS[$key] = $attr_map_types;
 	return $attr_map_types;
 }
+
+
+function get_ajax_configs()
+{
+
+	$config =  [
+		'root' => esc_url_raw(rest_url()),
+		'ajax' => add_query_arg(['action' => 'sa_wc_ajax', 'nonce' => wp_create_nonce('sa_wc_ajax')], admin_url('admin-ajax.php')),
+		'nonce' => wp_create_nonce('wp_rest'),
+	];
+
+	return $config;
+}

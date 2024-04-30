@@ -11,9 +11,10 @@ module.exports = [
 		entry: {
 			plugins: "./src/plugins/index.js",
 			admin: "./src/admin/admin.js",
-			["attr-product"]: "./src/wc-attributes/attr-product.js",
-			["attr-manager"]: "./src/wc-attributes/attr-manager.js",
-			["swatches"]: "./src/frontend/swatches.js",
+			["attr/attr-product"]: "./src/wc-attributes/attr-product.js",
+			["attr/attr-manager"]: "./src/wc-attributes/attr-manager.js",
+			["attr/product-attributes"]: "./src/wc-attributes/product-attributes.js",
+			["frontend/swatches"]: "./src/frontend/swatches.js",
 		},
 		output: {
 			...defaultConfig.output,

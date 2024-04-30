@@ -18,7 +18,7 @@ function admin_scripts()
 		return;
 	}
 
-	$assets = get_assets('attr-product');
+	$assets = get_assets('attr/attr-product');
 	if (!$assets) {
 		return;
 	}

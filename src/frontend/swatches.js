@@ -296,19 +296,37 @@ const AttrItem = ({ attr }) => {
 							open={isOpen}
 							onClose={() => setIsOpen(false)}
 							direction="right"
-							className="sa_attr_modal_values"
+							className="sa_drawer sa_attr_modal_values"
 							zIndex={999900}
 							size={450}
 							lockBackgroundScroll={true}
 						>
-							<div className="sa_modal_inner">
-								<AttrOptions
-									attr={attr}
-									settings={{
-										...(settings?.modal?.option || {}),
-										...(attr?.settings || {}),
-									}}
-								/>
+							<div className="sa_drawer_wrap">
+								<div className="sa_drawer_head">
+									<div className="sa_drawer_head_inner">
+										<div className="sa_drawer_title">Select {attr?.label}</div>
+										<div className="sa_drawer_actions">
+											<button>Close</button>
+										</div>
+									</div>
+								</div>
+								<div className="sa_drawer_body">
+									<AttrOptions
+										attr={attr}
+										settings={{
+											...(settings?.modal?.option || {}),
+											...(attr?.settings || {}),
+										}}
+									/>
+								</div>
+								<div className="sa_drawer_footer">
+									<div className="sa_drawer_footer_inner">
+										<div className="sa_drawer_title">Select {attr?.label}</div>
+										<div className="sa_drawer_actions">
+											<button>Close</button>
+										</div>
+									</div>
+								</div>
 							</div>
 						</Drawer>
 					</>

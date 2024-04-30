@@ -122,7 +122,7 @@ const ListSelectedTermItem = ({
 					style={{ width: 600 }}
 					onRequestClose={() => setOpen(false)}
 				>
-					<div className="sa_modal_inner">
+					<div className="sa_drawer_inner">
 						{loading ? (
 							<div className="loading">
 								<Spinner

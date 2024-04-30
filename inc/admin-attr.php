@@ -2,8 +2,11 @@
 
 namespace SA_WC_BLOCKS\Admin\Attr;
 
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
+
 use function SA_WC_BLOCKS\get_assets;
 use function SA_WC_BLOCKS\get_wc_tax_attrs;
+use function SA_WC_BLOCKS\get_ajax_configs;
 
 function get_swatch_data($term_id)
 {
@@ -242,6 +245,7 @@ add_action('admin_enqueue_scripts', __NAMESPACE__ . '\admin_scripts');
 
 /**
  * Change admin tags js to update some js events.
+ * @see /wp-admin/js/tags.js
  *
  * @param [type] $src
  * @param [type] $handle
@@ -250,26 +254,15 @@ add_action('admin_enqueue_scripts', __NAMESPACE__ . '\admin_scripts');
 function maybe_change_admin_js($src, $handle)
 {
 	if ($handle === 'admin-tags') {
-		// @see /wp-admin/js/tags.js
+		//
 		$src = SA_WC_BLOCKS_URL . '/wp-admin-js/tags.js';
 	}
 	return $src;
 }
 
-
-
-function admin_scripts()
+function attr_terms_scripts()
 {
-
-	$screen    = get_current_screen();
-	$screen_id = $screen ? $screen->id : '';
-	$taxonomy = $screen ? $screen->taxonomy : '';
-	$attrs = get_wc_tax_attrs();
-	if (!isset($attrs[$taxonomy])) {
-		return;
-	}
-
-	$assets = get_assets('attr-manager');
+	$assets = get_assets('attr/attr-manager');
 	if (!$assets) {
 		return;
 	}
@@ -279,12 +272,8 @@ function admin_scripts()
 	wp_register_script('sa_attr_manager', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
 	wp_register_style('sa_attr_manager', $assets['files']['css'], [], $assets['version']);
 
-	$config =  [
-		'root' => esc_url_raw(rest_url()),
-		'ajax' => add_query_arg(['action' => 'sa_wc_ajax', 'nonce' => wp_create_nonce('sa_wc_ajax')], admin_url('admin-ajax.php')),
-		'nonce' => wp_create_nonce('wp_rest'),
-		'current_tax' => get_current_tax_type(),
-	];
+	$config = get_ajax_configs();
+	$config['current_tax'] = get_current_tax_type();
 
 	if (isset($_GET['tag_ID'])) {
 		$config['current_term'] = get_swatch_data(absint($_GET['tag_ID']));
@@ -296,3 +285,75 @@ function admin_scripts()
 
 	add_filter('script_loader_src', __NAMESPACE__ . '\maybe_change_admin_js', 10, 2);
 }
+
+
+function product_attr_scripts()
+{
+	$assets = get_assets('attr/product-attributes');
+	if (!$assets) {
+		return;
+	}
+
+	$assets['dependencies'][] = 'jquery';
+	wp_enqueue_media();
+	wp_register_script('sa_product_attr', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
+	wp_register_style('sa_product_attr', $assets['files']['css'], [], $assets['version']);
+
+
+	$config = get_ajax_configs();
+	if (isset($_GET['edit'])) {
+		$config['id'] = absint($_GET['edit']);
+	}
+
+	wp_localize_script('sa_product_attr', 'SA_WC_BLOCKS', $config);
+	wp_enqueue_script('sa_product_attr');
+	wp_enqueue_style('sa_product_attr');
+}
+
+
+
+function admin_scripts()
+{
+
+	$screen    = get_current_screen();
+	$taxonomy = $screen ? $screen->taxonomy : '';
+
+	if ('product_page_product_attributes' === $screen->id) {
+		product_attr_scripts();
+		return;
+	}
+
+	$attrs = get_wc_tax_attrs();
+	if (!isset($attrs[$taxonomy])) {
+		return;
+	}
+
+	attr_terms_scripts();
+}
+
+
+function add_attribute_fields()
+{
+?>
+	<div class="form-field">
+		<label for="sa_attribute_settings"><?php esc_html_e('Advanced settings', 'woocommerce'); ?></label>
+		<div class="sa_attribute_settings"></div>
+	</div>
+<?php
+}
+function edit_attribute_fields()
+{
+?>
+	<tr class="form-field form-required">
+		<th scope="row" valign="top">
+			<label for="sa_attribute_settings"><?php esc_html_e('Advanced settings', 'woocommerce'); ?></label>
+		</th>
+		<td>
+			<div class="sa_attribute_settings"></div>
+		</td>
+	</tr>
+<?php
+}
+
+add_action('woocommerce_after_add_attribute_fields', __NAMESPACE__ . '\add_attribute_fields');
+add_action('woocommerce_after_edit_attribute_fields', __NAMESPACE__ . '\edit_attribute_fields');

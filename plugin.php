@@ -27,6 +27,11 @@ require_once SA_WC_BLOCKS_PATH . '/api/api.php';
 require_once SA_WC_BLOCKS_PATH . '/inc/admin-attr.php';
 require_once SA_WC_BLOCKS_PATH . '/inc/admin-attr-product.php';
 require_once SA_WC_BLOCKS_PATH . '/inc/wc-settings.php';
+require_once SA_WC_BLOCKS_PATH . '/inc/install.php';
+
+
+register_activation_hook(__FILE__, __NAMESPACE__ . '\install');
+
 
 function render_block_core_archives()
 {
@@ -156,7 +161,7 @@ add_filter('wc_get_template', __NAMESPACE__ . '\load_template', 99999, 2);
 
 function scripts()
 {
-	$assets = get_assets('swatches');
+	$assets = get_assets('frontend/swatches');
 	if (!$assets) {
 		return;
 	}

@@ -267,7 +267,7 @@ const App = ({
 						</div>
 					}
 				>
-					<div className="sa_modal_inner" style={{ minHeight: "50vh" }}>
+					<div className="sa_drawer_inner" style={{ minHeight: "50vh" }}>
 						{loading ? (
 							<div className="loading">
 								<Spinner
