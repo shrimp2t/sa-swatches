@@ -2,7 +2,7 @@ body {
 	--sa-border-width: 2px;
 	--sa-border-radius: 3px;
 	--sa-check-active-bg: #1896e5;
-	--sa-border-color: #ededed;
+	--sa-border-color: #c3c1c1;
 	--sa-gap: 10px;
 	--sa-row-gap: 1.5em;
 	--sa-attr-label-width: 120px;
@@ -55,7 +55,7 @@ body {
 		border-radius: 100px;
 		background: #fff;
 		position: relative;
-		margin: 0 6px;
+		margin: 0;
 		&::before {
 			content: "";
 			width: calc(100% + 6px);
@@ -137,6 +137,7 @@ body {
 	height: 20px;
 	display: flex;
 	overflow: hidden;
+	border-radius: var(--sa-border-radius);
 	&.sa_no {
 		justify-content: center;
 		align-items: center;
@@ -173,6 +174,14 @@ body {
 }
 
 .sa_attr_options {
+	&.sa_opts_col_auto {
+		width: 100%;
+		height: 100%;
+		.sa_swatch {
+			width: 100%;
+			height: 100%;
+		}
+	}
 	&.sa_opts_col {
 		gap: 0px;
 		margin: calc(0px - var(--sa-gap) / 2);
@@ -215,8 +224,8 @@ body {
 				bottom: 0px;
 				right: 0px;
 				left: 0px;
-				// width: auto;
-				// height: auto;
+				width: auto;
+				height: auto;
 			}
 		}
 	}
@@ -237,9 +246,7 @@ body {
 		flex-basis: var(--sa-attr-label-width);
 	}
 	.sa_attr_values {
-		&.sa_single {
-			flex-basis: calc(100% - var(--sa-attr-label-width));
-		}
+		flex-basis: calc(100% - var(--sa-attr-label-width));
 	}
 }
 
@@ -301,9 +308,9 @@ body {
 // --- Loop ------------------
 
 .sa_loop_swatches {
-	--sa-gap: 3px;
+	--sa-gap: 4px;
 	--sa-swatch-gap: 3px;
-	--sa-option-padding: 3px;
+	--sa-option-padding: 2px;
 	--sa-row-margin: 10px;
 	--sa-row-gap: 10px;
 

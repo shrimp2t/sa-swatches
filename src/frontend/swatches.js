@@ -225,6 +225,10 @@ const AttrOptions = ({ attr, settings }) => {
 	classes.push("sa_opts_l_" + settings?.layout);
 	if (settings?.col > 0) {
 		classes.push("sa_opts_col");
+	} else {
+		if (!settings?.loop) {
+			classes.push("sa_opts_col_auto");
+		}
 	}
 
 	console.log("settings", settings);
@@ -288,7 +292,7 @@ const AttrItem = ({ attr }) => {
 				</div>
 			)}
 
-			<div className={[loop ? "sa_attr_values" : "sa_loop_values"].join(" ")}>
+			<div className={[!loop ? "sa_attr_values" : "sa_loop_values"].join(" ")}>
 				{settings.layout === "drawer" ? (
 					<>
 						<div onClick={() => setIsOpen(true)}>
@@ -503,8 +507,8 @@ jQuery(($) => {
 		appEl.insertAfter(table);
 		const settings = {
 			layout: singleSettings?.layout || "separate", // inline | separate | drawer
-			showAttrDesc: false, // Show attribute description.
-			showAttrLabel: false,
+			showAttrDesc: true, // Show attribute description.
+			showAttrLabel: true,
 			option: singleSettings?.layout === "drawer" ? drawerOption : option,
 			drawer: {
 				option: option,
