@@ -575,6 +575,9 @@ jQuery(($) => {
 		const thumb = wrap.find(".sa_loop_thumb");
 		const thumbHtml = thumb.html();
 
+		const price = wrap.find(".price");
+		price.data("o_price", price.html());
+
 		appEl.off("click");
 		appEl.off("found_variation");
 		appEl.off("reset_data");
@@ -597,11 +600,16 @@ jQuery(($) => {
 			addCartBtn.html(SA_WC_SWATCHES.i10n.add_cart);
 			addCartBtn.addClass("ajax_add_to_cart");
 			buildLink(findArgs || {});
-			if (variation.image.thumb_src) {
+			if (variation?.image?.thumb_src) {
 				thumb
 					.find("img")
 					.attr("src", variation.image.thumb_src)
 					.attr("srcset", variation?.image?.srcset);
+			}
+
+			if (variation?.price_html) {
+				const vp = jQuery(variation?.price_html).html();
+				price.html(vp);
 			}
 		});
 
@@ -612,6 +620,7 @@ jQuery(($) => {
 			addCartBtn.removeClass("ajax_add_to_cart");
 			buildLink(findArgs || {});
 			thumb.html(thumbHtml);
+			price.html(price.data("o_price"));
 		});
 
 		req({
