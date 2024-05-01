@@ -176,6 +176,11 @@ body {
 		.sa_attr_option {
 			width: 100%;
 		}
+		&.sa_opts_l_box {
+			.sa_attr_option {
+				flex-direction: column;
+			}
+		}
 	}
 }
 

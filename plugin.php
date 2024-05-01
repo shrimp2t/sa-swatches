@@ -158,6 +158,45 @@ function load_template($template, $template_name)
 
 add_filter('wc_get_template', __NAMESPACE__ . '\load_template', 99999, 2);
 
+function get_option_settings()
+{
+
+	$keys = [
+		'sa_swatches_layout',
+		'sa_swatches_option_layout',
+		'sa_swatches_option_col',
+		'sa_swatches_option_size',
+		'sa_swatches_option_layout',
+		'sa_swatches_option_label',
+		'sa_swatches_option_drawer_layout',
+		'sa_swatches_option_drawer_size',
+		'sa_swatches_option_drawer_label',
+		'sa_swatches_shop_show',
+		'sa_swatches_shop_selection',
+		'sa_swatches_shop_position',
+		'sa_swatches_shop_max',
+		'sa_swatches_shop_size',
+	];
+
+	$singe_options = [];
+	$shop_options = [];
+	$shop_key = 'sa_swatches_shop_';
+	$single_key = 'sa_swatches_';
+	foreach ($keys as $k) {
+		$new_key = false;
+		if (strpos($k, $shop_key) === 0) {
+			$new_key = substr($k, strlen($shop_key));
+			$shop_options[$new_key] = get_option($k);
+		} else {
+			$new_key = substr($k, strlen($single_key));
+			$singe_options[$new_key] = get_option($k);
+		}
+	}
+
+	return [$singe_options, $shop_options];
+}
+
+
 
 function scripts()
 {
@@ -172,8 +211,12 @@ function scripts()
 	wp_enqueue_script('sa_wc_swatches');
 	wp_enqueue_style('sa_wc_swatches');
 
+	$settings =  get_option_settings();
+
 	$configs =  [
 		'ajax' => add_query_arg(['action' => 'sa_wc_ajax', 'nonce' => wp_create_nonce('sa_wc_ajax')], admin_url('admin-ajax.php')),
+		'single' => (object) $settings[0],
+		'loop' => (object) $settings[1],
 	];
 
 	wp_localize_script('sa_wc_swatches', 'SA_WC_SWATCHES', $configs);

@@ -453,6 +453,22 @@ const App = ({ pid, variants, settings, form }) => {
 };
 
 jQuery(($) => {
+	const singleSettings = cleanObj(SA_WC_SWATCHES.single, true);
+	const loopSettings = cleanObj(SA_WC_SWATCHES.single, true);
+
+	const option = {
+		layout: singleSettings?.option_layout, // box || inline | checkbox
+		col: parseInt(singleSettings?.option_col), // Number: apply for layout [box] only.
+		size: singleSettings?.option_size, // not apply for [box] layout.
+		label: singleSettings?.option_label, //  yes | no | <>empty
+	};
+
+	const drawerOption = {
+		layout: singleSettings?.option_drawer_layout, // box || inline | checkbox
+		size: singleSettings?.option_drawer_size, // not apply for [box] layout.
+		label: singleSettings?.option_drawer_label, //  yes | no | <>empty
+	};
+
 	$(".variations_form").each(function () {
 		const form = $(this);
 		const pid = form.data("product_id");
@@ -461,25 +477,18 @@ jQuery(($) => {
 		const appEl = $("<div/>");
 		appEl.insertAfter(table);
 		const settings = {
-			layout: "drawer", // inline | separate | drawer
+			layout: singleSettings?.layout || "separate", // inline | separate | drawer
 			show_attr_desc: true, // Show attribute description.
 			show_attr_label: false,
 
-			option: {
-				layout: "inline", // box || inline | checkbox
-				// col: 6, // apply for layout [box] only.
-				// size: 30, // not apply for [box] layout.
-				// label: "yes", //  yes | no | <>empty
-			},
+			option: singleSettings?.layout === "drawer" ? drawerOption : option,
 
 			drawer: {
-				option: {
-					layout: "checkbox",
-					col: 3,
-					size: 35,
-				},
+				option: option,
 			},
 		};
+
+		console.log("Settings", settings);
 
 		const onChange = (selected) => {
 			Object.keys(selected).map((name) => {

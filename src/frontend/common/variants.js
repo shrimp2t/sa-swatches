@@ -19,10 +19,14 @@ export const isMatch = function (variation_attributes, attributes) {
 	return match;
 };
 
-export const cleanObj = (obj) => {
+export const cleanObj = (obj, removeEmpty = false) => {
 	for (var propName in obj) {
 		if (obj[propName] === null || obj[propName] === undefined) {
 			delete obj[propName];
+		}
+		if (removeEmpty) {
+			if (obj[propName] === "") {
+			}
 		}
 	}
 	return obj;
