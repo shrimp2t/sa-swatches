@@ -225,12 +225,23 @@ function scripts()
 add_action('wp_enqueue_scripts', __NAMESPACE__ . '\scripts');
 
 
+function always_use_ajax() {
+	return 0;
+}
+
+add_filter('woocommerce_ajax_variation_threshold', __NAMESPACE__ .'\always_use_ajax');
+
+
 function loop_swatches()
 {
 	global $product;
 	$id = $product->get_id();
+	$type = $product->get_type();
+	if ('variable' != $type) {
+		return;
+	}
 ?>
-	<div class="sa_loop_swatches" data-id="<?php echo esc_attr($id); ?>">DSADASD</div>
+	<div class="sa_loop_swatches" data-id="<?php echo esc_attr($id); ?>" data-type="<?php echo esc_attr($type); ?>">DSADASD</div>
 <?php
 }
 

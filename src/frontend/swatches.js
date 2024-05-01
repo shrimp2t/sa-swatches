@@ -348,16 +348,21 @@ const AttrItem = ({ attr }) => {
 	);
 };
 
-const App = ({ pid, variants, settings, form }) => {
+const App = ({ pid, variants: initVariants, settings, form }) => {
 	const [appId, setAppId] = useState("");
 	const [attrs, setAttrs] = useState({});
 	const [selected, setSelected] = useState({});
 	const [defaults, setDefaults] = useState({});
 	const [availableAttrs, setAvailableAttrs] = useState([]);
+	const [ajaxLoaded, setAjaxLoaded] = useState(false);
+	const [variants, setVariants] = useState(
+		initVariants?.length ? initVariants : [],
+	);
 
 	useEffect(() => {
 		form.on("sa_variants", (evt, data) => {
-			variants = data;
+			setVariants(data);
+			setAjaxLoaded(Date.now());
 		});
 	}, []);
 
@@ -421,7 +426,9 @@ const App = ({ pid, variants, settings, form }) => {
 		}
 
 		handleCheckVariants(attrs, selected, variants);
-	}, [attrs]);
+
+		console.log("Calll___Check", obj, variants);
+	}, [attrs, ajaxLoaded]);
 
 	useEffect(() => {
 		handleCheckVariants(attrs, selected, variants);
@@ -521,7 +528,7 @@ jQuery(($) => {
 
 		const args = {
 			pid,
-			variants,
+			variants: variants?.length ? variants : [],
 			useAjax,
 			onChange,
 			settings,
@@ -536,6 +543,11 @@ jQuery(($) => {
 	jQuery(".sa_loop_swatches").each(function () {
 		const appEl = jQuery(this);
 		const pid = appEl.data("id");
+
+		appEl.off("click");
+		appEl.on("click", function (e) {
+			e.preventDefault();
+		});
 
 		req({
 			url: SA_WC_SWATCHES.ajax,
@@ -557,7 +569,12 @@ jQuery(($) => {
 			variants: [],
 			useAjax: true,
 			onChange: () => {},
-			settings: {},
+			settings: {
+				layout: "inline",
+				option: {
+					layout: "inline",
+				},
+			},
 			form: appEl,
 		};
 
