@@ -114,7 +114,7 @@ const Option = ({
 
 	const hasSwatch = ["sa_image", "sa_color"].includes(swatch?.type);
 
-	let willShowLabel = showLabel !== "no";
+	let willShowLabel = !["hide", "no"].includes(showLabel);
 	if (!showLabel && !hasSwatch) {
 		willShowLabel = true;
 	}
@@ -140,6 +140,10 @@ const Option = ({
 			}
 		};
 	}
+
+	// if (!checkActive) {
+	// 	console.log("settings", attrName, showLabel, willShowLabel, settings);
+	// }
 
 	return (
 		<>
@@ -480,9 +484,7 @@ jQuery(($) => {
 			layout: singleSettings?.layout || "separate", // inline | separate | drawer
 			show_attr_desc: true, // Show attribute description.
 			show_attr_label: false,
-
 			option: singleSettings?.layout === "drawer" ? drawerOption : option,
-
 			drawer: {
 				option: option,
 			},
