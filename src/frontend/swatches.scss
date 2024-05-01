@@ -298,9 +298,10 @@ body {
 	}
 }
 
-// --- Loop
+// --- Loop ------------------
 
 .sa_loop_swatches {
+	--sa-gap: 3px;
 	--sa-swatch-gap: 3px;
 	--sa-option-padding: 3px;
 	--sa-row-margin: 10px;
