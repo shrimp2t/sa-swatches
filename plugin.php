@@ -28,6 +28,7 @@ require_once SA_WC_BLOCKS_PATH . '/inc/admin-attr.php';
 require_once SA_WC_BLOCKS_PATH . '/inc/admin-attr-product.php';
 require_once SA_WC_BLOCKS_PATH . '/inc/wc-settings.php';
 require_once SA_WC_BLOCKS_PATH . '/inc/install.php';
+require_once SA_WC_BLOCKS_PATH . '/inc/product.php';
 
 
 register_activation_hook(__FILE__, __NAMESPACE__ . '\install');
@@ -143,106 +144,16 @@ function add_attribute_types($options)
 add_filter('product_attributes_type_selector', __NAMESPACE__ . '\add_attribute_types', 9999);
 
 
-function load_template($template, $template_name)
-{
-	if ('single-product/add-to-cart/variable.php' === $template_name) {
-		$new_file = SA_WC_BLOCKS_PATH . '/wc-templates/' . $template_name;
-		if (file_exists($new_file)) {
-			return $new_file;
-		}
-	}
+// function load_template($template, $template_name)
+// {
+// 	if ('single-product/add-to-cart/variable.php' === $template_name) {
+// 		$new_file = SA_WC_BLOCKS_PATH . '/wc-templates/' . $template_name;
+// 		if (file_exists($new_file)) {
+// 			return $new_file;
+// 		}
+// 	}
 
-	return $template;
-}
+// 	return $template;
+// }
 
-
-add_filter('wc_get_template', __NAMESPACE__ . '\load_template', 99999, 2);
-
-function get_option_settings()
-{
-
-	$keys = [
-		'sa_swatches_layout',
-		'sa_swatches_option_layout',
-		'sa_swatches_option_col',
-		'sa_swatches_option_size',
-		'sa_swatches_option_layout',
-		'sa_swatches_option_label',
-		'sa_swatches_option_drawer_layout',
-		'sa_swatches_option_drawer_size',
-		'sa_swatches_option_drawer_label',
-		'sa_swatches_shop_show',
-		'sa_swatches_shop_selection',
-		'sa_swatches_shop_position',
-		'sa_swatches_shop_max',
-		'sa_swatches_shop_size',
-	];
-
-	$singe_options = [];
-	$shop_options = [];
-	$shop_key = 'sa_swatches_shop_';
-	$single_key = 'sa_swatches_';
-	foreach ($keys as $k) {
-		$new_key = false;
-		if (strpos($k, $shop_key) === 0) {
-			$new_key = substr($k, strlen($shop_key));
-			$shop_options[$new_key] = get_option($k);
-		} else {
-			$new_key = substr($k, strlen($single_key));
-			$singe_options[$new_key] = get_option($k);
-		}
-	}
-
-	return [$singe_options, $shop_options];
-}
-
-
-
-function scripts()
-{
-	$assets = get_assets('frontend/swatches');
-	if (!$assets) {
-		return;
-	}
-	$assets['dependencies'][] = 'jquery';
-	wp_enqueue_media();
-	wp_register_script('sa_wc_swatches', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
-	wp_register_style('sa_wc_swatches', $assets['files']['css'], [], $assets['version']);
-	wp_enqueue_script('sa_wc_swatches');
-	wp_enqueue_style('sa_wc_swatches');
-
-	$settings =  get_option_settings();
-
-	$configs =  [
-		'ajax' => add_query_arg(['action' => 'sa_wc_ajax', 'nonce' => wp_create_nonce('sa_wc_ajax')], admin_url('admin-ajax.php')),
-		'single' => (object) $settings[0],
-		'loop' => (object) $settings[1],
-	];
-
-	wp_localize_script('sa_wc_swatches', 'SA_WC_SWATCHES', $configs);
-}
-
-add_action('wp_enqueue_scripts', __NAMESPACE__ . '\scripts');
-
-
-function always_use_ajax() {
-	return 0;
-}
-
-add_filter('woocommerce_ajax_variation_threshold', __NAMESPACE__ .'\always_use_ajax');
-
-
-function loop_swatches()
-{
-	global $product;
-	$id = $product->get_id();
-	$type = $product->get_type();
-	if ('variable' != $type) {
-		return;
-	}
-?>
-	<div class="sa_loop_swatches" data-id="<?php echo esc_attr($id); ?>" data-type="<?php echo esc_attr($type); ?>">DSADASD</div>
-<?php
-}
-
-add_action('woocommerce_after_shop_loop_item', __NAMESPACE__ . '\loop_swatches', 1);
+// add_filter('wc_get_template', __NAMESPACE__ . '\load_template', 99999, 2);

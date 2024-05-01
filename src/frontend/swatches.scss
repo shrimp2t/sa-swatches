@@ -6,13 +6,16 @@ body {
 	--sa-gap: 10px;
 	--sa-row-gap: 1.5em;
 	--sa-attr-label-width: 120px;
+	--sa-swatch-gap: 10px;
+	--sa-option-padding: 5px;
+	--sa-row-margin: 1em;
 }
 
 .sa_attr_product {
 	display: flex;
 	flex-direction: column;
 	gap: var(--sa-row-gap);
-	margin-bottom: 1em;
+	margin-bottom: var(--sa-row-margin);
 
 	.sa_attr {
 		display: flex;
@@ -32,16 +35,17 @@ body {
 .sa_attr_option {
 	cursor: pointer;
 	border: var(--sa-border-width) solid var(--sa-border-color);
-	padding: 8px 10px;
+	padding: var(--sa-option-padding) calc(1.5 * var(--sa-option-padding));
 	&.sa_no_label {
-		padding: 5px;
+		padding: var(--sa-option-padding);
 	}
-	line-height: 1.2;
+	font-size: 14px;
+	line-height: 20px;
 	border-radius: var(--sa-border-radius);
 	position: relative;
 	display: inline-flex;
 	align-items: center;
-	gap: 10px;
+	gap: var(--sa-swatch-gap);
 
 	.sa_checkbox {
 		width: 16px;
@@ -93,7 +97,9 @@ body {
 			z-index: 1;
 			width: 40px;
 			height: 60px;
-			transform: rotate(45deg) translate(1px, -5px);
+			top: -12px;
+			left: 8px;
+			transform: rotate(45deg) translate(3px, 8px);
 		}
 	}
 
@@ -209,8 +215,8 @@ body {
 				bottom: 0px;
 				right: 0px;
 				left: 0px;
-				width: auto;
-				height: auto;
+				// width: auto;
+				// height: auto;
 			}
 		}
 	}
@@ -231,12 +237,13 @@ body {
 		flex-basis: var(--sa-attr-label-width);
 	}
 	.sa_attr_values {
-		flex-basis: calc(100% - var(--sa-attr-label-width));
+		&.sa_single {
+			flex-basis: calc(100% - var(--sa-attr-label-width));
+		}
 	}
 }
 
 // List layout -----------------------
-
 
 // drawer layout -----------------------
 
@@ -288,5 +295,27 @@ body {
 		flex: 1;
 		overflow: auto;
 		padding: var(--sa-padding);
+	}
+}
+
+// --- Loop
+
+.sa_loop_swatches {
+	--sa-swatch-gap: 3px;
+	--sa-option-padding: 3px;
+	--sa-row-margin: 10px;
+	--sa-row-gap: 10px;
+
+	.sa_attr_options {
+		flex-wrap: nowrap;
+	}
+	.sa_loop_values {
+		width: 100%;
+		display: flex;
+		overflow: hidden;
+	}
+	.sa_opt_label {
+		flex-wrap: nowrap;
+		white-space: nowrap;
 	}
 }

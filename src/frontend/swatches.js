@@ -34,6 +34,8 @@ const Option = ({
 		});
 	};
 
+	const { loop = false } = settings;
+
 	let selectedVal =
 		typeof selected[attrName] !== "undefined"
 			? selected?.[attrName]
@@ -114,8 +116,8 @@ const Option = ({
 
 	const hasSwatch = ["sa_image", "sa_color"].includes(swatch?.type);
 
-	let willShowLabel = !["hide", "no"].includes(showLabel);
-	if (!showLabel && !hasSwatch) {
+	let willShowLabel = !["hide", "no", false].includes(showLabel);
+	if (!willShowLabel && !hasSwatch) {
 		willShowLabel = true;
 	}
 
@@ -224,6 +226,9 @@ const AttrOptions = ({ attr, settings }) => {
 	if (settings?.col > 0) {
 		classes.push("sa_opts_col");
 	}
+
+	console.log("settings", settings);
+
 	return (
 		<div className={classes.join(" ")}>
 			{attr?.options.map((option) => {
@@ -262,6 +267,7 @@ const AttrItem = ({ attr }) => {
 
 	let showColon = ["separate"].includes(settings.layout);
 	let showValue = ["separate"].includes(settings.layout);
+	const { showAttrLabel = true, loop = false } = settings;
 
 	return (
 		<div
@@ -271,15 +277,18 @@ const AttrItem = ({ attr }) => {
 				"atype-" + (attr?.type || "mixed"),
 			].join(" ")}
 		>
-			<div className="sa_attr_label">
-				<span className="sa_label_title">
-					{attr?.label}
-					{showColon ? <span className="colon">:</span> : ""}
-				</span>
+			{showAttrLabel && (
+				<div className="sa_attr_label">
+					<span className="sa_label_title">
+						{attr?.label}
+						{showColon ? <span className="colon">:</span> : ""}
+					</span>
 
-				{showValue && <span className="sa_label_val">{selectedLabel}</span>}
-			</div>
-			<div className="sa_attr_values">
+					{showValue && <span className="sa_label_val">{selectedLabel}</span>}
+				</div>
+			)}
+
+			<div className={[loop ? "sa_attr_values" : "sa_loop_values"].join(" ")}>
 				{settings.layout === "drawer" ? (
 					<>
 						<div onClick={() => setIsOpen(true)}>
@@ -339,7 +348,7 @@ const AttrItem = ({ attr }) => {
 						attr={attr}
 						settings={{
 							...(settings?.option || {}),
-							...(attr?.settings || {}),
+							...(!loop ? attr?.settings || {} : {}),
 						}}
 					/>
 				)}
@@ -378,6 +387,11 @@ const App = ({ pid, variants: initVariants, settings, form }) => {
 		}).then((res) => {
 			// console.log("Data", res);
 			if (res?.success && res?.data) {
+				if (settings?.loop || settings?.option?.loop) {
+					for (const k in res.data) {
+						delete res.data[k].settings;
+					}
+				}
 				setAttrs(res.data);
 			}
 			// console.log("Data", Object.keys(res).join(" | "));
@@ -489,8 +503,8 @@ jQuery(($) => {
 		appEl.insertAfter(table);
 		const settings = {
 			layout: singleSettings?.layout || "separate", // inline | separate | drawer
-			show_attr_desc: true, // Show attribute description.
-			show_attr_label: false,
+			showAttrDesc: false, // Show attribute description.
+			showAttrLabel: false,
 			option: singleSettings?.layout === "drawer" ? drawerOption : option,
 			drawer: {
 				option: option,
@@ -543,6 +557,7 @@ jQuery(($) => {
 	jQuery(".sa_loop_swatches").each(function () {
 		const appEl = jQuery(this);
 		const pid = appEl.data("id");
+		appEl.addClass("sa_loop_product");
 
 		appEl.off("click");
 		appEl.on("click", function (e) {
@@ -571,8 +586,12 @@ jQuery(($) => {
 			onChange: () => {},
 			settings: {
 				layout: "inline",
+
+				showAttrLabel: false,
 				option: {
 					layout: "inline",
+					label: "hide",
+					loop: true,
 				},
 			},
 			form: appEl,
