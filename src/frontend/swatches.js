@@ -568,8 +568,10 @@ jQuery(($) => {
 		appEl.addClass("sa_loop_product");
 		const wrap = appEl.closest(".sa_product_loop_wrap");
 		const addCartBtn = wrap.find(".add_to_cart_button");
-		const a = wrap.find("a.woocommerce-loop-product__link");
+		const a = wrap.find(`a.woocommerce-loop-product__link, a[href="${url}"]`);
 		addCartBtn.data("o_text", addCartBtn.html());
+		const thumb = wrap.find(".sa_loop_thumb");
+		const thumbHtml = thumb.html();
 
 		appEl.off("click");
 		appEl.off("found_variation");
@@ -588,21 +590,26 @@ jQuery(($) => {
 		};
 
 		appEl.on("found_variation", function (evt, variation, findArgs) {
-			console.log("variation", pid, variation, findArgs);
 			addCartBtn.attr("data-product_id", variation.variation_id);
 			addCartBtn.attr("data-product_sku", variation.sku);
 			addCartBtn.html(SA_WC_SWATCHES.i10n.add_cart);
 			addCartBtn.addClass("ajax_add_to_cart");
 			buildLink(findArgs || {});
+			if (variation.image.thumb_src) {
+				thumb
+					.find("img")
+					.attr("src", variation.image.thumb_src)
+					.attr("srcset", variation?.image?.srcset);
+			}
 		});
 
 		appEl.on("reset_data", function (evt, findArgs) {
-			console.log("reset_data", pid, findArgs);
 			addCartBtn.attr("data-product_id", pid);
 			addCartBtn.attr("data-product_sku", "");
 			addCartBtn.html(addCartBtn.data("o_text"));
 			addCartBtn.removeClass("ajax_add_to_cart");
 			buildLink(findArgs || {});
+			thumb.html(thumbHtml);
 		});
 
 		req({

@@ -120,3 +120,11 @@ function loop_classes($classes, $product)
 }
 
 add_filter('woocommerce_post_class', __NAMESPACE__ . '\loop_classes', 15, 2);
+
+
+function product_get_image($image, $product)
+{
+	return '<span class="sa_loop_thumb">' . $image . '</span>';
+}
+
+add_filter('woocommerce_product_get_image', __NAMESPACE__ . '\product_get_image', 999, 2);
