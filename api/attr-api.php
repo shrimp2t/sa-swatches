@@ -362,6 +362,26 @@ function rest_update_custom_swatch($post)
 	]);
 }
 
+function parserSettings($all_settings)
+{
+	if (!is_array($all_settings)) {
+		return $all_settings;
+	}
+
+	$key = 'drawer_';
+	$settings = [];
+	$drawer = [];
+	foreach ($all_settings as $k => $v) {
+		if (strpos($k, $key) === 0) {
+			$new_key = substr($k, strlen($key));
+			$drawer[$new_key] = $v;
+		} else {
+			$settings[$k] = $v;
+		}
+	}
+
+	return [$settings, $drawer];
+}
 
 function get_product_attributes($product)
 {
@@ -374,7 +394,8 @@ function get_product_attributes($product)
 	foreach ($attributes as $attribute_name => $attr_options) {
 		$key =  sanitize_title($attribute_name);
 		$type =  $attribute_name && isset($attrs[$attribute_name]) ? $attrs[$attribute_name] : null;
-		$settings = isset($all_settings[$key]) ?  $all_settings[$key] : [];
+		$parser_settings = parserSettings(isset($all_settings[$key]) ?  $all_settings[$key] : []);
+
 		$attr_data[$key] = [
 			'label' => wc_attribute_label($attribute_name),
 			'name' => 'attribute_' . $key,
@@ -382,7 +403,8 @@ function get_product_attributes($product)
 			'default' => $product->get_variation_default_attribute($attribute_name),
 			'selected' => false,
 			'type' => $type,
-			'settings' => (object)$settings,
+			'settings' => (object)$parser_settings[0],
+			'drawer' => (object)$parser_settings[1],
 		];
 		$options = [];
 

@@ -229,6 +229,9 @@
 }
 
 .sa_swatch_modal {
+	* {
+		box-sizing: border-box;
+	}
 	.button,
 	button {
 		display: inline-flex;
@@ -243,13 +246,21 @@
 
 	.form-item {
 		display: flex;
-		gap: 15px;
+		gap: 1em;
 		align-items: center;
 		.form_label {
 			align-items: center;
 		}
 		.form_value {
 			margin-left: auto;
+			flex-basis: 120px;
+			width: 120px;
+			display: flex;
+		}
+		input,
+		select {
+			max-width: 100%;
+			width: 100%;
 		}
 	}
 }
@@ -357,5 +368,16 @@
 			display: block;
 			object-fit: cover;
 		}
+	}
+}
+
+.sa_heading {
+	h3 {
+		margin: 0px;
+	}
+	.sa_desc {
+		margin-bottom: 0px;
+		font-style: italic;
+		opacity: 0.8;
 	}
 }

@@ -276,7 +276,7 @@ const AttrItem = ({ attr }) => {
 				{showValue && <span className="sa_label_val">{selectedLabel}</span>}
 			</div>
 			<div className="sa_attr_values">
-				{settings.layout === "modal" ? (
+				{settings.layout === "drawer" ? (
 					<>
 						<div onClick={() => setIsOpen(true)}>
 							<Option
@@ -288,7 +288,7 @@ const AttrItem = ({ attr }) => {
 								noSelect={true}
 								settings={{
 									...(settings?.option || {}),
-									...(attr?.settings || {}),
+									...(attr?.drawer || {}),
 								}}
 							/>
 						</div>
@@ -296,7 +296,7 @@ const AttrItem = ({ attr }) => {
 							open={isOpen}
 							onClose={() => setIsOpen(false)}
 							direction="right"
-							className="sa_drawer sa_attr_modal_values"
+							className="sa_drawer sa_attr_drawer_values"
 							zIndex={999900}
 							size={450}
 							lockBackgroundScroll={true}
@@ -314,7 +314,7 @@ const AttrItem = ({ attr }) => {
 									<AttrOptions
 										attr={attr}
 										settings={{
-											...(settings?.modal?.option || {}),
+											...(settings?.drawer?.option || {}),
 											...(attr?.settings || {}),
 										}}
 									/>
@@ -461,7 +461,7 @@ jQuery(($) => {
 		const appEl = $("<div/>");
 		appEl.insertAfter(table);
 		const settings = {
-			layout: "modal", // inline | separate | modal
+			layout: "drawer", // inline | separate | drawer
 			show_attr_desc: true, // Show attribute description.
 			show_attr_label: false,
 
@@ -472,7 +472,7 @@ jQuery(($) => {
 				// label: "yes", //  yes | no | <>empty
 			},
 
-			modal: {
+			drawer: {
 				option: {
 					layout: "checkbox",
 					col: 3,
