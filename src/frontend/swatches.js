@@ -647,7 +647,7 @@ jQuery(($) => {
 			},
 			settings: {
 				layout: "inline",
-
+				loop: true,
 				showAttrLabel: false,
 				option: {
 					layout: "inline",
