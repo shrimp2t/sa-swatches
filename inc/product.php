@@ -102,7 +102,7 @@ function loop_swatches()
 
 	$link  = apply_filters('woocommerce_loop_product_link', get_the_permalink(), $product);
 ?>
-	<div class="sa_loop_swatches" data-link="<?php echo esc_url($link); ?>" data-id="<?php echo esc_attr($id); ?>" data-type="<?php echo esc_attr($type); ?>">DSADASD</div>
+	<div class="sa_loop_swatches" data-link="<?php echo esc_url($link); ?>" data-id="<?php echo esc_attr($id); ?>" data-type="<?php echo esc_attr($type); ?>"></div>
 <?php
 }
 

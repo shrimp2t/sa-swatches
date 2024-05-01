@@ -143,10 +143,6 @@ const Option = ({
 		};
 	}
 
-	// if (!checkActive) {
-	// 	console.log("settings", attrName, showLabel, willShowLabel, settings);
-	// }
-
 	return (
 		<>
 			<div className="sa_opt_wrap" style={css}>
@@ -412,8 +408,14 @@ const App = ({ pid, variants: initVariants, settings, form }) => {
 		});
 
 		setAvailableAttrs(activeAttrOptions);
+		const attrLength = Object.keys(attrs).length;
+		const findArgsLength = Object.keys(findArgs).length;
 
-		if (Object.keys(attrs).length === Object.keys(findArgs).length) {
+		if (
+			attrLength > 0 &&
+			findArgsLength > 0 &&
+			attrLength === Object.keys(findArgs).length
+		) {
 			const matchingVariations = findMatchingVariations(variants, findArgs);
 			const [variation] = matchingVariations;
 			form.trigger("update_variation_values");
@@ -585,7 +587,7 @@ jQuery(($) => {
 			const usp = new URLSearchParams(args);
 			const str = usp.toString();
 			const sep = url.includes("?") ? "&" : "?";
-			const newUrl = `${url}${sep}${str}`;
+			const newUrl = str.length ? `${url}${sep}${str}` : url;
 			a.attr("href", newUrl);
 		};
 
