@@ -223,3 +223,15 @@ function scripts()
 }
 
 add_action('wp_enqueue_scripts', __NAMESPACE__ . '\scripts');
+
+
+function loop_swatches()
+{
+	global $product;
+	$id = $product->get_id();
+?>
+	<div class="sa_loop_swatches" data-id="<?php echo esc_attr($id); ?>">DSADASD</div>
+<?php
+}
+
+add_action('woocommerce_after_shop_loop_item', __NAMESPACE__ . '\loop_swatches', 1);
