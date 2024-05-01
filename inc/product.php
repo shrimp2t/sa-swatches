@@ -2,6 +2,8 @@
 
 namespace SA_WC_BLOCKS\Frontend\Product;
 
+use WC_Product_Simple;
+
 use function SA_WC_BLOCKS\get_assets;
 
 function get_option_settings()
@@ -58,11 +60,21 @@ function scripts()
 	wp_enqueue_style('sa_wc_swatches');
 
 	$settings =  get_option_settings();
+	$sample_product = new WC_Product_Simple();
+	$sample_product->set_status('publish');
+	$sample_product->set_regular_price(99);
+	$sample_product->set_price(99);
+	$sample_product->set_stock_status('instock');
+	$sample_product->set_id(1);
+
 
 	$configs =  [
 		'ajax' => add_query_arg(['action' => 'sa_wc_ajax', 'nonce' => wp_create_nonce('sa_wc_ajax')], admin_url('admin-ajax.php')),
 		'single' => (object) $settings[0],
 		'loop' => (object) $settings[1],
+		'i10n' => [
+			'add_cart' => $sample_product->add_to_cart_text(),
+		],
 	];
 
 	wp_localize_script('sa_wc_swatches', 'SA_WC_SWATCHES', $configs);
@@ -87,8 +99,10 @@ function loop_swatches()
 	if ('variable' != $type) {
 		return;
 	}
+
+	$link  = apply_filters('woocommerce_loop_product_link', get_the_permalink(), $product);
 ?>
-	<div class="sa_loop_swatches" data-id="<?php echo esc_attr($id); ?>" data-type="<?php echo esc_attr($type); ?>">DSADASD</div>
+	<div class="sa_loop_swatches" data-link="<?php echo esc_url($link); ?>" data-id="<?php echo esc_attr($id); ?>" data-type="<?php echo esc_attr($type); ?>">DSADASD</div>
 <?php
 }
 

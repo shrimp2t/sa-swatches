@@ -231,8 +231,6 @@ const AttrOptions = ({ attr, settings }) => {
 		}
 	}
 
-	console.log("settings", settings);
-
 	return (
 		<div className={classes.join(" ")}>
 			{attr?.options.map((option) => {
@@ -420,13 +418,13 @@ const App = ({ pid, variants: initVariants, settings, form }) => {
 			const [variation] = matchingVariations;
 			form.trigger("update_variation_values");
 			if (variation) {
-				form.trigger("found_variation", [variation]);
+				form.trigger("found_variation", [variation, findArgs]);
 			} else {
-				form.trigger("reset_data");
+				form.trigger("reset_data", [findArgs]);
 			}
 		} else {
 			form.trigger("update_variation_values");
-			form.trigger("reset_data");
+			form.trigger("reset_data", findArgs);
 		}
 	};
 
@@ -436,16 +434,17 @@ const App = ({ pid, variants: initVariants, settings, form }) => {
 			if (!obj?.__c) {
 				obj.__c = attr.name;
 			}
-			obj[attr.name] = attr?.default;
+			if (attr?.default?.length) {
+				obj[attr.name] = attr?.default;
+			}
 		});
 		setDefaults(obj);
-		if (!selected?.__t) {
-			setSelected(obj);
-		}
+		setSelected(obj);
+		// if (!selected?.__t) {
+
+		// }
 
 		handleCheckVariants(attrs, selected, variants);
-
-		console.log("Calll___Check", obj, variants);
 	}, [attrs, ajaxLoaded]);
 
 	useEffect(() => {
@@ -562,10 +561,32 @@ jQuery(($) => {
 		const appEl = jQuery(this);
 		const pid = appEl.data("id");
 		appEl.addClass("sa_loop_product");
+		const wrap = appEl.closest(".sa_product_loop_wrap");
+		const addCartBtn = wrap.find(".add_to_cart_button");
+		addCartBtn.data("o_text", addCartBtn.html());
 
 		appEl.off("click");
+		appEl.off("found_variation");
+		appEl.off("reset_data");
+
 		appEl.on("click", function (e) {
 			e.preventDefault();
+		});
+
+		appEl.on("found_variation", function (evt, variation, findArgs) {
+			console.log("variation", pid, variation, findArgs);
+			addCartBtn.attr("data-product_id", variation.variation_id);
+			addCartBtn.attr("data-product_sku", variation.sku);
+			addCartBtn.html(SA_WC_SWATCHES.i10n.add_cart);
+			addCartBtn.addClass("ajax_add_to_cart");
+		});
+
+		appEl.on("reset_data", function (evt, findArgs) {
+			console.log("reset_data", pid, findArgs);
+			addCartBtn.attr("data-product_id", pid);
+			addCartBtn.attr("data-product_sku", "");
+			addCartBtn.html(addCartBtn.data("o_text"));
+			addCartBtn.removeClass("ajax_add_to_cart");
 		});
 
 		req({
@@ -587,7 +608,9 @@ jQuery(($) => {
 			pid,
 			variants: [],
 			useAjax: true,
-			onChange: () => {},
+			onChange: (selected) => {
+				console.log("selected", selected);
+			},
 			settings: {
 				layout: "inline",
 
@@ -604,3 +627,5 @@ jQuery(($) => {
 		render(<App {...args} />, appEl.get(0));
 	});
 });
+
+console.log("SA_WC_SWATCHES", SA_WC_SWATCHES);
