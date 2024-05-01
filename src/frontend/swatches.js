@@ -530,4 +530,37 @@ jQuery(($) => {
 
 		render(<App {...args} />, appEl.get(0));
 	});
+
+	// For loop Products
+
+	jQuery(".sa_loop_swatches").each(function () {
+		const appEl = jQuery(this);
+		const pid = appEl.data("id");
+
+		req({
+			url: SA_WC_SWATCHES.ajax,
+			params: {
+				endpoint: "get_variants",
+				pid,
+			},
+			method: "get",
+		})
+			.then((res) => {
+				if (res?.success && res?.data?.length) {
+					appEl.trigger("sa_variants", [res?.data]);
+				}
+			})
+			.catch((e) => {});
+
+		const args = {
+			pid,
+			variants: [],
+			useAjax: true,
+			onChange: () => {},
+			settings: {},
+			form: appEl,
+		};
+
+		render(<App {...args} />, appEl.get(0));
+	});
 });
