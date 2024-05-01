@@ -430,6 +430,8 @@ const App = ({ pid, variants: initVariants, settings, form }) => {
 
 	useEffect(() => {
 		let obj = {};
+		const { searchParams } = new URL(window.location.href);
+		const initSelected = {};
 		Object.values(attrs).map((attr) => {
 			if (!obj?.__c) {
 				obj.__c = attr.name;
@@ -437,13 +439,15 @@ const App = ({ pid, variants: initVariants, settings, form }) => {
 			if (attr?.default?.length) {
 				obj[attr.name] = attr?.default;
 			}
+
+			const urlAttrVal = searchParams.get(attr.name);
+			if (urlAttrVal?.length) {
+				initSelected[attr.name] = urlAttrVal;
+			}
 		});
+
 		setDefaults(obj);
-		setSelected(obj);
-		// if (!selected?.__t) {
-
-		// }
-
+		setSelected({ ...obj, ...initSelected });
 		handleCheckVariants(attrs, selected, variants);
 	}, [attrs, ajaxLoaded]);
 
@@ -560,9 +564,11 @@ jQuery(($) => {
 	jQuery(".sa_loop_swatches").each(function () {
 		const appEl = jQuery(this);
 		const pid = appEl.data("id");
+		const url = appEl.data("link");
 		appEl.addClass("sa_loop_product");
 		const wrap = appEl.closest(".sa_product_loop_wrap");
 		const addCartBtn = wrap.find(".add_to_cart_button");
+		const a = wrap.find("a.woocommerce-loop-product__link");
 		addCartBtn.data("o_text", addCartBtn.html());
 
 		appEl.off("click");
@@ -573,12 +579,21 @@ jQuery(($) => {
 			e.preventDefault();
 		});
 
+		const buildLink = (args) => {
+			const usp = new URLSearchParams(args);
+			const str = usp.toString();
+			const sep = url.includes("?") ? "&" : "?";
+			const newUrl = `${url}${sep}${str}`;
+			a.attr("href", newUrl);
+		};
+
 		appEl.on("found_variation", function (evt, variation, findArgs) {
 			console.log("variation", pid, variation, findArgs);
 			addCartBtn.attr("data-product_id", variation.variation_id);
 			addCartBtn.attr("data-product_sku", variation.sku);
 			addCartBtn.html(SA_WC_SWATCHES.i10n.add_cart);
 			addCartBtn.addClass("ajax_add_to_cart");
+			buildLink(findArgs || {});
 		});
 
 		appEl.on("reset_data", function (evt, findArgs) {
@@ -587,6 +602,7 @@ jQuery(($) => {
 			addCartBtn.attr("data-product_sku", "");
 			addCartBtn.html(addCartBtn.data("o_text"));
 			addCartBtn.removeClass("ajax_add_to_cart");
+			buildLink(findArgs || {});
 		});
 
 		req({
