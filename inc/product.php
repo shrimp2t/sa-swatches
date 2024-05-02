@@ -113,13 +113,13 @@ function loop_classes($classes, $product)
 {
 	$type = $product->get_type();
 	if ('variable' != $type) {
-		return $classes;
+		// return $classes;
 	}
 	$classes[] = 'sa_product_loop_wrap';
 	return $classes;
 }
 
-add_filter('woocommerce_post_class', __NAMESPACE__ . '\loop_classes', 15, 2);
+add_filter('woocommerce_post_class', __NAMESPACE__ . '\loop_classes', 99999, 2);
 
 
 function product_get_image($image, $product)
