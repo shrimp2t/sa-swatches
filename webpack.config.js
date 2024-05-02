@@ -14,12 +14,15 @@ module.exports = [
 			["attr/attr-product"]: "./src/wc-attributes/attr-product.js",
 			["attr/attr-manager"]: "./src/wc-attributes/attr-manager.js",
 			["attr/product-attributes"]: "./src/wc-attributes/product-attributes.js",
-			["frontend/swatches"]: "./src/frontend/swatches.js",
+			// ["frontend/swatches"]: "./src/frontend/swatches.js",
 		},
 		output: {
 			...defaultConfig.output,
 			path: path.resolve(__dirname, "./build/"),
 			publicPath: "auto",
+			// library: {
+			// 	type: "module",
+			// },
 		},
 
 		plugins: [
@@ -29,6 +32,9 @@ module.exports = [
 			}),
 		],
 		mode: "development",
+		// experiments: {
+		// 	outputModule: true,
+		// },
 	},
 
 	{

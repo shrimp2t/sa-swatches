@@ -3,7 +3,7 @@
 /**
  * Plugin Name:       WooCommerce Blocks by Sa
  * Description:       Add more blocks with advanced settings for WooCommerce.
- * Requires at least: 5.8
+ * Requires at least: 6.5
  * Requires PHP:      7.0
  * Version:           0.1.0
  * Author:            shrimp2t

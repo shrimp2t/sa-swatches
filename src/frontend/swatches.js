@@ -1,504 +1,45 @@
-import "./swatches.scss";
 
-import req from "../common/req";
-import { render, useState, useEffect } from "@wordpress/element";
-import { AppContext, useAppContext } from "./components/context";
-import IconCheck from "./components/IconCheck";
-import {
-	cleanObj,
-	findMatchingVariations,
-	findActiveAttrOptions,
-} from "./common/variants";
-import Drawer from "react-modern-drawer";
-import { Tooltip } from "react-tooltip";
+import "./swatches.scss";
 import "react-modern-drawer/dist/index.css";
 import "react-tooltip/dist/react-tooltip.css";
 
-const Option = ({
-	option,
-	attrName,
-	clickable = true,
-	settings = {},
-	checkActive = true,
-	showIcon = true,
-	noSelect = false,
-}) => {
-	const { setSelected, defaults, selected, availableAttrs, appId } =
-		useAppContext();
-	const onCLick = (value) => {
-		setSelected((prev) => {
-			if (prev?.[attrName] === value) {
-				return { ...prev, [attrName]: null, __t: Date.now(), __c: attrName };
-			}
-			return { ...prev, [attrName]: value, __t: Date.now(), __c: attrName };
-		});
-	};
+import { render } from "@wordpress/element";
+import App from "./components/App";
+import req from "../common/req";
+import {
+	cleanObj,
+} from "./common/variants";
 
-	const { loop = false } = settings;
 
-	let selectedVal =
-		typeof selected[attrName] !== "undefined"
-			? selected?.[attrName]
-			: defaults?.[attrName];
+/**
+ * WordPress dependencies
+ */
+import { store, getContext, getElement } from '@wordpress/interactivity';
+console.log('store', store);
 
-	const classes = ["sa_attr_option"];
-	let isActive = true;
-	let isClickable = true;
-	let isChecked = false;
 
-	classes.push(`sa_opt_layout_${settings.layout}`);
+// const { state, actions } = store("woocommerce/product-button");
+// console.log('store', state);
 
-	if (availableAttrs?.[attrName]) {
-		if (
-			availableAttrs?.[attrName]?.includes(option?.slug) ||
-			availableAttrs?.[attrName]?.includes("")
-		) {
-			isActive = true;
-		} else {
-			// if (selected?.__c !== attrName) {
-			isActive = false;
-			isClickable = false;
-			// }
-		}
-	} else {
-		isActive = false;
-		isClickable = false;
-	}
 
-	if (checkActive) {
-		if (isActive) {
-			classes.push("sa_active");
-		} else {
-			classes.push("sa_inactive");
-		}
-	}
 
-	if (!selectedVal) {
-		classes.push("sa_not_select");
-	}
 
-	if (selectedVal === option?.slug) {
-		classes.push("sa_selected");
-		isClickable = true;
-		isChecked = true;
-	}
 
-	const swatch = {
-		...(option?.swatch || {}),
-		...(option?.custom_swatch || {}),
-	};
-
-	classes.push("type_" + (swatch?.type || "mixed"));
-
-	const isBox = ["box"].includes(settings?.layout);
-	let css = {};
-	let cssSwatch = {};
-	let cssSwatchLabel = {};
-	const { label: showLabel = "yes", col = 0, size = 0 } = settings;
-
-	if (col > 0) {
-		css = {
-			flexBasis: `${100 / col}%`,
-			width: `${100 / col}%`,
-		};
-	}
-
-	if (size > 0 && !isBox) {
-		cssSwatch = {
-			width: `${size}px`,
-			height: `${size}px`,
-		};
-		cssSwatchLabel = {
-			minHeight: `${size}px`,
-			minWidth: `${size}px`,
-		};
-	}
-
-	const hasSwatch = ["sa_image", "sa_color"].includes(swatch?.type);
-
-	let willShowLabel = !["hide", "no", false].includes(showLabel);
-	if (!willShowLabel && !hasSwatch) {
-		willShowLabel = true;
-	}
-
-	if (!checkActive && !selectedVal && willShowLabel) {
-		willShowLabel = false;
-	}
-
-	if (!willShowLabel) {
-		classes.push("sa_no_label");
-	}
-
-	const tooltipId = `${appId}-${attrName}-${option.slug}-${checkActive}`;
-	const divProps = {
-		className: classes.join(" "),
-		"data-tooltip-id": tooltipId,
-	};
-
-	if (clickable && isClickable) {
-		divProps.onClick = () => {
-			if (isClickable) {
-				onCLick(option?.slug);
-			}
-		};
-	}
-
-	return (
-		<>
-			<div className="sa_opt_wrap" style={css}>
-				<div {...divProps}>
-					{checkActive && ["checkbox"].includes(settings?.layout) && (
-						<span className="sa_checkbox_wrap">
-							<span className="sa_checkbox"></span>
-						</span>
-					)}
-					{swatch?.type === "sa_color" ? (
-						<span className="sa_swatch_wrap">
-							<span className="sa_swatch sa_color" style={cssSwatch}>
-								<div className="sa_color_inner">
-									<span
-										className="sa_color_item"
-										style={{ background: `${swatch?.value}` }}
-									></span>
-
-									{swatch?.more?.length ? (
-										<>
-											{swatch?.more.map((c) => (
-												<span
-													key={c}
-													className="sa_color_item"
-													style={{ background: `${c}` }}
-												></span>
-											))}
-										</>
-									) : null}
-								</div>
-							</span>
-						</span>
-					) : null}
-
-					{swatch?.type === "sa_image" ? (
-						<span className="sa_swatch_wrap">
-							<span className="sa_swatch sa_image" style={cssSwatch}>
-								<span className="sa_image_item">
-									<img alt="" src={swatch?.thumbnail || swatch?.full} />
-								</span>
-							</span>
-						</span>
-					) : null}
-
-					{noSelect && !selectedVal && (
-						<span className="sa_swatch_wrap">
-							<span className="sa_swatch sa_no" style={cssSwatch}>
-								<span className="sa_no_item">{"..."}</span>
-							</span>
-						</span>
-					)}
-
-					{willShowLabel && (
-						<span className="sa_opt_label" style={cssSwatchLabel}>
-							{option?.custom_name || option?.name}
-						</span>
-					)}
-
-					{showIcon && isChecked && (
-						<div className="sa_icon">
-							<IconCheck />
-						</div>
-					)}
-				</div>
-			</div>
-
-			<Tooltip className="sa_tooltip" style={{ zIndex: 999999 }} id={tooltipId}>
-				{option?.custom_name || option?.name}
-			</Tooltip>
-		</>
-	);
-};
-
-const AttrOptions = ({ attr, settings }) => {
-	const classes = ["sa_attr_options"];
-	classes.push("sa_opts_l_" + settings?.layout);
-	if (settings?.col > 0) {
-		classes.push("sa_opts_col");
-	} else {
-		if (!settings?.loop) {
-			classes.push("sa_opts_col_auto");
-		}
-	}
-
-	return (
-		<div className={classes.join(" ")}>
-			{attr?.options.map((option) => {
-				return (
-					<Option
-						key={[attr.id, option.id]}
-						attrName={attr.name}
-						attrId={attr.id}
-						option={option}
-						settings={settings}
-					/>
-				);
-			})}
-		</div>
-	);
-};
-
-const AttrItem = ({ attr }) => {
-	const { attrs, selected, settings } = useAppContext();
-	const [isOpen, setIsOpen] = useState(false);
-
-	let selectedLabel = "";
-	const selectedVal = selected?.[attr?.name] || false;
-	let option = false;
-
-	if (selectedVal) {
-		const { options = [] } = attrs?.[attr.id] || {};
-		for (let i = 0; i < options.length; i++) {
-			if (selectedVal === options[i].slug) {
-				option = options[i];
-				selectedLabel = options[i].name;
-				break;
-			}
-		}
-	}
-
-	let showColon = ["separate"].includes(settings.layout);
-	let showValue = ["separate"].includes(settings.layout);
-	const { showAttrLabel = true, loop = false } = settings;
-
-	return (
-		<div
-			className={[
-				"sa_attr",
-				attr.name,
-				"atype-" + (attr?.type || "mixed"),
-			].join(" ")}
-		>
-			{showAttrLabel && (
-				<div className="sa_attr_label">
-					<span className="sa_label_title">
-						{attr?.label}
-						{showColon ? <span className="colon">:</span> : ""}
-					</span>
-
-					{showValue && <span className="sa_label_val">{selectedLabel}</span>}
-				</div>
-			)}
-
-			<div className={[!loop ? "sa_attr_values" : "sa_loop_values"].join(" ")}>
-				{settings.layout === "drawer" ? (
-					<>
-						<div onClick={() => setIsOpen(true)}>
-							<Option
-								option={option}
-								attrName={attr.name}
-								clickable={false}
-								checkActive={false}
-								showIcon={false}
-								noSelect={true}
-								settings={{
-									...(settings?.option || {}),
-									...(attr?.drawer || {}),
-								}}
-							/>
-						</div>
-						<Drawer
-							open={isOpen}
-							onClose={() => setIsOpen(false)}
-							direction="right"
-							className="sa_drawer sa_attr_drawer_values"
-							zIndex={999900}
-							size={450}
-							lockBackgroundScroll={true}
-						>
-							<div className="sa_drawer_wrap">
-								<div className="sa_drawer_head">
-									<div className="sa_drawer_head_inner">
-										<div className="sa_drawer_title">Select {attr?.label}</div>
-										<div className="sa_drawer_actions">
-											<button>Close</button>
-										</div>
-									</div>
-								</div>
-								<div className="sa_drawer_body">
-									<AttrOptions
-										attr={attr}
-										settings={{
-											...(settings?.drawer?.option || {}),
-											...(attr?.settings || {}),
-										}}
-									/>
-								</div>
-								<div className="sa_drawer_footer">
-									<div className="sa_drawer_footer_inner">
-										<div className="sa_drawer_title">Select {attr?.label}</div>
-										<div className="sa_drawer_actions">
-											<button>Close</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</Drawer>
-					</>
-				) : (
-					<AttrOptions
-						attr={attr}
-						settings={{
-							...(settings?.option || {}),
-							...(!loop ? attr?.settings || {} : {}),
-						}}
-					/>
-				)}
-			</div>
-		</div>
-	);
-};
-
-const App = ({ pid, variants: initVariants, settings, form }) => {
-	const [appId, setAppId] = useState("");
-	const [attrs, setAttrs] = useState({});
-	const [selected, setSelected] = useState({});
-	const [defaults, setDefaults] = useState({});
-	const [availableAttrs, setAvailableAttrs] = useState([]);
-	const [ajaxLoaded, setAjaxLoaded] = useState(false);
-	const [variants, setVariants] = useState(
-		initVariants?.length ? initVariants : [],
-	);
-
-	useEffect(() => {
-		form.on("sa_variants", (evt, data) => {
-			setVariants(data);
-			setAjaxLoaded(Date.now());
-		});
-	}, []);
-
-	// Get Attrs settings.
-	useEffect(() => {
-		setAppId(`_${pid}_${Date.now()}`);
-		req({
-			url: SA_WC_SWATCHES.ajax,
-			params: {
-				endpoint: "get_product_attrs",
-				pid,
-			},
-		}).then((res) => {
-			// console.log("Data", res);
-			if (res?.success && res?.data) {
-				if (settings?.loop || settings?.option?.loop) {
-					for (const k in res.data) {
-						delete res.data[k].settings;
-					}
-				}
-				setAttrs(res.data);
-			}
-			// console.log("Data", Object.keys(res).join(" | "));
-		});
-	}, [pid]);
-
-	const handleCheckVariants = (attrs, selected, variants) => {
-		const findArgs = cleanObj({ ...selected, __t: null, __c: null });
-		const activeAttrOptions = {};
-		Object.values(attrs).map((attr) => {
-			const args = { ...findArgs };
-			delete args[attr.name];
-			const found = findMatchingVariations(variants, args);
-			const activeOpts = findActiveAttrOptions(found, attr.name);
-			activeAttrOptions[attr.name] = activeOpts;
-		});
-
-		setAvailableAttrs(activeAttrOptions);
-		const attrLength = Object.keys(attrs).length;
-		const findArgsLength = Object.keys(findArgs).length;
-
-		if (
-			attrLength > 0 &&
-			findArgsLength > 0 &&
-			attrLength === Object.keys(findArgs).length
-		) {
-			const matchingVariations = findMatchingVariations(variants, findArgs);
-			const [variation] = matchingVariations;
-			form.trigger("update_variation_values");
-			if (variation) {
-				form.trigger("found_variation", [variation, findArgs]);
-			} else {
-				form.trigger("reset_data", [findArgs]);
-			}
-		} else {
-			form.trigger("update_variation_values");
-			form.trigger("reset_data", findArgs);
-		}
-	};
-
-	useEffect(() => {
-		let obj = {};
-		const { searchParams } = new URL(window.location.href);
-		const initSelected = {};
-		Object.values(attrs).map((attr) => {
-			if (!obj?.__c) {
-				obj.__c = attr.name;
-			}
-			if (attr?.default?.length) {
-				obj[attr.name] = attr?.default;
-			}
-
-			const urlAttrVal = searchParams.get(attr.name);
-			if (urlAttrVal?.length) {
-				initSelected[attr.name] = urlAttrVal;
-			}
-		});
-
-		setDefaults(obj);
-		setSelected({ ...obj, ...initSelected });
-		handleCheckVariants(attrs, selected, variants);
-	}, [attrs, ajaxLoaded]);
-
-	useEffect(() => {
-		handleCheckVariants(attrs, selected, variants);
-
-		Object.keys(selected).map((name) => {
-			const v = selected[name] || false;
-			form.find(`[name="${name}"]`).val(v);
-		});
-	}, [selected]);
-
-	const contentValues = {
-		appId,
-		selected,
-		setSelected,
-		defaults,
-		attrs,
-		availableAttrs,
-		settings,
-	};
-
-	const classes = ["sa_attr_product"];
-	classes.push("sa_layout_" + settings.layout);
-
-	return (
-		<AppContext.Provider value={contentValues}>
-			<div className={classes.join(" ")}>
-				{Object.values(attrs).map((attr) => (
-					<AttrItem key={attr.id} attr={attr} />
-				))}
-			</div>
-		</AppContext.Provider>
-	);
-};
+const { SA_WC_SWATCHES } = window;
 
 jQuery(($) => {
 	const singleSettings = cleanObj(SA_WC_SWATCHES.single, true);
 	const loopSettings = cleanObj(SA_WC_SWATCHES.single, true);
 
 	const option = {
-		layout: singleSettings?.option_layout, // box || inline | checkbox
+		layout: singleSettings?.option_layout || 'inline', // box || inline | checkbox
 		col: parseInt(singleSettings?.option_col), // Number: apply for layout [box] only.
-		size: singleSettings?.option_size, // not apply for [box] layout.
+		size: singleSettings?.option_size || 22, // not apply for [box] layout.
 		label: singleSettings?.option_label, //  yes | no | <>empty
 	};
 
 	const drawerOption = {
-		layout: singleSettings?.option_drawer_layout, // box || inline | checkbox
+		layout: singleSettings?.option_drawer_layout || 'inline', // box || inline | checkbox
 		size: singleSettings?.option_drawer_size, // not apply for [box] layout.
 		label: singleSettings?.option_drawer_label, //  yes | no | <>empty
 	};
@@ -546,7 +87,7 @@ jQuery(($) => {
 						form.trigger("sa_variants", [res?.data]);
 					}
 				})
-				.catch((e) => {});
+				.catch((e) => { });
 		}
 
 		const args = {
@@ -568,14 +109,28 @@ jQuery(($) => {
 		const pid = appEl.data("id");
 		const url = appEl.data("link");
 		appEl.addClass("sa_loop_product");
-		const wrap = appEl.closest(".sa_product_loop_wrap");
+		let wrap = appEl.closest(".sa_p_loop_wrap");
+		if (!wrap.length) {
+			wrap = appEl.closest(".product");
+		}
 		const addCartBtn = wrap.find(".add_to_cart_button");
+		const isBlockBtn = addCartBtn.hasClass('wc-interactive');
+		const isCartBtn = addCartBtn.prop('tagName') === 'BUTTON';
 		const a = wrap.find(`a.woocommerce-loop-product__link, a[href="${url}"]`);
-		addCartBtn.data("o_text", addCartBtn.html());
 		const thumb = wrap.find(".sa_loop_thumb");
 		const thumbHtml = thumb.html();
+		let blockContext = {}
+		const blockParent = addCartBtn.parent();
+		if (isBlockBtn) {
+			blockContext = blockParent.data('wc-context');
+			console.log('blockContext', blockContext);
 
-		const price = wrap.find(".price");
+		}
+
+		let price = wrap.find(".price");
+		if (!price.length) {
+			price = wrap.find('.wc-block-components-product-price');
+		}
 		price.data("o_price", price.html());
 
 		appEl.off("click");
@@ -597,14 +152,25 @@ jQuery(($) => {
 		appEl.on("found_variation", function (evt, variation, findArgs) {
 			addCartBtn.attr("data-product_id", variation.variation_id);
 			addCartBtn.attr("data-product_sku", variation.sku);
-			addCartBtn.html(SA_WC_SWATCHES.i10n.add_cart);
+			if (isBlockBtn) {
+				addCartBtn.addClass('wc-interactive');
+				addCartBtn.find('span').html(SA_WC_SWATCHES.i18n.add_cart);
+				blockParent.attr('wc-context', JSON.stringify({ ...blockContext, productId: variation.variation_id }))
+			} else {
+				addCartBtn.html(SA_WC_SWATCHES.i18n.add_cart);
+			}
+
+
 			addCartBtn.addClass("ajax_add_to_cart");
 			buildLink(findArgs || {});
 			if (variation?.image?.thumb_src) {
-				thumb
-					.find("img")
-					.attr("src", variation.image.thumb_src)
-					.attr("srcset", variation?.image?.srcset);
+				const img = thumb
+					.find("img");
+
+				img.attr("src", variation.image.thumb_src)
+				if (variation?.image?.srcset) {
+					img.attr("srcset", variation?.image?.srcset);
+				}
 			}
 
 			if (variation?.price_html) {
@@ -614,9 +180,17 @@ jQuery(($) => {
 		});
 
 		appEl.on("reset_data", function (evt, findArgs) {
-			addCartBtn.attr("data-product_id", pid);
+			addCartBtn.attr("data-product_id", '');
 			addCartBtn.attr("data-product_sku", "");
-			addCartBtn.html(addCartBtn.data("o_text"));
+			// if (isCartBtn) {
+			// 	addCartBtn.attr('type', 'link');
+			// }
+			if (isBlockBtn) {
+				addCartBtn.removeClass('wc-interactive');
+				addCartBtn.find('span').html(SA_WC_SWATCHES.i18n.select_options);
+			} else {
+				addCartBtn.html(SA_WC_SWATCHES.i18n.select_options);
+			}
 			addCartBtn.removeClass("ajax_add_to_cart");
 			buildLink(findArgs || {});
 			thumb.html(thumbHtml);
@@ -636,7 +210,7 @@ jQuery(($) => {
 					appEl.trigger("sa_variants", [res?.data]);
 				}
 			})
-			.catch((e) => {});
+			.catch((e) => { });
 
 		const args = {
 			pid,
@@ -663,3 +237,4 @@ jQuery(($) => {
 });
 
 console.log("SA_WC_SWATCHES", SA_WC_SWATCHES);
+
