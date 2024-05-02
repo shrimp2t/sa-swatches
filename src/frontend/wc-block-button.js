@@ -9,8 +9,15 @@ console.log("dsadsadsa");
  * WordPress dependencies
  */
 
-import { store, getContext, getElement } from "@wordpress/interactivity";
+import {
+	store,
+	getContext,
+	getElement,
+	getConfig,
+} from "@wordpress/interactivity";
+// import { getScope } from "@wordpress/interactivity/build/hooks";
 const nameSpace = "woocommerce/product-button";
+console.log("getConfig", getConfig(nameSpace));
 store("sawc/cart-btn", {
 	actions: {
 		toggle: () => {
