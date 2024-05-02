@@ -3,25 +3,13 @@ import "./swatches.scss";
 import "react-modern-drawer/dist/index.css";
 import "react-tooltip/dist/react-tooltip.css";
 
+// import React from "react";
 import { render } from "@wordpress/element";
 import App from "./components/App";
 import req from "../common/req";
 import {
 	cleanObj,
 } from "./common/variants";
-
-
-/**
- * WordPress dependencies
- */
-import { store, getContext, getElement } from '@wordpress/interactivity';
-console.log('store', store);
-
-
-// const { state, actions } = store("woocommerce/product-button");
-// console.log('store', state);
-
-
 
 
 

@@ -1,5 +1,12 @@
 # wc-blocks-by-sa
 
+// New Store cart API -- check nonce
+app/public/wp-content/plugins/woocommerce/src/StoreApi/Routes/V1/AbstractCartRoute.php
+
+
+
+https://github.com/WordPress/playground-tools/tree/trunk/packages/wp-now
+
 # sliders
 
 https://react-responsive-carousel.js.org/storybook/?path=/story/01-basic--base

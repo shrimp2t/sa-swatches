@@ -54,7 +54,6 @@ function blocks_init()
 		'products',
 	];
 	foreach ($blocks as $block) {
-
 		register_block_type(SA_WC_BLOCKS_PATH . '/build/blocks/' . $block);
 	}
 	wp_enqueue_style('sa_wc_blocks-plugins', SA_WC_BLOCKS_URL . "/build/plugins.css", false);

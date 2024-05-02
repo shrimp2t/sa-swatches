@@ -1,17 +1,14 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "sa-wc-blocks/products",
+	"name": "sa-wc-blocks/wc-block-btn",
 	"version": "0.1.0",
-	"title": "Sa/Products",
+	"title": "Sa/WC Block Button",
 	"category": "widgets",
-	"icon": "smiley",
-	"description": "Example block scaffolded with Create Block tool.",
 	"example": {},
 	"supports": {
-		"html": false
+		"html": false,
+		"interactivity": true
 	},
-	"textdomain": "example-dynamic",
-	"editorScript": "file:./index.js",
-	"viewScript": "file:./view.js"
+	"viewScriptModule": "file:./wc-block-button.js"
 }

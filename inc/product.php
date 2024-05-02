@@ -50,13 +50,13 @@ function get_option_settings()
 
 function scripts()
 {
-	$assets = get_assets('frontend/view');
+
+	// return;
+	$assets = get_assets('frontend/swatches');
 	if (!$assets) {
 		return;
 	}
 	$assets['dependencies'][] = 'jquery';
-
-
 
 	// foreach ($assets['dependencies'] as $k => $v) {
 	// 	if ($v  == 'wp-interactivity') {
@@ -64,13 +64,19 @@ function scripts()
 	// 	}
 	// }
 
-	// @wordpress/interactivity
-	wp_register_script_module('sa_wc_swatches', $assets['files']['js'], $assets['dependencies'], $assets['version']);
-
-	wp_enqueue_script_module('sa_wc_swatches');
+	// wp_register_script_module
+	wp_register_script('sa_wc_swatches', $assets['files']['js'], $assets['dependencies'], $assets['version']);
+	// wp_enqueue_script_module
+	wp_enqueue_script('sa_wc_swatches');
 
 	wp_register_style('sa_wc_swatches', $assets['files']['css'], [], $assets['version']);
 	wp_enqueue_style('sa_wc_swatches');
+
+	$asset_button = get_assets('frontend/wc-block-button');
+	$asset_button['dependencies'][] = 'wc-product-button-interactivity-frontend';
+	wp_register_script_module('sa_wc_block_btn', $asset_button['files']['js'], $asset_button['dependencies'], $asset_button['version']);
+	wp_enqueue_script_module('sa_wc_block_btn', $asset_button['files']['js'], $asset_button['dependencies'], $asset_button['version']);
+
 
 	$settings =  get_option_settings();
 	$sample_product = new WC_Product_Variation();
@@ -177,3 +183,23 @@ add_filter('woocommerce_product_supports', function ($is_support,  $feature, $pr
 	}
 	return $is_support;
 },  9999, 3);
+
+
+add_action('wp_footer', function(){
+ ?>
+ <div
+  data-wp-interactive='{ "namespace": "sawc/cart-btn" }'
+  data-wp-context='{ "isOpen": false }'
+  data-wp-watch="callbacks.logIsOpen"
+>
+  <button
+    data-wp-on--click="actions.toggle"
+    data-wp-bind--aria-expanded="context.isOpen"
+    aria-controls="p-1"
+  >
+    Toggle
+  </button>
+
+</div>
+ <?php
+});
