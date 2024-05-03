@@ -26,8 +26,8 @@ function admin_scripts()
 
 	$assets['dependencies'][] = 'jquery';
 	wp_enqueue_media();
-	wp_register_script('sa_admin_settings', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
-	wp_register_style('sa_admin_settings', $assets['files']['css'], [], $assets['version']);
+	wp_register_script('sa_wc_admin_settings', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
+	wp_register_style('sa_wc_admin_settings', $assets['files']['css'], [], $assets['version']);
 
 	$config =  [
 		'root' => esc_url_raw(rest_url()),
@@ -35,9 +35,9 @@ function admin_scripts()
 		'nonce' => wp_create_nonce('wp_rest'),
 	];
 
-	wp_localize_script('sa_admin_settings', 'SA_WC_SWATCHES', $config);
-	wp_enqueue_script('sa_admin_settings');
-	wp_enqueue_style('sa_admin_settings');
+	wp_localize_script('sa_wc_admin_settings', 'SA_WC_SWATCHES', $config);
+	wp_enqueue_script('sa_wc_admin_settings');
+	wp_enqueue_style('sa_wc_admin_settings');
 }
 
 add_action('admin_enqueue_scripts', __NAMESPACE__ . '\admin_scripts');

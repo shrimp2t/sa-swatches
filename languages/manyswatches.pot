@@ -1,0 +1,236 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+
+#: src/admin/admin-settings.js:100
+msgid "Items per row"
+msgstr ""
+
+#: src/admin/admin-settings.js:172
+msgid "Selected Option Settings"
+msgstr ""
+
+#: src/admin/admin-settings.js:173
+msgid "Apply for drawer layout only."
+msgstr ""
+
+#: src/admin/admin-settings.js:194
+msgid "Item Layout"
+msgstr ""
+
+#: src/admin/admin-settings.js:230
+msgid "Item min width"
+msgstr ""
+
+#: src/admin/admin-settings.js:288
+msgid "Variations in shop & archive pages"
+msgstr ""
+
+#: src/admin/admin-settings.js:295
+msgid "Enable"
+msgstr ""
+
+#: src/admin/admin-settings.js:30
+msgid "Variations in product page"
+msgstr ""
+
+#: src/admin/admin-settings.js:316
+msgid "Options Settings"
+msgstr ""
+
+#: src/admin/admin-settings.js:33
+msgid "Layout Settings"
+msgstr ""
+
+#: src/admin/admin-settings.js:338
+msgid "Swatches align"
+msgstr ""
+
+#: src/admin/admin-settings.js:357
+msgid "Allow attributes selection"
+msgstr ""
+
+#: src/admin/admin-settings.js:37
+msgid "From Layout"
+msgstr ""
+
+#: src/admin/admin-settings.js:376
+msgid "Swatch size"
+msgstr ""
+
+#: src/admin/admin-settings.js:390
+msgid "Image swatch style"
+msgstr ""
+
+#: src/admin/admin-settings.js:409
+msgid "Color swatch style"
+msgstr ""
+
+#: src/blocks/list/edit.js:100
+msgid "Add Items"
+msgstr ""
+
+#: src/blocks/list/settings.js:10
+msgid "Items"
+msgstr ""
+
+#: src/blocks/list/settings.js:17
+msgid "Title"
+msgstr ""
+
+#: src/blocks/list/settings.js:18
+msgid "Item title"
+msgstr ""
+
+#: src/blocks/list/settings.js:22
+msgid "Subtitle"
+msgstr ""
+
+#: src/blocks/list/settings.js:24
+msgid "Item subtitle"
+msgstr ""
+
+#: src/blocks/list/settings.js:29
+msgid "Description"
+msgstr ""
+
+#: src/blocks/list/settings.js:30
+msgid "Item description"
+msgstr ""
+
+#: src/blocks/list/settings.js:38
+msgid "Columns"
+msgstr ""
+
+#: src/blocks/list/settings.js:6
+msgid "Content"
+msgstr ""
+
+#: src/components/fields/background.js:111
+msgid "Repeat"
+msgstr ""
+
+#: src/components/fields/background.js:114
+msgid "no-repeat"
+msgstr ""
+
+#: src/components/fields/background.js:118
+msgid "repeat"
+msgstr ""
+
+#: src/components/fields/background.js:122
+msgid "repeat-x"
+msgstr ""
+
+#: src/components/fields/background.js:126
+msgid "repeat-y"
+msgstr ""
+
+#: src/components/fields/background.js:142
+msgid "Attachment"
+msgstr ""
+
+#: src/components/fields/background.js:145
+msgid "Scroll"
+msgstr ""
+
+#: src/components/fields/background.js:149
+msgid "Fixed"
+msgstr ""
+
+#: src/components/fields/background.js:153
+msgid "Local"
+msgstr ""
+
+#: src/components/fields/background.js:157
+msgid "Local, scroll"
+msgstr ""
+
+#: src/components/fields/background.js:16
+msgid "Type"
+msgstr ""
+
+#: src/components/fields/background.js:161
+msgid "Scroll, local"
+msgstr ""
+
+#: src/components/fields/background.js:35
+#: src/components/fields/border.js:48
+msgid "Color"
+msgstr ""
+
+#: src/components/fields/background.js:47
+#: src/components/fields/border.js:39
+msgid "Gradient"
+msgstr ""
+
+#: src/components/fields/background.js:59
+#: src/components/fields/border.js:35
+msgid "Image"
+msgstr ""
+
+#: src/components/fields/background.js:88
+msgid "Default"
+msgstr ""
+
+#: src/components/fields/background.js:92
+msgid "Cover"
+msgstr ""
+
+#: src/components/fields/background.js:96
+msgid "Contain"
+msgstr ""
+
+#: src/components/fields/border.js:16
+msgid "Border Width"
+msgstr ""
+
+#: src/components/fields/border.js:28
+msgid "Style"
+msgstr ""
+
+#: src/components/fields/border.js:54
+msgid "Border Radius"
+msgstr ""
+
+#: src/components/fields/color.js:100
+msgid "Clear"
+msgstr ""
+
+#: src/components/fields/image.js:51
+msgid "Edit image"
+msgstr ""
+
+#: src/components/fields/image.js:60
+msgid "Replace image"
+msgstr ""
+
+#: src/components/fields/image.js:68
+msgid "Change Image"
+msgstr ""
+
+#: src/components/fields/image.js:69
+msgid "Upload Image"
+msgstr ""
+
+#: src/components/fields/image.js:78
+#: src/components/fields/repeater.js:108
+msgid "Remove"
+msgstr ""
+
+#: src/components/fields/repeater.js:180
+msgid "Add Item"
+msgstr ""
+
+#: src/components/fields/responsive.js:60
+msgid "Desktop"
+msgstr ""
+
+#: src/components/fields/responsive.js:68
+msgid "Tablet"
+msgstr ""
+
+#: src/components/fields/responsive.js:76
+msgid "Mobile"
+msgstr ""

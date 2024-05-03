@@ -27,14 +27,14 @@ const Settings = ({ onChange, values }) => {
   return (
     <>
       <div className="sa-settings-form">
-        <h2>Variations in product page</h2>
+        <h2>{__('Variations in product page', 'sa-wc-swatches')}</h2>
         <div className="group-items">
           <div className="sa_heading">
-            <h3>Layout Settings</h3>
+            <h3>{__('Layout Settings', 'sa-wc-swatches')}</h3>
           </div>
 
           <div class="form-item">
-            <label className="form_label">From Layout</label>
+            <label className="form_label">{__('From Layout', 'domain')}</label>
             <div className="form_value">
               <select
                 value={values?.fromLayout || ""}
@@ -54,7 +54,7 @@ const Settings = ({ onChange, values }) => {
 
         <div className="group-items">
           <div className="sa_heading">
-            <h3>Options Settings</h3>
+            <h3>{__('Options Settings', 'domain')}</h3>
           </div>
 
           <div class="form-item">
@@ -76,7 +76,7 @@ const Settings = ({ onChange, values }) => {
           </div>
 
           <div class="form-item">
-            <label className="form_label">Item Layout</label>
+            <label className="form_label">{__('Item Layout', 'domain')}</label>
             <div className="form_value">
               <select
                 value={values?.layout}
@@ -97,7 +97,7 @@ const Settings = ({ onChange, values }) => {
             </div>
           </div>
           <div class="form-item">
-            <label className="form_label">Items per row</label>
+            <label className="form_label">{__('Items per row', 'domain')}</label>
             <div className="form_value">
               <input
                 value={values?.col}
@@ -112,7 +112,7 @@ const Settings = ({ onChange, values }) => {
             </div>
           </div>
           <div class="form-item">
-            <label className="form_label">Swatch size</label>
+            <label className="form_label">{__('Swatch size', 'domain')}</label>
             <div className="form_value">
               <input
                 value={values?.size}
@@ -126,7 +126,7 @@ const Settings = ({ onChange, values }) => {
           </div>
 
           <div class="form-item">
-            <label className="form_label">Image swatch style</label>
+            <label className="form_label">{__('Image swatch style', 'domain')}</label>
             <div className="form_value">
               <select
                 value={values?.swatch_image || ""}
@@ -145,7 +145,7 @@ const Settings = ({ onChange, values }) => {
 
 
           <div class="form-item">
-            <label className="form_label">Color swatch style</label>
+            <label className="form_label">{__('Color swatch style', 'domain')}</label>
             <div className="form_value">
               <select
                 value={values?.swatch_color || ""}
@@ -169,8 +169,8 @@ const Settings = ({ onChange, values }) => {
           <div className="group-items">
 
             <div className="sa_heading has_desc">
-              <h3>Selected Option Settings</h3>
-              <p className="sa_desc">Apply for drawer layout only.</p>
+              <h3>{__('Selected Option Settings', 'domain')}</h3>
+              <p className="sa_desc">{__('Apply for drawer layout only.', 'domain')}</p>
             </div>
             <div class="form-item">
               <label className="form_label">Label</label>
@@ -191,7 +191,7 @@ const Settings = ({ onChange, values }) => {
             </div>
 
             <div class="form-item">
-              <label className="form_label">Item Layout</label>
+              <label className="form_label">{__('Item Layout', 'domain')}</label>
               <div className="form_value">
                 <select
                   value={values?.drawer_layout}
@@ -213,7 +213,7 @@ const Settings = ({ onChange, values }) => {
             </div>
 
             <div class="form-item">
-              <label className="form_label">Swatch size</label>
+              <label className="form_label">{__('Swatch size', 'domain')}</label>
               <div className="form_value">
                 <input
                   value={values?.drawer_size}
@@ -227,7 +227,7 @@ const Settings = ({ onChange, values }) => {
             </div>
 
             <div class="form-item">
-              <label className="form_label">Item min width</label>
+              <label className="form_label">{__('Item min width', 'domain')}</label>
               <div className="form_value">
                 <input
                   value={values?.drawer_minWidth}
@@ -242,7 +242,7 @@ const Settings = ({ onChange, values }) => {
 
 
             <div class="form-item">
-              <label className="form_label">Image swatch style</label>
+              <label className="form_label">{__('Image swatch style', 'domain')}</label>
               <div className="form_value">
                 <select
                   value={values?.label_swatch_image || ""}
@@ -261,7 +261,7 @@ const Settings = ({ onChange, values }) => {
 
 
             <div class="form-item">
-              <label className="form_label">Color swatch style</label>
+              <label className="form_label">{__('Color swatch style', 'domain')}</label>
               <div className="form_value">
                 <select
                   value={values?.label_swatch_color || ""}
@@ -285,14 +285,14 @@ const Settings = ({ onChange, values }) => {
 
 
       <div className="sa-settings-form">
-        <h2>Variations in shop & archive pages</h2>
+        <h2>{__('Variations in shop & archive pages', 'domain')}</h2>
         <div className="group-items">
           <div className="sa_heading">
             <h3>Layout Settings</h3>
           </div>
 
           <div class="form-item">
-            <label className="form_label">Enable</label>
+            <label className="form_label">{__('Enable', 'domain')}</label>
             <div className="form_value">
               <select
                 value={values?.shop_show || ""}
@@ -313,7 +313,7 @@ const Settings = ({ onChange, values }) => {
 
         <div className="group-items">
           <div className="sa_heading">
-            <h3>Options Settings</h3>
+            <h3>{__('Options Settings', 'domain')}</h3>
           </div>
 
           <div class="form-item">
@@ -335,7 +335,7 @@ const Settings = ({ onChange, values }) => {
           </div>
 
           <div class="form-item">
-            <label className="form_label">Swatches align</label>
+            <label className="form_label">{__('Swatches align', 'domain')}</label>
             <div className="form_value">
               <select
                 value={values?.shop_align || ""}
@@ -354,7 +354,7 @@ const Settings = ({ onChange, values }) => {
 
 
           <div class="form-item">
-            <label className="form_label">Allow attributes selection</label>
+            <label className="form_label">{__('Allow attributes selection', 'domain')}</label>
             <div className="form_value">
               <select
                 value={values?.shop_selection || ""}
@@ -373,7 +373,7 @@ const Settings = ({ onChange, values }) => {
 
 
           <div class="form-item">
-            <label className="form_label">Swatch size</label>
+            <label className="form_label">{__('Swatch size', 'domain')}</label>
             <div className="form_value">
               <input
                 value={values?.shop_size}
@@ -387,7 +387,7 @@ const Settings = ({ onChange, values }) => {
           </div>
 
           <div class="form-item">
-            <label className="form_label">Image swatch style</label>
+            <label className="form_label">{__('Image swatch style', 'domain')}</label>
             <div className="form_value">
               <select
                 value={values?.shop_swatch_image || ""}
@@ -406,7 +406,7 @@ const Settings = ({ onChange, values }) => {
 
 
           <div class="form-item">
-            <label className="form_label">Color swatch style</label>
+            <label className="form_label">{__('Color swatch style', 'domain')}</label>
             <div className="form_value">
               <select
                 value={values?.shop_swatch_color || ""}

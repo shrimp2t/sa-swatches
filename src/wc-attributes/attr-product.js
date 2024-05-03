@@ -33,8 +33,8 @@ const App = ({
 	const [settings, setSettings] = useState({});
 
 	useEffect(() => {
-		jQuery(document.body).on("sa_product_attr_settings", (evt, data) => {
-			console.log("sa_product_attr_settings__on", taxonomy, data?.[taxonomy]);
+		jQuery(document.body).on("sa_wc_admin_product_attr_settings", (evt, data) => {
+			console.log("sa_wc_admin_product_attr_settings__on", taxonomy, data?.[taxonomy]);
 			setSettings((prev) => {
 				return { ...prev, ...(data?.[taxonomy] || {}) };
 			});
@@ -437,7 +437,7 @@ const saLoadSettings = () => {
 			},
 		})
 			.then((res) => {
-				jQuery(document.body).trigger("sa_product_attr_settings", [
+				jQuery(document.body).trigger("sa_wc_admin_product_attr_settings", [
 					res?.data || {},
 				]);
 			})

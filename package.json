@@ -39,6 +39,7 @@
 		"uniqid": "^5.4.0"
 	},
 	"devDependencies": {
+		"@wordpress/babel-plugin-makepot": "^5.41.0",
 		"@wordpress/babel-preset-default": "^7.40.0",
 		"@wordpress/scripts": "^27.7.0"
 	}

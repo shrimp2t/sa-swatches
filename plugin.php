@@ -32,6 +32,16 @@ require_once SA_WC_SWATCHES_PATH . '/inc/product.php';
 
 
 register_activation_hook(__FILE__, __NAMESPACE__ . '\install');
+add_action('init', __NAMESPACE__ . '\load_textdomain');
+
+function load_textdomain()
+{
+	load_plugin_textdomain('sa-wc-swatches', false, SA_WC_SWATCHES_PATH . '/languages');
+	wp_set_script_translations('sa_wc_admin_settings', 'sa-wc-swatches');
+	wp_set_script_translations('sa_wc_admin_attr_manager', 'sa-wc-swatches');
+	wp_set_script_translations('sa_wc_swatches', 'sa-wc-swatches');
+	wp_set_script_translations('sa_wc_admin_product_attr', 'sa-wc-swatches');
+}
 
 
 function render_block_core_archives()

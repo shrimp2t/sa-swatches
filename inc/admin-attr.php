@@ -266,8 +266,8 @@ function attr_terms_scripts()
 
 	$assets['dependencies'][] = 'jquery';
 	wp_enqueue_media();
-	wp_register_script('sa_attr_manager', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
-	wp_register_style('sa_attr_manager', $assets['files']['css'], [], $assets['version']);
+	wp_register_script('sa_wc_admin_attr_manager', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
+	wp_register_style('sa_wc_admin_attr_manager', $assets['files']['css'], [], $assets['version']);
 
 	$config = get_ajax_configs();
 	$config['current_tax'] = get_current_tax_type();
@@ -276,9 +276,9 @@ function attr_terms_scripts()
 		$config['current_term'] = get_swatch_data(absint($_GET['tag_ID']));
 	}
 
-	wp_localize_script('sa_attr_manager', 'SA_WC_SWATCHES', $config);
-	wp_enqueue_script('sa_attr_manager');
-	wp_enqueue_style('sa_attr_manager');
+	wp_localize_script('sa_wc_admin_attr_manager', 'SA_WC_SWATCHES', $config);
+	wp_enqueue_script('sa_wc_admin_attr_manager');
+	wp_enqueue_style('sa_wc_admin_attr_manager');
 
 	add_filter('script_loader_src', __NAMESPACE__ . '\maybe_change_admin_js', 10, 2);
 }
@@ -293,8 +293,8 @@ function product_attr_scripts()
 
 	$assets['dependencies'][] = 'jquery';
 	wp_enqueue_media();
-	wp_register_script('sa_product_attr', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
-	wp_register_style('sa_product_attr', $assets['files']['css'], [], $assets['version']);
+	wp_register_script('sa_wc_admin_product_attr', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
+	wp_register_style('sa_wc_admin_product_attr', $assets['files']['css'], [], $assets['version']);
 
 
 	$config = get_ajax_configs();
@@ -302,9 +302,9 @@ function product_attr_scripts()
 		$config['id'] = absint($_GET['edit']);
 	}
 
-	wp_localize_script('sa_product_attr', 'SA_WC_SWATCHES', $config);
-	wp_enqueue_script('sa_product_attr');
-	wp_enqueue_style('sa_product_attr');
+	wp_localize_script('sa_wc_admin_product_attr', 'SA_WC_SWATCHES', $config);
+	wp_enqueue_script('sa_wc_admin_product_attr');
+	wp_enqueue_style('sa_wc_admin_product_attr');
 }
 
 
