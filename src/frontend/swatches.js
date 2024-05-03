@@ -135,22 +135,32 @@ jQuery(($) => {
 			const sep = url.includes("?") ? "&" : "?";
 			const newUrl = str.length ? `${url}${sep}${str}` : url;
 			a.attr("href", newUrl);
+			return newUrl;
 		};
 
 		appEl.on("found_variation", function (evt, variation, findArgs) {
 			addCartBtn.attr("data-product_id", variation.variation_id);
 			addCartBtn.attr("data-product_sku", variation.sku);
+			const link = buildLink(findArgs || {});
+
 			if (isBlockBtn) {
 				addCartBtn.addClass('wc-interactive');
-				addCartBtn.find('span').html(SA_WC_SWATCHES.i18n.add_cart);
+				const btnSpan = addCartBtn.find('span');
+				btnSpan.html(SA_WC_SWATCHES.i18n.add_cart);
 				blockParent.attr('wc-context', JSON.stringify({ ...blockContext, productId: variation.variation_id }))
+				btnSpan.get(0).dispatchEvent(new CustomEvent("sa_wc_variation_change", {
+					bubbles: true,
+					detail: {
+						variation_id: variation.variation_id,
+						link,
+					},
+				}));
 			} else {
 				addCartBtn.html(SA_WC_SWATCHES.i18n.add_cart);
 			}
 
-
 			addCartBtn.addClass("ajax_add_to_cart");
-			buildLink(findArgs || {});
+
 			if (variation?.image?.thumb_src) {
 				const img = thumb
 					.find("img");
@@ -170,17 +180,23 @@ jQuery(($) => {
 		appEl.on("reset_data", function (evt, findArgs) {
 			addCartBtn.attr("data-product_id", '');
 			addCartBtn.attr("data-product_sku", "");
-			// if (isCartBtn) {
-			// 	addCartBtn.attr('type', 'link');
-			// }
+			const link = buildLink(findArgs || {});
 			if (isBlockBtn) {
 				addCartBtn.removeClass('wc-interactive');
-				addCartBtn.find('span').html(SA_WC_SWATCHES.i18n.select_options);
+				const btnSpan = addCartBtn.find('span');
+				btnSpan.html(SA_WC_SWATCHES.i18n.select_options);
+				btnSpan.get(0).dispatchEvent(new CustomEvent("sa_wc_variation_change", {
+					bubbles: true,
+					detail: {
+						variation_id: 0,
+						link,
+					},
+				}));
 			} else {
 				addCartBtn.html(SA_WC_SWATCHES.i18n.select_options);
 			}
 			addCartBtn.removeClass("ajax_add_to_cart");
-			buildLink(findArgs || {});
+
 			thumb.html(thumbHtml);
 			price.html(price.data("o_price"));
 		});

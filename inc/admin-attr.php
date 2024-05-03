@@ -254,8 +254,7 @@ add_action('admin_enqueue_scripts', __NAMESPACE__ . '\admin_scripts');
 function maybe_change_admin_js($src, $handle)
 {
 	if ($handle === 'admin-tags') {
-		//
-		$src = SA_WC_BLOCKS_URL . '/wp-admin-js/tags.js';
+		$src = SA_WC_BLOCKS_URL . '/assets/wp-admin-js/tags.js';
 	}
 	return $src;
 }

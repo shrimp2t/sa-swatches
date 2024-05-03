@@ -72,12 +72,6 @@ function scripts()
 	wp_register_style('sa_wc_swatches', $assets['files']['css'], [], $assets['version']);
 	wp_enqueue_style('sa_wc_swatches');
 
-	$asset_button = get_assets('frontend/wc-block-button');
-	$asset_button['dependencies'][] = 'wc-product-button-interactivity-frontend';
-	wp_register_script_module('sa_wc_block_btn', $asset_button['files']['js'], $asset_button['dependencies'], $asset_button['version']);
-	wp_enqueue_script_module('sa_wc_block_btn', $asset_button['files']['js'], $asset_button['dependencies'], $asset_button['version']);
-
-
 	$settings =  get_option_settings();
 	$sample_product = new WC_Product_Variation();
 	$sample_product->set_parent_data([
@@ -185,21 +179,13 @@ add_filter('woocommerce_product_supports', function ($is_support,  $feature, $pr
 },  9999, 3);
 
 
-add_action('wp_footer', function(){
- ?>
- <div
-  data-wp-interactive='{ "namespace": "sawc/cart-btn" }'
-  data-wp-context='{ "isOpen": false }'
-  data-wp-watch="callbacks.logIsOpen"
->
-  <button
-    data-wp-on--click="actions.toggle"
-    data-wp-bind--aria-expanded="context.isOpen"
-    aria-controls="p-1"
-  >
-    Toggle
-  </button>
+function wp_script_attributes($attributes)
+{
 
-</div>
- <?php
-});
+	if ($attributes['id'] == 'wc-product-button-interactivity-frontend-js') {
+		$attributes['src'] = SA_WC_BLOCKS_URL . '/assets/wc-js/product-button-interactivity-frontend.js';
+	}
+
+	return $attributes;
+}
+add_filter('wp_script_attributes', __NAMESPACE__ . '\wp_script_attributes', 100, 1);
