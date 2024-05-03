@@ -47,7 +47,6 @@ const App = ({ pid, variants: initVariants, settings, form, table }) => {
 					table.hide();
 				}
 			}
-			// console.log("Data", Object.keys(res).join(" | "));
 		});
 	}, [pid]);
 

@@ -249,6 +249,10 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
+#: src/frontend/components/AttrItem.js:93
+msgid "Select %s"
+msgstr ""
+
 #: src/wc-attributes/components/SortableList.js:141
 msgid "This product settings"
 msgstr ""
