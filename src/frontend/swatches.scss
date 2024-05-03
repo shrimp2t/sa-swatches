@@ -20,6 +20,7 @@ body {
 	.sa_attr {
 		display: flex;
 		gap: var(--sa-gap);
+
 		.sa_label_val {
 			margin-left: 0.5em;
 		}
@@ -36,9 +37,22 @@ body {
 	cursor: pointer;
 	border: var(--sa-border-width) solid var(--sa-border-color);
 	padding: var(--sa-option-padding) calc(1.5 * var(--sa-option-padding));
+
 	&.sa_no_label {
 		padding: var(--sa-option-padding);
 	}
+
+	&.sa_style_circle {
+		border-radius: 100000px;
+		overflow: hidden;
+
+		.sa_swatch_wrap {
+			border-radius: 100000px;
+			overflow: hidden;
+
+		}
+	}
+
 	font-size: 14px;
 	line-height: 20px;
 	border-radius: var(--sa-border-radius);
@@ -56,6 +70,7 @@ body {
 		background: #fff;
 		position: relative;
 		margin: 0;
+
 		&::before {
 			content: "";
 			width: calc(100% + 6px);
@@ -83,6 +98,7 @@ body {
 		width: 22px;
 		display: block;
 		border-bottom-right-radius: var(--sa-border-radius);
+
 		svg {
 			z-index: 3;
 			position: absolute;
@@ -90,6 +106,7 @@ body {
 			right: -5px;
 			transform: scale(0.6);
 		}
+
 		&::before {
 			content: "";
 			position: absolute;
@@ -105,18 +122,22 @@ body {
 
 	&.sa_selected {
 		border: var(--sa-border-width) solid var(--sa-check-active-bg);
+
 		.sa_checkbox {
 			background: var(--sa-check-active-bg);
+
 			&::before {
 				border-color: var(--sa-check-active-bg);
 				opacity: 1;
 			}
 		}
 	}
+
 	&.sa_inactive {
 		border-color: #c18080;
 		background: #eed5d5;
 		opacity: 0.8;
+
 		.sa_icon {
 			&::before {
 				background: #c18080 !important;
@@ -138,25 +159,30 @@ body {
 	display: flex;
 	overflow: hidden;
 	border-radius: var(--sa-border-radius);
+
 	&.sa_no {
 		justify-content: center;
 		align-items: center;
 	}
+
 	.sa_color_inner {
 		width: 100%;
 		height: 100%;
 		display: flex;
 		transform: rotate(45deg) scale(1.45);
 	}
+
 	.sa_color_item {
 		flex-basis: 100%;
 		height: 100%;
 		display: flex;
 	}
+
 	.sa_image_item {
 		flex-basis: 100%;
 		height: 100%;
 		display: flex;
+
 		img {
 			height: 100%;
 			width: 100%;
@@ -165,6 +191,7 @@ body {
 		}
 	}
 }
+
 // -- Option layout -----------------------
 .sa_drawer_body,
 .sa_attr {
@@ -177,20 +204,25 @@ body {
 	&.sa_opts_col_auto {
 		width: 100%;
 		height: 100%;
+
 		.sa_swatch {
 			width: 100%;
 			height: 100%;
 		}
 	}
+
 	&.sa_opts_col {
 		gap: 0px;
 		margin: calc(0px - var(--sa-gap) / 2);
+
 		.sa_opt_wrap {
 			padding: calc(var(--sa-gap) / 2);
 		}
+
 		.sa_attr_option {
 			width: 100%;
 		}
+
 		&.sa_opts_l_box {
 			.sa_attr_option {
 				flex-direction: column;
@@ -207,9 +239,11 @@ body {
 			width: 100%;
 			display: block;
 		}
+
 		.sa_attr_option {
 			width: 100%;
 			padding: 5px;
+
 			.sa_opt_label {
 				overflow: hidden;
 				width: 100%;
@@ -217,7 +251,9 @@ body {
 				white-space: nowrap;
 				text-overflow: ellipsis;
 			}
+
 			flex-direction: column;
+
 			.sa_swatch {
 				position: absolute;
 				top: 0px;
@@ -245,6 +281,7 @@ body {
 	.sa_attr_label {
 		flex-basis: var(--sa-attr-label-width);
 	}
+
 	.sa_attr_values {
 		flex-basis: calc(100% - var(--sa-attr-label-width));
 	}
@@ -258,6 +295,7 @@ body {
 	.sa_attr {
 		align-items: center;
 	}
+
 	.sa_attr_values {
 		margin-left: auto;
 	}
@@ -265,22 +303,26 @@ body {
 
 .sa_drawer {
 	--sa-padding: 1em;
+
 	.sa_drawer_wrap {
 		display: flex;
 		flex-direction: column;
 		height: 100%;
 	}
+
 	.sa_drawer_head_inner,
 	.sa_drawer_footer_inner {
 		min-height: 1em;
 		display: flex;
 		align-items: center;
 	}
+
 	.sa_drawer_head,
 	.sa_drawer_footer {
 		padding: var(--sa-padding);
 		align-items: center;
 	}
+
 	.sa_drawer_head {
 		border-bottom: 1px solid var(--sa-border-color);
 		flex: 0;
@@ -295,9 +337,11 @@ body {
 		font-size: 1em;
 		font-weight: bold;
 	}
+
 	.sa_drawer_actions {
 		margin-left: auto;
 	}
+
 	.sa_drawer_body {
 		flex: 1;
 		overflow: auto;
@@ -306,6 +350,24 @@ body {
 }
 
 // --- Loop ------------------
+.sa_align_center {
+	.sa_loop_values {
+		justify-content: center;
+	}
+}
+
+.sa_align_left {
+	.sa_loop_values {
+		justify-content: start;
+	}
+}
+
+.sa_align_right {
+	.sa_loop_values {
+		justify-content: right;
+	}
+}
+
 
 .sa_loop_swatches {
 	--sa-gap: 4px;
@@ -317,11 +379,13 @@ body {
 	.sa_attr_options {
 		flex-wrap: nowrap;
 	}
+
 	.sa_loop_values {
 		width: 100%;
 		display: flex;
 		overflow: hidden;
 	}
+
 	.sa_opt_label {
 		flex-wrap: nowrap;
 		white-space: nowrap;

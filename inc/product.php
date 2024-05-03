@@ -11,7 +11,10 @@ use function SA_WC_SWATCHES\get_assets;
 function get_option_settings()
 {
 
-	$all_settings = get_option('sa_swatches_settings', []);
+	$all_settings = json_decode(get_option('sa_swatches_settings', ''), true);
+	if (!is_array($all_settings)) {
+		$all_settings = [];
+	}
 
 	return $all_settings;
 }

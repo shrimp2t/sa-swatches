@@ -82,7 +82,7 @@ const Option = ({
   let css = {};
   let cssSwatch = {};
   let cssSwatchLabel = {};
-  const { label: showLabel = "yes", col = 0, size = 0 } = settings;
+  const { label: showLabel = "yes", col = 0, size = 0, image_style, color_style } = settings;
 
   if (col > 0) {
     css = {
@@ -99,6 +99,7 @@ const Option = ({
     cssSwatchLabel = {
       minHeight: `${size}px`,
       minWidth: `${size}px`,
+      justifyContent: 'center',
     };
   }
 
@@ -116,6 +117,21 @@ const Option = ({
   if (!willShowLabel) {
     classes.push("sa_no_label");
   }
+
+  let isCircle = false;
+  if (hasSwatch) {
+
+    if ('sa_image' === swatch?.type && image_style) {
+      classes.push('sa_style_' + image_style);
+      isCircle = image_style === 'circle';
+    }
+
+    if ('sa_color' === swatch?.type && color_style) {
+      classes.push('sa_style_' + color_style);
+      isCircle = color_style === 'circle';
+    }
+  }
+
 
   const tooltipId = `${appId}-${attrName}-${option.slug}-${checkActive}`;
   const divProps = {
@@ -189,7 +205,7 @@ const Option = ({
             </span>
           )}
 
-          {showIcon && isChecked && (
+          {!isCircle && showIcon && isChecked && (
             <div className="sa_icon">
               <IconCheck />
             </div>

@@ -36,6 +36,7 @@ const AttrItem = ({ attr }) => {
         "sa_attr",
         attr.name,
         "atype-" + (attr?.type || "mixed"),
+        'sa_align_' + (settings?.align || 'none')
       ].join(" ")}
     >
       {showAttrLabel && (
