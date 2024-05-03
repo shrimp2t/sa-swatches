@@ -16,9 +16,6 @@ const Settings = ({ onChange, values }) => {
     });
   };
 
-  console.log("settings", values);
-
-
   return (
     <>
       <div className="sa-settings-form">
@@ -29,14 +26,14 @@ const Settings = ({ onChange, values }) => {
           </div>
 
           <div class="form-item">
-            <label className="form_label">{__('From Layout', 'domain')}</label>
+            <label className="form_label">{__('Form Layout', 'domain')}</label>
             <div className="form_value">
               <select
-                value={values?.fromLayout || ""}
+                value={values?.form_layout || ""}
                 defaultValue={""}
                 onChange={(e) => {
                   const v = e.target.value;
-                  handleOnChange("fromLayout", v);
+                  handleOnChange("form_layout", v);
                 }}
               >
                 {Object.keys(SA_WC_SWATCHES.configs.main_layout).map(k => (<option value={k} key={k}>{SA_WC_SWATCHES.configs.main_layout[k]}</option>))}

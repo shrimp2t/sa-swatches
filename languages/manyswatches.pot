@@ -3,22 +3,24 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
-#: src/admin/admin-settings.js:166
+#: src/admin/admin-settings.js:163
 msgid "Selected Option Settings"
 msgstr ""
 
-#: src/admin/admin-settings.js:167
+#: src/admin/admin-settings.js:164
 msgid "Apply for drawer layout only."
 msgstr ""
 
-#: src/admin/admin-settings.js:170
+#: src/admin/admin-settings.js:167
 msgid "Label"
 msgstr ""
 
-#: src/admin/admin-settings.js:190
+#: src/admin/admin-settings.js:187
 msgid "Item Layout"
 msgstr ""
 
+#: src/admin/admin-settings.js:196
+#: src/admin/admin-settings.js:197
 #: src/admin/admin-settings.js:199
 #: src/admin/admin-settings.js:204
 #: src/admin/admin-settings.js:85
@@ -28,59 +30,59 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: src/admin/admin-settings.js:220
+#: src/admin/admin-settings.js:217
 msgid "Item min width"
 msgstr ""
 
-#: src/admin/admin-settings.js:25
+#: src/admin/admin-settings.js:22
 msgid "Variations in product page"
 msgstr ""
 
-#: src/admin/admin-settings.js:282
+#: src/admin/admin-settings.js:279
 msgid "Variations in shop & archive pages"
 msgstr ""
 
-#: src/admin/admin-settings.js:285
+#: src/admin/admin-settings.js:282
 msgid "Layout Settings"
 msgstr ""
 
-#: src/admin/admin-settings.js:289
+#: src/admin/admin-settings.js:286
 msgid "Enable"
 msgstr ""
 
-#: src/admin/admin-settings.js:313
+#: src/admin/admin-settings.js:29
+msgid "Form Layout"
+msgstr ""
+
+#: src/admin/admin-settings.js:310
 msgid "Options Settings"
 msgstr ""
 
-#: src/admin/admin-settings.js:317
+#: src/admin/admin-settings.js:314
 msgid "Position"
 msgstr ""
 
-#: src/admin/admin-settings.js:32
-msgid "From Layout"
-msgstr ""
-
-#: src/admin/admin-settings.js:338
+#: src/admin/admin-settings.js:335
 msgid "Swatches align"
 msgstr ""
 
-#: src/admin/admin-settings.js:359
+#: src/admin/admin-settings.js:356
 msgid "Allow attributes selection"
 msgstr ""
 
-#: src/admin/admin-settings.js:381
+#: src/admin/admin-settings.js:378
 msgid "Swatch size"
 msgstr ""
 
-#: src/admin/admin-settings.js:395
+#: src/admin/admin-settings.js:392
 msgid "Image swatch style"
 msgstr ""
 
-#: src/admin/admin-settings.js:416
+#: src/admin/admin-settings.js:413
 msgid "Color swatch style"
 msgstr ""
 
-#: src/admin/admin-settings.js:90
+#: src/admin/admin-settings.js:87
 msgid "Items per row"
 msgstr ""
 

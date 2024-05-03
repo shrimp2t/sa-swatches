@@ -16,20 +16,20 @@ import {
 const { SA_WC_SWATCHES } = window;
 
 jQuery(($) => {
-	const singleSettings = cleanObj(SA_WC_SWATCHES.single, true);
-	const loopSettings = cleanObj(SA_WC_SWATCHES.single, true);
+	const preSettings = cleanObj(SA_WC_SWATCHES.settings, true);
+
 
 	const option = {
-		layout: singleSettings?.option_layout || 'inline', // box || inline | checkbox
-		col: parseInt(singleSettings?.option_col), // Number: apply for layout [box] only.
-		size: singleSettings?.option_size || 22, // not apply for [box] layout.
-		label: singleSettings?.option_label, //  yes | no | <>empty
+		layout: preSettings?.layout || 'inline', // box || inline | checkbox
+		col: parseInt(preSettings?.col), // Number: apply for layout [box] only.
+		size: preSettings?.size || 22, // not apply for [box] layout.
+		label: preSettings?.label, //  yes | no | <>empty
 	};
 
 	const drawerOption = {
-		layout: singleSettings?.option_drawer_layout || 'inline', // box || inline | checkbox
-		size: singleSettings?.option_drawer_size, // not apply for [box] layout.
-		label: singleSettings?.option_drawer_label, //  yes | no | <>empty
+		layout: preSettings?.drawer_layout || 'inline', // box || inline | checkbox
+		size: preSettings?.drawer_size, // not apply for [box] layout.
+		label: preSettings?.drawer_label, //  yes | no | <>empty
 	};
 
 	$(".variations_form").each(function () {
@@ -40,10 +40,10 @@ jQuery(($) => {
 		const appEl = $("<div/>");
 		appEl.insertAfter(table);
 		const settings = {
-			layout: singleSettings?.layout || "separate", // inline | separate | drawer
+			layout: preSettings?.form_layout || "separate", // inline | separate | drawer
 			showAttrDesc: true, // Show attribute description.
 			showAttrLabel: true,
-			option: singleSettings?.layout === "drawer" ? drawerOption : option,
+			option: preSettings?.form_layout === "drawer" ? drawerOption : option,
 			drawer: {
 				option: option,
 			},
