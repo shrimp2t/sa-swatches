@@ -41,12 +41,12 @@ const ColSwatch = ({ term, tax, type, setSelectedList }) => {
 	return (
 		<>
 			{type === "sa_image" ? (
-				<td>
+				<td className="col_swatch">
 					<ImagePicker swatch={term?.swatch} onChange={onChange} />
 				</td>
 			) : null}
 			{type === "sa_color" ? (
-				<td>
+				<td className="col_swatch">
 					<ColorPicker
 						confirm={true}
 						onChange={onChange}

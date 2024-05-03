@@ -1,4 +1,5 @@
 import { Spinner, Modal } from "@wordpress/components";
+import { __ } from "@wordpress/i18n";
 
 import React from "react";
 import { useState, useEffect } from "@wordpress/element";
@@ -81,22 +82,24 @@ const ListSelectedTermItem = ({
 					</span>
 				) : null}
 				{lastSwatch?.type === "sa_color" ? (
-					<span className="sa_group_colors">
-						<span
-							className="color sa_border"
-							style={{
-								background: `${lastSwatch?.value}`,
-							}}
-						></span>
-						{lastSwatch?.more?.length &&
-							lastSwatch?.more.map((mc) => (
-								<span
-									className="color sa_border"
-									style={{
-										background: `${mc}`,
-									}}
-								></span>
-							))}
+					<span className="sa_group_colors sa_swatch">
+						<span className="sa_color_inner">
+							<span
+								className="sa_color_item"
+								style={{
+									background: `${lastSwatch?.value}`,
+								}}
+							></span>
+							{lastSwatch?.more?.length &&
+								lastSwatch?.more.map((mc) => (
+									<span
+										className="sa_color_item"
+										style={{
+											background: `${mc}`,
+										}}
+									></span>
+								))}
+						</span>
 					</span>
 				) : null}
 
@@ -135,10 +138,12 @@ const ListSelectedTermItem = ({
 						) : null}
 
 						<div className="box ">
-							<h3>This product settings</h3>
+							<h3>{__("This product settings", "domain")}</h3>
 							<div className="term-item__swatch_box settings-form">
 								<div class="form-item">
-									<label className="form_label">Swatch type</label>
+									<label className="form_label">
+										{__("Swatch type", "domain")}
+									</label>
 									<div className="form_value">
 										<select
 											value={customSwatch?.type || ""}
@@ -154,7 +159,7 @@ const ListSelectedTermItem = ({
 												});
 											}}
 										>
-											<option value={``}>Default</option>
+											<option value={``}>{__("Default", "domain")}</option>
 											{Object.keys(SA_WC_SWATCHES.att_types).map((key) => {
 												return (
 													<option value={key} key={key}>
@@ -166,7 +171,7 @@ const ListSelectedTermItem = ({
 									</div>
 								</div>
 								<div class="form-item">
-									<label className="form_label">Swatch</label>
+									<label className="form_label">{__("Swatch", "domain")}</label>
 									<div className="form_value">
 										{lastSwatch?.type === "sa_image" ? (
 											<ImagePicker
@@ -195,7 +200,9 @@ const ListSelectedTermItem = ({
 								</div>
 
 								<div class="form-item">
-									<label className="form_label">Custom name</label>
+									<label className="form_label">
+										{__("Custom name", "domain")}
+									</label>
 									<div className="form_value">
 										<input
 											type="text"
@@ -212,14 +219,14 @@ const ListSelectedTermItem = ({
 										onClick={() => handleClearCustom()}
 										className="button"
 									>
-										Reset
+										{__("Reset", "reset")}
 									</button>
 								</div>
 							</div>
 						</div>
 
 						<div className="sa_box">
-							<h3>Global settings</h3>
+							<h3>{__("Global settings", "domain")}</h3>
 							<div className="term-item swatch_box">
 								{term?.swatch?.type === "sa_image" ? (
 									<span className="img sa_border">

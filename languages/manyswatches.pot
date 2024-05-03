@@ -4,17 +4,17 @@ msgstr ""
 "X-Generator: babel-plugin-makepot\n"
 
 #: src/admin/admin-settings.js:170
-#: src/wc-attributes/components/SwatchSettings.js:101
+#: src/wc-attributes/components/SwatchSettings.js:100
 msgid "Selected Option Settings"
 msgstr ""
 
 #: src/admin/admin-settings.js:172
-#: src/wc-attributes/components/SwatchSettings.js:103
+#: src/wc-attributes/components/SwatchSettings.js:102
 msgid "Apply for drawer layout only."
 msgstr ""
 
 #: src/admin/admin-settings.js:176
-#: src/wc-attributes/components/SwatchSettings.js:107
+#: src/wc-attributes/components/SwatchSettings.js:106
 msgid "Label"
 msgstr ""
 
@@ -43,7 +43,7 @@ msgid "Enable"
 msgstr ""
 
 #: src/admin/admin-settings.js:329
-#: src/wc-attributes/components/SwatchSettings.js:30
+#: src/wc-attributes/components/SwatchSettings.js:29
 msgid "Options Settings"
 msgstr ""
 
@@ -60,7 +60,7 @@ msgid "Allow attributes selection"
 msgstr ""
 
 #: src/admin/admin-settings.js:397
-#: src/wc-attributes/components/SwatchSettings.js:146
+#: src/wc-attributes/components/SwatchSettings.js:145
 msgid "Swatch size"
 msgstr ""
 
@@ -73,7 +73,7 @@ msgid "Color swatch style"
 msgstr ""
 
 #: src/admin/admin-settings.js:94
-#: src/wc-attributes/components/SwatchSettings.js:71
+#: src/wc-attributes/components/SwatchSettings.js:70
 msgid "Items per row"
 msgstr ""
 
@@ -119,7 +119,9 @@ msgstr ""
 
 #: src/admin/admin-settings.js:196
 #: src/components/fields/background.js:88
-#: src/wc-attributes/components/SwatchSettings.js:151
+#: src/wc-attributes/components/SortableList.js:162
+#: src/wc-attributes/components/SortableList.js:160
+#: src/wc-attributes/components/SwatchSettings.js:150
 msgid "Default"
 msgstr ""
 
@@ -247,14 +249,36 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: src/wc-attributes/components/SwatchSettings.js:127
+#: src/wc-attributes/components/SortableList.js:141
+msgid "This product settings"
+msgstr ""
+
+#: src/wc-attributes/components/SortableList.js:145
+msgid "Swatch type"
+msgstr ""
+
+#: src/wc-attributes/components/SortableList.js:174
+msgid "Swatch"
+msgstr ""
+
+#: src/wc-attributes/components/SortableList.js:204
+msgid "Custom name"
+msgstr ""
+
+#: src/wc-attributes/components/SortableList.js:222
+#: src/wc-attributes/components/SortableList.js:220
+#: src/wc-attributes/components/SwatchSettings.js:162
+msgid "Reset"
+msgstr ""
+
+#: src/wc-attributes/components/SortableList.js:229
+msgid "Global settings"
+msgstr ""
+
+#: src/wc-attributes/components/SwatchSettings.js:126
 msgid "Item layout"
 msgstr ""
 
-#: src/wc-attributes/components/SwatchSettings.js:16
+#: src/wc-attributes/components/SwatchSettings.js:15
 msgid "Reset all settings?"
-msgstr ""
-
-#: src/wc-attributes/components/SwatchSettings.js:163
-msgid "Reset"
 msgstr ""

@@ -65,13 +65,16 @@ const ColorPicker = ({ value, onChange, confirm }) => {
 						setIsVisible(!isVisible);
 					}}
 				>
-					{values.map((i) => {
-						return (
-							<div key={i.t} className="wc_swatch_color sa_border">
-								<div style={{ background: i.v, pointer: "cursor" }}></div>
-							</div>
-						);
-					})}
+					<span className="sa_swatch">
+						<span className="sa_color_inner">
+							{values.map((i) => (
+								<span
+									className="sa_color_item"
+									style={{ background: i.v, pointer: "cursor" }}
+								></span>
+							))}
+						</span>
+					</span>
 				</div>
 
 				{isVisible && (

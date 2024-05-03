@@ -191,7 +191,50 @@
 
 .sa_group_colors {
 	display: flex;
-	gap: 5px;
+	width: 100%;
+	height: 100%;
+}
+
+.col_swatch {
+	width: 50px;
+}
+.sa_swatch {
+	width: 30px;
+	height: 30px;
+	display: flex;
+	overflow: hidden;
+	border-radius: 3px;
+
+	&.sa_no {
+		justify-content: center;
+		align-items: center;
+	}
+
+	.sa_color_inner {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		transform: rotate(45deg) scale(1.45);
+	}
+
+	.sa_color_item {
+		flex-basis: 100%;
+		height: 100%;
+		display: flex;
+	}
+
+	.sa_image_item {
+		flex-basis: 100%;
+		height: 100%;
+		display: flex;
+
+		img {
+			height: 100%;
+			width: 100%;
+			object-fit: cover;
+			display: block;
+		}
+	}
 }
 
 .wc_swatch_color_picker {
