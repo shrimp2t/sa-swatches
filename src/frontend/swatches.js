@@ -24,12 +24,16 @@ jQuery(($) => {
 		col: parseInt(preSettings?.col), // Number: apply for layout [box] only.
 		size: preSettings?.size || 22, // not apply for [box] layout.
 		label: preSettings?.label, //  yes | no | <>empty
+		image_style: preSettings?.swatch_image,
+		color_style: preSettings?.swatch_color,
 	};
 
 	const drawerOption = {
 		layout: preSettings?.drawer_layout || 'inline', // box || inline | checkbox
 		size: preSettings?.drawer_size, // not apply for [box] layout.
 		label: preSettings?.drawer_label, //  yes | no | <>empty
+		image_style: preSettings?.drawer_swatch_image,
+		color_style: preSettings?.drawer_swatch_color,
 	};
 
 	$(".variations_form").each(function () {
@@ -227,10 +231,14 @@ jQuery(($) => {
 				layout: "inline",
 				loop: true,
 				showAttrLabel: false,
+				align: preSettings?.shop_align || 'center',
 				option: {
 					layout: "inline",
 					label: "hide",
 					loop: true,
+					size: preSettings?.shop_size,
+					image_style: preSettings?.shop_swatch_image,
+					color_style: preSettings?.shop_swatch_color,
 				},
 			},
 			form: appEl,

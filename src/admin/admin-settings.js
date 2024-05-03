@@ -213,7 +213,7 @@ const Settings = ({ onChange, values }) => {
               </div>
             </div>
 
-            <div class="form-item">
+            {/* <div class="form-item">
               <label className="form_label">{__('Item min width', 'domain')}</label>
               <div className="form_value">
                 <input
@@ -225,18 +225,18 @@ const Settings = ({ onChange, values }) => {
                   size={3}
                 />
               </div>
-            </div>
+            </div> */}
 
 
             <div class="form-item">
               <label className="form_label">{__('Image swatch style', 'domain')}</label>
               <div className="form_value">
                 <select
-                  value={values?.label_swatch_image || ""}
+                  value={values?.drawer_swatch_image || ""}
                   defaultValue={""}
                   onChange={(e) => {
                     const v = e.target.value;
-                    handleOnChange("label_swatch_image", v);
+                    handleOnChange("drawer_swatch_image", v);
                   }}
                 >
                   {Object.keys(SA_WC_SWATCHES.configs.swatch_style).map((key) => (
@@ -253,11 +253,11 @@ const Settings = ({ onChange, values }) => {
               <label className="form_label">{__('Color swatch style', 'domain')}</label>
               <div className="form_value">
                 <select
-                  value={values?.label_swatch_color || ""}
+                  value={values?.drawer_swatch_color || ""}
                   defaultValue={""}
                   onChange={(e) => {
                     const v = e.target.value;
-                    handleOnChange("label_swatch_color", v);
+                    handleOnChange("drawer_swatch_color", v);
                   }}
                 >
                   {Object.keys(SA_WC_SWATCHES.configs.swatch_style).map((key) => (
