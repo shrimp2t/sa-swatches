@@ -263,6 +263,7 @@ const SortableList = ({
 	return (
 		<ReactSortable
 			list={list}
+			// clone={false}
 			setList={onSorted}
 			className="sa-list-term"
 			handle=".move"
@@ -270,6 +271,7 @@ const SortableList = ({
 			{list.map((term) => {
 				return (
 					<ListSelectedTermItem
+						key={term?.id}
 						term={term}
 						showMove={true}
 						onClose={onClose}
