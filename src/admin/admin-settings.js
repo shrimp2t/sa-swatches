@@ -18,11 +18,6 @@ const Settings = ({ onChange, values }) => {
 
   console.log("settings", values);
 
-  const types = {
-    inline: "Inline",
-    box: "Box",
-    checkbox: "Checkbox",
-  };
 
   return (
     <>
@@ -44,9 +39,8 @@ const Settings = ({ onChange, values }) => {
                   handleOnChange("fromLayout", v);
                 }}
               >
-                <option value={"separate"}>separate</option>
-                <option value={"inline"}>inline</option>
-                <option value={"drawer"}>drawer</option>
+                {Object.keys(SA_WC_SWATCHES.configs.main_layout).map(k => (<option value={k} key={k}>{SA_WC_SWATCHES.configs.main_layout[k]}</option>))}
+
               </select>
             </div>
           </div>
@@ -68,9 +62,7 @@ const Settings = ({ onChange, values }) => {
                   handleOnChange("label", v);
                 }}
               >
-                <option value={""}>Default</option>
-                <option value={"yes"}>Show</option>
-                <option value={"no"}>Hide</option>
+                {Object.keys(SA_WC_SWATCHES.configs.show_hide).map(k => (<option value={k} key={k}>{SA_WC_SWATCHES.configs.show_hide[k]}</option>))}
               </select>
             </div>
           </div>
@@ -85,14 +77,12 @@ const Settings = ({ onChange, values }) => {
                   handleOnChange("layout", e.target.value);
                 }}
               >
-                <option value={""}>Default</option>
-                {Object.keys(types).map((key) => {
-                  return (
-                    <option value={key} key={key}>
-                      {types[key]}
-                    </option>
-                  );
-                })}
+                <option value={""}>{__('Default', 'domain')}</option>
+                {Object.keys(SA_WC_SWATCHES.configs.opion_layout).map((key) => (
+                  <option value={key} key={key}>
+                    {SA_WC_SWATCHES.configs.opion_layout[key]}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -136,9 +126,11 @@ const Settings = ({ onChange, values }) => {
                   handleOnChange("swatch_image", v);
                 }}
               >
-                <option value={""}>Default</option>
-                <option value={"box"}>box</option>
-                <option value={"circle"}>circle</option>
+                {Object.keys(SA_WC_SWATCHES.configs.swatch_style).map((key) => (
+                  <option value={key} key={key}>
+                    {SA_WC_SWATCHES.configs.swatch_style[key]}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -155,9 +147,11 @@ const Settings = ({ onChange, values }) => {
                   handleOnChange("swatch_color", v);
                 }}
               >
-                <option value={""}>Default</option>
-                <option value={"box"}>box</option>
-                <option value={"circle"}>circle</option>
+                {Object.keys(SA_WC_SWATCHES.configs.swatch_style).map((key) => (
+                  <option value={key} key={key}>
+                    {SA_WC_SWATCHES.configs.swatch_style[key]}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -173,7 +167,7 @@ const Settings = ({ onChange, values }) => {
               <p className="sa_desc">{__('Apply for drawer layout only.', 'domain')}</p>
             </div>
             <div class="form-item">
-              <label className="form_label">Label</label>
+              <label className="form_label">{__('Label', 'domain')}</label>
               <div className="form_value">
                 <select
                   value={values?.drawer_label || ""}
@@ -183,9 +177,11 @@ const Settings = ({ onChange, values }) => {
                     handleOnChange("drawer_label", v);
                   }}
                 >
-                  <option value={""}>Default</option>
-                  <option value={"yes"}>Show</option>
-                  <option value={"no"}>Hide</option>
+                  {Object.keys(SA_WC_SWATCHES.configs.show_hide).map((key) => (
+                    <option value={key} key={key}>
+                      {SA_WC_SWATCHES.configs.show_hide[key]}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -200,14 +196,8 @@ const Settings = ({ onChange, values }) => {
                     handleOnChange("drawer_layout", e.target.value);
                   }}
                 >
-                  <option value={""}>Default</option>
-                  {Object.keys(types).map((key) => {
-                    return (
-                      <option value={key} key={key}>
-                        {types[key]}
-                      </option>
-                    );
-                  })}
+                  <option value={""}>{__('Default', 'domain')}</option>
+                  cccc
                 </select>
               </div>
             </div>
@@ -252,9 +242,11 @@ const Settings = ({ onChange, values }) => {
                     handleOnChange("label_swatch_image", v);
                   }}
                 >
-                  <option value={""}>Default</option>
-                  <option value={"box"}>box</option>
-                  <option value={"circle"}>circle</option>
+                  {Object.keys(SA_WC_SWATCHES.configs.swatch_style).map((key) => (
+                    <option value={key} key={key}>
+                      {SA_WC_SWATCHES.configs.swatch_style[key]}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -271,9 +263,11 @@ const Settings = ({ onChange, values }) => {
                     handleOnChange("label_swatch_color", v);
                   }}
                 >
-                  <option value={""}>Default</option>
-                  <option value={"box"}>Box</option>
-                  <option value={"circle"}>Circle</option>
+                  {Object.keys(SA_WC_SWATCHES.configs.swatch_style).map((key) => (
+                    <option value={key} key={key}>
+                      {SA_WC_SWATCHES.configs.swatch_style[key]}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -288,7 +282,7 @@ const Settings = ({ onChange, values }) => {
         <h2>{__('Variations in shop & archive pages', 'domain')}</h2>
         <div className="group-items">
           <div className="sa_heading">
-            <h3>Layout Settings</h3>
+            <h3>{__('Layout Settings', 'domain')}</h3>
           </div>
 
           <div class="form-item">
@@ -302,8 +296,11 @@ const Settings = ({ onChange, values }) => {
                   handleOnChange("shop_show", v);
                 }}
               >
-                <option value={"yes"}>yes</option>
-                <option value={"no"}>no</option>
+                {Object.keys(SA_WC_SWATCHES.configs.yes_no).map((key) => (
+                  <option value={key} key={key}>
+                    {SA_WC_SWATCHES.configs.yes_no[key]}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -317,7 +314,7 @@ const Settings = ({ onChange, values }) => {
           </div>
 
           <div class="form-item">
-            <label className="form_label">Position</label>
+            <label className="form_label">{__('Position', 'domain')}</label>
             <div className="form_value">
               <select
                 value={values?.shop_position || ""}
@@ -327,8 +324,11 @@ const Settings = ({ onChange, values }) => {
                   handleOnChange("shop_position", v);
                 }}
               >
-                <option value={"before_add_cart"}>before_add_cart</option>
-                <option value={"before_add_cart"}>after_add_cart</option>
+                {Object.keys(SA_WC_SWATCHES.configs.position).map((key) => (
+                  <option value={key} key={key}>
+                    {SA_WC_SWATCHES.configs.position[key]}
+                  </option>
+                ))}
 
               </select>
             </div>
@@ -345,9 +345,11 @@ const Settings = ({ onChange, values }) => {
                   handleOnChange("shop_align", v);
                 }}
               >
-                <option value={"center"}>center</option>
-                <option value={"left"}>left</option>
-                <option value={"right"}>right</option>
+                {Object.keys(SA_WC_SWATCHES.configs.align).map((key) => (
+                  <option value={key} key={key}>
+                    {SA_WC_SWATCHES.configs.align[key]}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -364,8 +366,11 @@ const Settings = ({ onChange, values }) => {
                   handleOnChange("shop_selection", v);
                 }}
               >
-                <option value={"yes"}>yes</option>
-                <option value={"no"}>no</option>
+                {Object.keys(SA_WC_SWATCHES.configs.yes_no).map((key) => (
+                  <option value={key} key={key}>
+                    {SA_WC_SWATCHES.configs.yes_no[key]}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -397,9 +402,11 @@ const Settings = ({ onChange, values }) => {
                   handleOnChange("shop_swatch_image", v);
                 }}
               >
-                <option value={""}>Default</option>
-                <option value={"box"}>box</option>
-                <option value={"circle"}>circle</option>
+                {Object.keys(SA_WC_SWATCHES.configs.swatch_style).map((key) => (
+                  <option value={key} key={key}>
+                    {SA_WC_SWATCHES.configs.swatch_style[key]}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -416,9 +423,11 @@ const Settings = ({ onChange, values }) => {
                   handleOnChange("shop_swatch_color", v);
                 }}
               >
-                <option value={""}>Default</option>
-                <option value={"box"}>box</option>
-                <option value={"circle"}>circle</option>
+                {Object.keys(SA_WC_SWATCHES.configs.swatch_style).map((key) => (
+                  <option value={key} key={key}>
+                    {SA_WC_SWATCHES.configs.swatch_style[key]}
+                  </option>
+                ))}
               </select>
             </div>
           </div>

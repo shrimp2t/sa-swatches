@@ -61,8 +61,50 @@ function get_ajax_configs()
 
 
 
-function get_text_settings_for_admin () {
-	$config = [];
+function get_text_settings_for_admin()
+{
+	$config = [
+
+		'main_layout' => [
+			'separate' => __('Separate', 'domain'),
+			'inline' => __('Inline', 'domain'),
+			'drawer' => __('Drawer', 'domain'),
+		],
+
+		'opion_layout' => [
+			'inline' => __('Inline', 'domain'),
+			'box' => __('Box', 'domain'),
+			'checkbox' => __('Checkbox', 'domain'),
+		],
+
+		'position' => [
+			'before_add_cart' => __('Before add cart', 'domain'),
+			'after_add_cart' => __('After add cart', 'domain'),
+		],
+
+
+		'align' => [
+			'' => __('Default', 'domain'),
+			'center' => __('Center', 'domain'),
+			'left' => __('Left', 'domain'),
+			'right' => __('Right', 'domain'),
+		],
+
+		'swatch_style' => [
+			'box' => __('Box', 'domain'),
+			'circle' => __('Circle', 'domain'),
+		],
+		'yes_no' => [
+			'yes' => __('Yes', 'domain'),
+			'no' => __('No', 'domain'),
+		],
+		'show_hide' => [
+			'show' => __('Show', 'domain'),
+			'hide' => __('Hide', 'domain'),
+		],
+
+
+	];
 
 	return $config;
 }

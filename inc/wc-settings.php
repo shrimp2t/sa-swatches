@@ -4,6 +4,7 @@ namespace SA_WC_SWATCHES\Admin\WC_Settings;
 
 
 use function SA_WC_SWATCHES\get_assets;
+use function SA_WC_SWATCHES\get_text_settings_for_admin;
 
 function admin_scripts()
 {
@@ -33,6 +34,7 @@ function admin_scripts()
 		'root' => esc_url_raw(rest_url()),
 		'ajax' => add_query_arg(['action' => 'sa_wc_ajax', 'nonce' => wp_create_nonce('sa_wc_ajax')], admin_url('admin-ajax.php')),
 		'nonce' => wp_create_nonce('wp_rest'),
+		'configs' => get_text_settings_for_admin(),
 	];
 
 	wp_localize_script('sa_wc_admin_settings', 'SA_WC_SWATCHES', $config);
