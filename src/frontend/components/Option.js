@@ -101,6 +101,11 @@ const Option = ({
       minWidth: `${size}px`,
       justifyContent: 'center',
     };
+  } else if (isBox && size > 0) {
+    cssSwatch = {
+      width: `${size}px`,
+      height: `${size}px`,
+    };
   }
 
   const hasSwatch = ["sa_image", "sa_color"].includes(swatch?.type);
@@ -116,6 +121,8 @@ const Option = ({
 
   if (!willShowLabel) {
     classes.push("sa_no_label");
+  } else {
+    classes.push("sa_has_label");
   }
 
   let isCircle = false;

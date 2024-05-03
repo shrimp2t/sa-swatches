@@ -53,7 +53,7 @@ jQuery(($) => {
 			},
 		};
 
-		console.log("Settings", settings);
+		console.log("SINGLE____Settings", settings);
 
 		const onChange = (selected) => {
 			Object.keys(selected).map((name) => {
