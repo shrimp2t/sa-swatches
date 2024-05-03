@@ -1,4 +1,3 @@
-
 import "./swatches.scss";
 import "react-modern-drawer/dist/index.css";
 import "react-tooltip/dist/react-tooltip.css";
@@ -7,20 +6,15 @@ import "react-tooltip/dist/react-tooltip.css";
 import { render } from "@wordpress/element";
 import App from "./components/App";
 import req from "../common/req";
-import {
-	cleanObj,
-} from "./common/variants";
-
-
+import { cleanObj } from "./common/variants";
 
 const { SA_WC_SWATCHES } = window;
 
 jQuery(($) => {
 	const preSettings = cleanObj(SA_WC_SWATCHES.settings, true);
 
-
 	const option = {
-		layout: preSettings?.layout || 'inline', // box || inline | checkbox
+		layout: preSettings?.layout || "inline", // box || inline | checkbox
 		col: parseInt(preSettings?.col), // Number: apply for layout [box] only.
 		size: preSettings?.size || 22, // not apply for [box] layout.
 		label: preSettings?.label, //  yes | no | <>empty
@@ -29,7 +23,7 @@ jQuery(($) => {
 	};
 
 	const drawerOption = {
-		layout: preSettings?.drawer_layout || 'inline', // box || inline | checkbox
+		layout: preSettings?.drawer_layout || "inline", // box || inline | checkbox
 		size: preSettings?.drawer_size, // not apply for [box] layout.
 		label: preSettings?.drawer_label, //  yes | no | <>empty
 		image_style: preSettings?.drawer_swatch_image,
@@ -40,7 +34,6 @@ jQuery(($) => {
 		const form = $(this);
 		const pid = form.data("product_id");
 		const table = form.find(".variations");
-		table.hide();
 		const appEl = $("<div/>");
 		appEl.insertAfter(table);
 		const settings = {
@@ -58,7 +51,6 @@ jQuery(($) => {
 		const onChange = (selected) => {
 			Object.keys(selected).map((name) => {
 				const v = selected[name] || false;
-				// form.find([`[name="${name}"]`]).val(v).trigger('change');
 			});
 		};
 
@@ -79,7 +71,7 @@ jQuery(($) => {
 						form.trigger("sa_variants", [res?.data]);
 					}
 				})
-				.catch((e) => { });
+				.catch((e) => {});
 		}
 
 		const args = {
@@ -89,6 +81,7 @@ jQuery(($) => {
 			onChange,
 			settings,
 			form,
+			table,
 		};
 
 		render(<App {...args} />, appEl.get(0));
@@ -106,22 +99,21 @@ jQuery(($) => {
 			wrap = appEl.closest(".product");
 		}
 		const addCartBtn = wrap.find(".add_to_cart_button");
-		const isBlockBtn = addCartBtn.hasClass('wc-interactive');
-		const isCartBtn = addCartBtn.prop('tagName') === 'BUTTON';
+		const isBlockBtn = addCartBtn.hasClass("wc-interactive");
+		const isCartBtn = addCartBtn.prop("tagName") === "BUTTON";
 		const a = wrap.find(`a.woocommerce-loop-product__link, a[href="${url}"]`);
 		const thumb = wrap.find(".sa_loop_thumb");
 		const thumbHtml = thumb.html();
-		let blockContext = {}
+		let blockContext = {};
 		const blockParent = addCartBtn.parent();
 		if (isBlockBtn) {
-			blockContext = blockParent.data('wc-context');
-			console.log('blockContext', blockContext);
-
+			blockContext = blockParent.data("wc-context");
+			console.log("blockContext", blockContext);
 		}
 
 		let price = wrap.find(".price");
 		if (!price.length) {
-			price = wrap.find('.wc-block-components-product-price');
+			price = wrap.find(".wc-block-components-product-price");
 		}
 		price.data("o_price", price.html());
 
@@ -148,17 +140,25 @@ jQuery(($) => {
 			const link = buildLink(findArgs || {});
 
 			if (isBlockBtn) {
-				addCartBtn.addClass('wc-interactive');
-				const btnSpan = addCartBtn.find('span');
+				addCartBtn.addClass("wc-interactive");
+				const btnSpan = addCartBtn.find("span");
 				btnSpan.html(SA_WC_SWATCHES.i18n.add_cart);
-				blockParent.attr('wc-context', JSON.stringify({ ...blockContext, productId: variation.variation_id }))
-				btnSpan.get(0).dispatchEvent(new CustomEvent("sa_wc_variation_change", {
-					bubbles: true,
-					detail: {
-						variation_id: variation.variation_id,
-						link,
-					},
-				}));
+				blockParent.attr(
+					"wc-context",
+					JSON.stringify({
+						...blockContext,
+						productId: variation.variation_id,
+					}),
+				);
+				btnSpan.get(0).dispatchEvent(
+					new CustomEvent("sa_wc_variation_change", {
+						bubbles: true,
+						detail: {
+							variation_id: variation.variation_id,
+							link,
+						},
+					}),
+				);
 			} else {
 				addCartBtn.html(SA_WC_SWATCHES.i18n.add_cart);
 			}
@@ -166,10 +166,9 @@ jQuery(($) => {
 			addCartBtn.addClass("ajax_add_to_cart");
 
 			if (variation?.image?.thumb_src) {
-				const img = thumb
-					.find("img");
+				const img = thumb.find("img");
 
-				img.attr("src", variation.image.thumb_src)
+				img.attr("src", variation.image.thumb_src);
 				if (variation?.image?.srcset) {
 					img.attr("srcset", variation?.image?.srcset);
 				}
@@ -182,20 +181,22 @@ jQuery(($) => {
 		});
 
 		appEl.on("reset_data", function (evt, findArgs) {
-			addCartBtn.attr("data-product_id", '');
+			addCartBtn.attr("data-product_id", "");
 			addCartBtn.attr("data-product_sku", "");
 			const link = buildLink(findArgs || {});
 			if (isBlockBtn) {
-				addCartBtn.removeClass('wc-interactive');
-				const btnSpan = addCartBtn.find('span');
+				addCartBtn.removeClass("wc-interactive");
+				const btnSpan = addCartBtn.find("span");
 				btnSpan.html(SA_WC_SWATCHES.i18n.select_options);
-				btnSpan.get(0).dispatchEvent(new CustomEvent("sa_wc_variation_change", {
-					bubbles: true,
-					detail: {
-						variation_id: 0,
-						link,
-					},
-				}));
+				btnSpan.get(0).dispatchEvent(
+					new CustomEvent("sa_wc_variation_change", {
+						bubbles: true,
+						detail: {
+							variation_id: 0,
+							link,
+						},
+					}),
+				);
 			} else {
 				addCartBtn.html(SA_WC_SWATCHES.i18n.select_options);
 			}
@@ -218,7 +219,7 @@ jQuery(($) => {
 					appEl.trigger("sa_variants", [res?.data]);
 				}
 			})
-			.catch((e) => { });
+			.catch((e) => {});
 
 		const args = {
 			pid,
@@ -231,7 +232,7 @@ jQuery(($) => {
 				layout: "inline",
 				loop: true,
 				showAttrLabel: false,
-				align: preSettings?.shop_align || 'center',
+				align: preSettings?.shop_align || "center",
 				option: {
 					layout: "inline",
 					label: "hide",
@@ -249,4 +250,3 @@ jQuery(($) => {
 });
 
 console.log("SA_WC_SWATCHES", SA_WC_SWATCHES);
-

@@ -164,7 +164,7 @@ const Settings = ({ onChange, values }) => {
 						</div>
 					</div>
 				</div>
-				{["drawer"].includes(values?.fromLayout) ? (
+				{["drawer"].includes(values?.form_layout) ? (
 					<div className="group-items">
 						<div className="sa_heading has_desc">
 							<h3>{__("Selected Option Settings", "domain")}</h3>
