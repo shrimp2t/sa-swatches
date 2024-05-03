@@ -1,6 +1,6 @@
 <?php
 
-namespace SA_WC_BLOCKS\API\Product;
+namespace SA_WC_SWATCHES\API\Product;
 
 add_action('sa_wc_api/get_variants', __NAMESPACE__ . '\rest_get_variants');
 function rest_get_variants()

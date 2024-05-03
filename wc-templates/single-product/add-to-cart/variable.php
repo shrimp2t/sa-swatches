@@ -16,7 +16,7 @@
  * @version 6.1.0
  */
 
-use function SA_WC_BLOCKS\API\Attrs\get_product_attributes;
+use function SA_WC_SWATCHES\API\Attrs\get_product_attributes;
 
 defined('ABSPATH') || exit;
 

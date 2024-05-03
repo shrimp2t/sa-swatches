@@ -1,12 +1,12 @@
 const req = ({ url, path, method, data, body, params, signal }) => {
 	return new Promise((resolve, reject) => {
-		let reqUrl = url ? url : window?.SA_WC_BLOCKS?.root + path;
+		let reqUrl = url ? url : window?.SA_WC_SWATCHES?.root + path;
 		const args = {
 			method: method || "get", // *GET, POST, PUT, DELETE, etc.
 			cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
 			headers: {
 				"Content-Type": "application/json",
-				"X-WP-Nonce": window?.SA_WC_BLOCKS?.nonce,
+				"X-WP-Nonce": window?.SA_WC_SWATCHES?.nonce,
 			},
 			redirect: "follow", // manual, *follow, error
 		};

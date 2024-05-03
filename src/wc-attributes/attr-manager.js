@@ -9,13 +9,13 @@ import "./attr-style.scss";
 
 const sendReq = ({ url, path, method, data, body, params }) => {
 	return new Promise((resolve, reject) => {
-		let reqUrl = url ? url : window?.SA_WC_BLOCKS?.root + path;
+		let reqUrl = url ? url : window?.SA_WC_SWATCHES?.root + path;
 		const args = {
 			method: method || "get", // *GET, POST, PUT, DELETE, etc.
 			cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
 			headers: {
 				"Content-Type": "application/json",
-				"X-WP-Nonce": window?.SA_WC_BLOCKS?.nonce,
+				"X-WP-Nonce": window?.SA_WC_SWATCHES?.nonce,
 			},
 			redirect: "follow", // manual, *follow, error
 		};
@@ -175,18 +175,18 @@ const Image2 = ({ id, type, onChange, clear }) => {
 const App = () => {
 	const onChange = (data) => {
 		console.log("onChange", data);
-		if (SA_WC_BLOCKS?.current_tax?.type === "sa_image") {
+		if (SA_WC_SWATCHES?.current_tax?.type === "sa_image") {
 			jQuery("input#sa_wc_attr_swatch").val(data?.id);
 		}
-		if (SA_WC_BLOCKS?.current_tax?.type === "sa_color") {
+		if (SA_WC_SWATCHES?.current_tax?.type === "sa_color") {
 			jQuery("input#sa_wc_attr_swatch").val(data);
 		}
 	};
 	return (
 		<>
-			{SA_WC_BLOCKS?.current_tax?.type === "sa_image" ? (
+			{SA_WC_SWATCHES?.current_tax?.type === "sa_image" ? (
 				<Image2
-					id={window.SA_WC_BLOCKS?.current_term?.value}
+					id={window.SA_WC_SWATCHES?.current_term?.value}
 					clear={true}
 					autoSave={false}
 					onChange={onChange}
@@ -194,9 +194,9 @@ const App = () => {
 				/>
 			) : null}
 
-			{SA_WC_BLOCKS?.current_tax?.type === "sa_color" ? (
+			{SA_WC_SWATCHES?.current_tax?.type === "sa_color" ? (
 				<ColorPicker
-					value={window.SA_WC_BLOCKS?.current_term}
+					value={window.SA_WC_SWATCHES?.current_term}
 					onChange={onChange}
 				/>
 			) : null}
@@ -210,7 +210,7 @@ const AppCol = ({ data, term_id }) => {
 		console.log("onChange__col", changeData);
 
 		let saveData = {
-			...SA_WC_BLOCKS.current_tax,
+			...SA_WC_SWATCHES.current_tax,
 			...changeData,
 			term_id,
 		};
@@ -218,7 +218,7 @@ const AppCol = ({ data, term_id }) => {
 		// console.log("saveData", saveData);
 
 		sendReq({
-			url: SA_WC_BLOCKS?.ajax,
+			url: SA_WC_SWATCHES?.ajax,
 			method: "post",
 			data: saveData,
 			params: {
@@ -232,11 +232,11 @@ const AppCol = ({ data, term_id }) => {
 	};
 	return (
 		<>
-			{SA_WC_BLOCKS?.current_tax?.type === "sa_image" ? (
+			{SA_WC_SWATCHES?.current_tax?.type === "sa_image" ? (
 				<Image2 id={data?.value} onChange={onChange} />
 			) : null}
 
-			{SA_WC_BLOCKS?.current_tax?.type === "sa_color" ? (
+			{SA_WC_SWATCHES?.current_tax?.type === "sa_color" ? (
 				<ColorPicker confirm={true} onChange={onChange} value={data} />
 			) : null}
 		</>

@@ -1112,7 +1112,6 @@
 						const e = he();
 						const element = getElement();
 						element.ref.addEventListener("sa_wc_variation_change", (evt) => {
-							console.log('sa_wc_variation_change', evt.detail, e);
 							e.productId = evt.detail?.variation_id || 0;
 							e.link = evt.detail?.link || null;
 						});

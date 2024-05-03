@@ -18,7 +18,7 @@ $ npm run packages-update
 
 To enter the folder type:
 
-  $ cd sa_wc_blocks
+  $ cd sa_wc_swatches
 
 You can start development with:
 

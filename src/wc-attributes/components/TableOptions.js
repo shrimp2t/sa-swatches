@@ -11,10 +11,10 @@ const ColSwatch = ({ term, tax, type, setSelectedList }) => {
 			term_id: term.id,
 		};
 
-		saveData.pid = SA_WC_BLOCKS?.pid;
+		saveData.pid = SA_WC_SWATCHES?.pid;
 
 		req({
-			url: SA_WC_BLOCKS?.ajax,
+			url: SA_WC_SWATCHES?.ajax,
 			method: "post",
 			data: saveData,
 			params: {

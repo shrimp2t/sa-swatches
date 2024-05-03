@@ -1,12 +1,12 @@
 <?php
 
-namespace SA_WC_BLOCKS\Frontend\Product;
+namespace SA_WC_SWATCHES\Frontend\Product;
 
 use WC_Product_Simple;
 use WC_Product_Variable;
 use WC_Product_Variation;
 
-use function SA_WC_BLOCKS\get_assets;
+use function SA_WC_SWATCHES\get_assets;
 
 function get_option_settings()
 {
@@ -183,7 +183,7 @@ function wp_script_attributes($attributes)
 {
 
 	if ($attributes['id'] == 'wc-product-button-interactivity-frontend-js') {
-		$attributes['src'] = SA_WC_BLOCKS_URL . '/assets/wc-js/product-button-interactivity-frontend.js';
+		$attributes['src'] = SA_WC_SWATCHES_URL . '/assets/wc-js/product-button-interactivity-frontend.js';
 	}
 
 	return $attributes;

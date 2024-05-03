@@ -1,6 +1,6 @@
 <?php
 
-namespace SA_WC_BLOCKS\API;
+namespace SA_WC_SWATCHES\API;
 
 require_once __DIR__ . '/attr-api.php';
 require_once __DIR__ . '/product-api.php';

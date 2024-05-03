@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name:       WooCommerce Blocks by Sa
+ * Plugin Name:       ManySwatches - Product Variation Swatches For WooCommerce
  * Description:       Add more blocks with advanced settings for WooCommerce.
  * Requires at least: 6.5
  * Requires PHP:      7.0
@@ -9,26 +9,26 @@
  * Author:            shrimp2t
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       sa_wc_blocks
+ * Text Domain:       sa-wc-swatches
  *
- * @package           sa_wc_blocks
+ * @package           ManySwatches
  */
 
-namespace SA_WC_BLOCKS;
+namespace SA_WC_SWATCHES;
 
 
-define('SA_WC_BLOCKS_BASEFILE', __FILE__);
-define('SA_WC_BLOCKS_URL', plugins_url('/', __FILE__));
-define('SA_WC_BLOCKS_PATH', dirname(__FILE__));
-define('SA_WC_BLOCKS_VERSION', '0.1.0');
+define('SA_WC_SWATCHES_BASEFILE', __FILE__);
+define('SA_WC_SWATCHES_URL', plugins_url('/', __FILE__));
+define('SA_WC_SWATCHES_PATH', dirname(__FILE__));
+define('SA_WC_SWATCHES_VERSION', '0.1.0');
 
-require_once SA_WC_BLOCKS_PATH . '/inc/functions.php';
-require_once SA_WC_BLOCKS_PATH . '/api/api.php';
-require_once SA_WC_BLOCKS_PATH . '/inc/admin-attr.php';
-require_once SA_WC_BLOCKS_PATH . '/inc/admin-attr-product.php';
-require_once SA_WC_BLOCKS_PATH . '/inc/wc-settings.php';
-require_once SA_WC_BLOCKS_PATH . '/inc/install.php';
-require_once SA_WC_BLOCKS_PATH . '/inc/product.php';
+require_once SA_WC_SWATCHES_PATH . '/inc/functions.php';
+require_once SA_WC_SWATCHES_PATH . '/api/api.php';
+require_once SA_WC_SWATCHES_PATH . '/inc/admin-attr.php';
+require_once SA_WC_SWATCHES_PATH . '/inc/admin-attr-product.php';
+require_once SA_WC_SWATCHES_PATH . '/inc/wc-settings.php';
+require_once SA_WC_SWATCHES_PATH . '/inc/install.php';
+require_once SA_WC_SWATCHES_PATH . '/inc/product.php';
 
 
 register_activation_hook(__FILE__, __NAMESPACE__ . '\install');
@@ -54,9 +54,9 @@ function blocks_init()
 		'products',
 	];
 	foreach ($blocks as $block) {
-		register_block_type(SA_WC_BLOCKS_PATH . '/build/blocks/' . $block);
+		register_block_type(SA_WC_SWATCHES_PATH . '/build/blocks/' . $block);
 	}
-	wp_enqueue_style('sa_wc_blocks-plugins', SA_WC_BLOCKS_URL . "/build/plugins.css", false);
+	wp_enqueue_style('sa_wc_swatches-plugins', SA_WC_SWATCHES_URL . "/build/plugins.css", false);
 }
 
 
@@ -64,10 +64,10 @@ function blocks_init()
 
 function add_blocks_css()
 {
-	// $asset_file = include SA_WC_BLOCKS_PATH . '/build/plugins.asset.php';
+	// $asset_file = include SA_WC_SWATCHES_PATH . '/build/plugins.asset.php';
 	// wp_enqueue_script(
-	// 	'sa_wc_blocks-plugins',
-	// 	SA_WC_BLOCKS_URL . '/build/plugins.js',
+	// 	'sa_wc_swatches-plugins',
+	// 	SA_WC_SWATCHES_URL . '/build/plugins.js',
 	// 	array_merge($asset_file['dependencies'], []),
 	// 	$asset_file['version'],
 	// 	true
@@ -111,7 +111,7 @@ function register_post_meta()
 {
 	// $post_types = get_post_types();
 	// foreach ($post_types as $type) {
-	// 	register_post_meta($type, 'sa_wc_blocks_css', array(
+	// 	register_post_meta($type, 'sa_wc_swatches_css', array(
 	// 		'show_in_rest' => true,
 	// 		'single' => true,
 	// 		'type' => 'object',
@@ -146,7 +146,7 @@ add_filter('product_attributes_type_selector', __NAMESPACE__ . '\add_attribute_t
 // function load_template($template, $template_name)
 // {
 // 	if ('single-product/add-to-cart/variable.php' === $template_name) {
-// 		$new_file = SA_WC_BLOCKS_PATH . '/wc-templates/' . $template_name;
+// 		$new_file = SA_WC_SWATCHES_PATH . '/wc-templates/' . $template_name;
 // 		if (file_exists($new_file)) {
 // 			return $new_file;
 // 		}

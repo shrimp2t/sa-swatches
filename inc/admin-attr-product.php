@@ -1,10 +1,10 @@
 <?php
 
-namespace SA_WC_BLOCKS\Attr\Post;
+namespace SA_WC_SWATCHES\Attr\Post;
 
 use Exception;
 
-use function SA_WC_BLOCKS\get_assets;
+use function SA_WC_SWATCHES\get_assets;
 
 
 
@@ -38,7 +38,7 @@ function admin_scripts()
 		'att_types' => wc_get_attribute_types(),
 	];
 
-	wp_localize_script('sa_attr_product', 'SA_WC_BLOCKS', $config);
+	wp_localize_script('sa_attr_product', 'SA_WC_SWATCHES', $config);
 	wp_enqueue_script('sa_attr_product');
 	wp_enqueue_style('sa_attr_product');
 }

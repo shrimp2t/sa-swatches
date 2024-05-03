@@ -155,10 +155,10 @@ const ListSelectedTermItem = ({
 											}}
 										>
 											<option value={``}>Default</option>
-											{Object.keys(SA_WC_BLOCKS.att_types).map((key) => {
+											{Object.keys(SA_WC_SWATCHES.att_types).map((key) => {
 												return (
 													<option value={key} key={key}>
-														{SA_WC_BLOCKS.att_types[key]}
+														{SA_WC_SWATCHES.att_types[key]}
 													</option>
 												);
 											})}

@@ -1,6 +1,6 @@
 <?php
 
-namespace SA_WC_BLOCKS;
+namespace SA_WC_SWATCHES;
 
 
 global $sa_db_version;

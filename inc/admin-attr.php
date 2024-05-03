@@ -1,12 +1,10 @@
 <?php
 
-namespace SA_WC_BLOCKS\Admin\Attr;
+namespace SA_WC_SWATCHES\Admin\Attr;
 
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
-
-use function SA_WC_BLOCKS\get_assets;
-use function SA_WC_BLOCKS\get_wc_tax_attrs;
-use function SA_WC_BLOCKS\get_ajax_configs;
+use function SA_WC_SWATCHES\get_assets;
+use function SA_WC_SWATCHES\get_wc_tax_attrs;
+use function SA_WC_SWATCHES\get_ajax_configs;
 
 function get_swatch_data($term_id)
 {
@@ -254,7 +252,7 @@ add_action('admin_enqueue_scripts', __NAMESPACE__ . '\admin_scripts');
 function maybe_change_admin_js($src, $handle)
 {
 	if ($handle === 'admin-tags') {
-		$src = SA_WC_BLOCKS_URL . '/assets/wp-admin-js/tags.js';
+		$src = SA_WC_SWATCHES_URL . '/assets/wp-admin-js/tags.js';
 	}
 	return $src;
 }
@@ -278,7 +276,7 @@ function attr_terms_scripts()
 		$config['current_term'] = get_swatch_data(absint($_GET['tag_ID']));
 	}
 
-	wp_localize_script('sa_attr_manager', 'SA_WC_BLOCKS', $config);
+	wp_localize_script('sa_attr_manager', 'SA_WC_SWATCHES', $config);
 	wp_enqueue_script('sa_attr_manager');
 	wp_enqueue_style('sa_attr_manager');
 
@@ -304,7 +302,7 @@ function product_attr_scripts()
 		$config['id'] = absint($_GET['edit']);
 	}
 
-	wp_localize_script('sa_product_attr', 'SA_WC_BLOCKS', $config);
+	wp_localize_script('sa_product_attr', 'SA_WC_SWATCHES', $config);
 	wp_enqueue_script('sa_product_attr');
 	wp_enqueue_style('sa_product_attr');
 }

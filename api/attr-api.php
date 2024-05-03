@@ -1,8 +1,8 @@
 <?php
 
-namespace SA_WC_BLOCKS\API\Attrs;
+namespace SA_WC_SWATCHES\API\Attrs;
 
-use function SA_WC_BLOCKS\get_wc_tax_attrs;
+use function SA_WC_SWATCHES\get_wc_tax_attrs;
 
 add_action('sa_wc_api/update_term_swatch', __NAMESPACE__ . '\rest_update_term_swatch');
 add_action('sa_wc_api/update_custom_swatch', __NAMESPACE__ . '\rest_update_custom_swatch');

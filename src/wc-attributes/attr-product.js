@@ -56,14 +56,14 @@ const App = ({
 			body.search = search;
 		}
 
-		body.pid = SA_WC_BLOCKS?.pid;
+		body.pid = SA_WC_SWATCHES?.pid;
 		body.is_custom = isCustom ? 1 : null;
 		if (isCustom) {
 			body.taxonomy = modalTitle;
 		}
 
 		req({
-			url: SA_WC_BLOCKS?.ajax,
+			url: SA_WC_SWATCHES?.ajax,
 			method: "post",
 			signal,
 			params: {
@@ -176,7 +176,7 @@ const App = ({
 
 		setLoading(true);
 		req({
-			url: SA_WC_BLOCKS?.ajax,
+			url: SA_WC_SWATCHES?.ajax,
 			method: "post",
 			params: {
 				endpoint: "add_term",
@@ -184,7 +184,7 @@ const App = ({
 			data: {
 				taxonomy,
 				name: newTerm,
-				pid: SA_WC_BLOCKS?.pid,
+				pid: SA_WC_SWATCHES?.pid,
 			},
 		})
 			.then((res) => {
@@ -427,13 +427,13 @@ const saInit = () => {
 const saLoadSettings = () => {
 	setTimeout(() => {
 		req({
-			url: SA_WC_BLOCKS?.ajax,
+			url: SA_WC_SWATCHES?.ajax,
 			method: "post",
 			params: {
 				endpoint: "get_attr_settings",
 			},
 			data: {
-				pid: SA_WC_BLOCKS?.pid,
+				pid: SA_WC_SWATCHES?.pid,
 			},
 		})
 			.then((res) => {
