@@ -166,3 +166,15 @@ add_filter('product_attributes_type_selector', __NAMESPACE__ . '\add_attribute_t
 // }
 
 // add_filter('wc_get_template', __NAMESPACE__ . '\load_template', 99999, 2);
+
+
+
+function plugin_add_settings_link($links)
+{
+	$url = admin_url('admin.php?page=wc-settings&tab=advanced&section=sa_swatches');
+	$settings_link = '<a href="' . esc_url($url) . '">' . __('Settings', 'domain') . '</a>';
+	array_push($links, $settings_link);
+	return $links;
+}
+$plugin = plugin_basename(__FILE__);
+add_filter("plugin_action_links_$plugin", __NAMESPACE__ . '\plugin_add_settings_link');

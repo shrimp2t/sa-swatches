@@ -5,7 +5,7 @@ namespace SA_WC_SWATCHES\Attr\Post;
 use Exception;
 
 use function SA_WC_SWATCHES\get_assets;
-
+use function SA_WC_SWATCHES\get_text_settings_for_admin;
 
 
 function admin_scripts()
@@ -36,6 +36,7 @@ function admin_scripts()
 		'nonce' => wp_create_nonce('wp_rest'),
 		'pid' => $post->ID,
 		'att_types' => wc_get_attribute_types(),
+		'configs' => get_text_settings_for_admin(),
 	];
 
 	wp_localize_script('sa_attr_product', 'SA_WC_SWATCHES', $config);
@@ -90,14 +91,6 @@ function extra_fields($attribute, $i)
 
 add_action('woocommerce_product_option_terms', __NAMESPACE__ . '\woocommerce_product_option_terms', 10, 3);
 add_action('woocommerce_after_product_attribute_settings', __NAMESPACE__ . '\extra_fields', 10, 2);
-
-
-
-
-
-
-// $attributes[] = apply_filters( 'woocommerce_admin_meta_boxes_prepare_attribute', $attribute, $data, $i );
-
 add_action('woocommerce_after_product_object_save', __NAMESPACE__ . '\save_attribute_custom_meta', 10, 1);
 
 function save_attribute_custom_meta($product)

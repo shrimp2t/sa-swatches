@@ -71,7 +71,8 @@ function get_text_settings_for_admin()
 			'drawer' => __('Drawer', 'domain'),
 		],
 
-		'opion_layout' => [
+		'option_layout' => [
+			'' => __('Default', 'domain'),
 			'inline' => __('Inline', 'domain'),
 			'box' => __('Box', 'domain'),
 			'checkbox' => __('Checkbox', 'domain'),
@@ -91,14 +92,17 @@ function get_text_settings_for_admin()
 		],
 
 		'swatch_style' => [
+			'' => __('Default', 'domain'),
 			'box' => __('Box', 'domain'),
 			'circle' => __('Circle', 'domain'),
 		],
 		'yes_no' => [
+			'' => __('Default', 'domain'),
 			'yes' => __('Yes', 'domain'),
 			'no' => __('No', 'domain'),
 		],
 		'show_hide' => [
+			'' => __('Default', 'domain'),
 			'show' => __('Show', 'domain'),
 			'hide' => __('Hide', 'domain'),
 		],

@@ -199,7 +199,6 @@ const ListSelectedTermItem = ({
 									<div className="form_value">
 										<input
 											type="text"
-											style={{ flexBasis: "60%" }}
 											value={customName}
 											onChange={(e) => setCustomName(e.target.value)}
 											placeholder="Custom name"

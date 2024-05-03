@@ -250,11 +250,12 @@
 		align-items: center;
 		.form_label {
 			align-items: center;
+			font-weight: 600;
 		}
 		.form_value {
 			margin-left: auto;
-			flex-basis: 120px;
-			width: 120px;
+			flex-basis: 220px;
+			width: 220px;
 			display: flex;
 		}
 		input,
@@ -374,6 +375,7 @@
 .sa_heading {
 	h3 {
 		margin: 0px;
+		font-size: 16px;
 	}
 	.sa_desc {
 		margin-bottom: 0px;
