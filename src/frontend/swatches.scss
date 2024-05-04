@@ -324,16 +324,20 @@ body {
 }
 
 .sa_wc_swatches {
-	transition: all linear 0.5s;
+	transition: all linear 0.3s;
 	opacity: 1;
 	display: block;
 	padding-bottom: var(--sa-row-margin);
 }
 .sa_vtb_wrap {
-	transition: all linear 0.5s;
+	transition: all linear 0.3s;
+	&.sa_hidden {
+		overflow: hidden;
+	}
 	&.sa_loading {
 		display: block;
 		position: relative;
+
 		.sa_wc_swatches {
 			position: absolute;
 			top: 0px;

@@ -34,13 +34,12 @@ jQuery(($) => {
 		const form = $(this);
 		const pid = form.data("product_id");
 		const table = form.find(".variations");
-		table.wrap("<div class='sa_vtb_wrap sa_loading'></div>");
+		table.wrap("<div class='sa_vtb_wrap sa_loading sa_hidden'></div>");
 		const wrap = table.parent();
 		const appEl = $("<div class='sa_wc_swatches'/>");
 		wrap.css({
 			height: `${table.height()}px`,
 		});
-		console.log("wrap", wrap);
 		appEl.insertAfter(table);
 		const settings = {
 			layout: preSettings?.form_layout || "separate", // inline | separate | drawer
@@ -90,13 +89,15 @@ jQuery(($) => {
 			onReady: () => {
 				if (table) {
 					wrap.removeClass("sa_loading");
+
 					table.hide();
 					setTimeout(() => {
 						wrap.css({ height: `${appEl.outerHeight()}px` });
 						setTimeout(() => {
+							wrap.removeClass("sa_hidden");
 							wrap.css({ height: `` });
-						}, 1000);
-					}, 500);
+						}, 500);
+					}, 300);
 				}
 			},
 		};
