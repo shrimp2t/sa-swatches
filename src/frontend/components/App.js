@@ -8,7 +8,14 @@ import {
 } from "../common/variants";
 import AttrItem from "./AttrItem";
 
-const App = ({ pid, variants: initVariants, settings, form, table }) => {
+const App = ({
+	pid,
+	variants: initVariants,
+	settings,
+	form,
+	table,
+	onReady,
+}) => {
 	const [appId, setAppId] = useState("");
 	const [attrs, setAttrs] = useState({});
 	const [selected, setSelected] = useState({});
@@ -43,9 +50,7 @@ const App = ({ pid, variants: initVariants, settings, form, table }) => {
 					}
 				}
 				setAttrs(res.data);
-				if (table) {
-					table.hide();
-				}
+				onReady?.();
 			}
 		});
 	}, [pid]);

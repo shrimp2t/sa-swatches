@@ -16,6 +16,9 @@ body {
 	flex-direction: column;
 	gap: var(--sa-row-gap);
 	margin-bottom: var(--sa-row-margin);
+	&:last-child {
+		margin-bottom: 0px;
+	}
 
 	.sa_attr {
 		display: flex;
@@ -318,6 +321,27 @@ body {
 
 .sa_cursor {
 	cursor: pointer;
+}
+
+.sa_wc_swatches {
+	transition: all linear 0.5s;
+	opacity: 1;
+	display: block;
+	padding-bottom: var(--sa-row-margin);
+}
+.sa_vtb_wrap {
+	transition: all linear 0.5s;
+	&.sa_loading {
+		display: block;
+		position: relative;
+		.sa_wc_swatches {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			opacity: 0;
+		}
+	}
 }
 
 @import "./scss/drawer.scss";
