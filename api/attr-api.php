@@ -393,7 +393,8 @@ function get_product_attributes($product)
 
 	foreach ($attributes as $attribute_name => $attr_options) {
 		$key =  sanitize_title($attribute_name);
-		$type =  $attribute_name && isset($attrs[$attribute_name]) ? $attrs[$attribute_name]['type'] : null;
+		$wc_attr = $attribute_name && isset($attrs[$attribute_name]) ? $attrs[$attribute_name] : null;
+		$type =  $wc_attr ? $wc_attr['type'] : null;
 		$parser_settings = parserSettings(isset($all_settings[$key]) ?  $all_settings[$key] : []);
 
 		$attr_data[$key] = [
@@ -405,6 +406,7 @@ function get_product_attributes($product)
 			'type' => $type,
 			'settings' => (object)$parser_settings[0],
 			'drawer' => (object)$parser_settings[1],
+			'data' => (object) $wc_attr ? $wc_attr['data'] : [],
 		];
 		$options = [];
 
