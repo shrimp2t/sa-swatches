@@ -133,3 +133,21 @@ function get_text_settings_for_admin()
 
 	return $config;
 }
+
+
+function remove_empty_from_array($array)
+{
+	if (!is_array($array)) {
+		return $array;
+	}
+	foreach ($array as $k => $v) {
+		if (!$v) {
+			unset($array[$k]);
+		}
+		if (is_array($v)) {
+			$array[$k] = remove_empty_from_array($v);
+		}
+	}
+
+	return $array;
+}

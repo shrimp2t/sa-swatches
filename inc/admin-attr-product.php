@@ -6,6 +6,7 @@ use Exception;
 
 use function SA_WC_SWATCHES\get_assets;
 use function SA_WC_SWATCHES\get_text_settings_for_admin;
+use function SA_WC_SWATCHES\remove_empty_from_array;
 
 
 function admin_scripts()
@@ -93,6 +94,8 @@ add_action('woocommerce_product_option_terms', __NAMESPACE__ . '\woocommerce_pro
 add_action('woocommerce_after_product_attribute_settings', __NAMESPACE__ . '\extra_fields', 10, 2);
 add_action('woocommerce_after_product_object_save', __NAMESPACE__ . '\save_attribute_custom_meta', 10, 1);
 
+
+
 function save_attribute_custom_meta($product)
 {
 	if (!isset($_POST['action']) || 'woocommerce_save_attributes' != $_POST['action']) {
@@ -120,14 +123,16 @@ function save_attribute_custom_meta($product)
 			$name = isset($attribute_names[$k]) ? $attribute_names[$k] : false;
 			if ($name) {
 				$name = sanitize_title($name);
-				$save_data[$name] = json_decode($v, true);
+				$save_data[$name] = remove_empty_from_array(json_decode($v, true));
 			}
 		}
 		foreach ($settings  as $k => $v) {
 			$name = isset($attribute_names[$k]) ? $attribute_names[$k] : false;
 			if ($name) {
 				$name = sanitize_title($name);
-				$save_settings[$name] = json_decode($v, true);
+				$save_settings[$name] = remove_empty_from_array(json_decode($v, true));
+
+
 				unset($save_settings[$name]['_t']);
 			}
 		}

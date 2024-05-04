@@ -3,6 +3,7 @@
 namespace SA_WC_SWATCHES\API\Attrs;
 
 use function SA_WC_SWATCHES\get_wc_tax_attrs;
+use function SA_WC_SWATCHES\remove_empty_from_array;
 
 add_action('sa_wc_api/update_term_swatch', __NAMESPACE__ . '\rest_update_term_swatch');
 add_action('sa_wc_api/update_custom_swatch', __NAMESPACE__ . '\rest_update_custom_swatch');
@@ -25,7 +26,7 @@ function get_image_data($image_id, $image_size = 'thumbnail')
 	return $data;
 }
 
-function get_swatch_data($term_id, $type = null)
+function get_swatch_data($term_id, $type = null, $image_size = 'thumbnail')
 {
 
 	$data = json_decode(get_term_meta($term_id, '_sa_wc_swatch', true), true);
@@ -39,7 +40,7 @@ function get_swatch_data($term_id, $type = null)
 	]);
 
 	if ($type === 'sa_image' && $data['value']) {
-		$image = get_image_data($data['value']);
+		$image = get_image_data($data['value'], $image_size);
 		$data = array_merge($data, $image);
 	}
 
@@ -47,7 +48,7 @@ function get_swatch_data($term_id, $type = null)
 }
 
 
-function get_terms_data($terms, $type = null, $pid = null, $tax = null)
+function get_terms_data($terms, $type = null, $pid = null, $tax = null, $image_size = 'thumbnail')
 {
 
 	$list = [];
@@ -60,7 +61,7 @@ function get_terms_data($terms, $type = null, $pid = null, $tax = null)
 	$overwrite =  $tax && isset($overwrite_all[$tax]) ? $overwrite_all[$tax] : [];
 
 	foreach ($terms as $term) {
-		$swatch = get_swatch_data($term->term_id, $type);
+		$swatch = get_swatch_data($term->term_id, $type, $image_size);
 		$swatch['type'] = $type;
 		$item_data =  [
 			'id' => $term->term_id,
@@ -78,7 +79,7 @@ function get_terms_data($terms, $type = null, $pid = null, $tax = null)
 			if (isset($custom['swatch'])) {
 				$item_data['custom_swatch'] = $custom['swatch'];
 				if ($custom['swatch']['type'] === 'sa_image' && isset($custom['swatch']['value'])) {
-					$image = get_image_data($custom['swatch']['value']);
+					$image = get_image_data($custom['swatch']['value'], $image_size);
 					$item_data['custom_swatch'] = array_merge($item_data['custom_swatch'], $image);
 				}
 			}
@@ -404,9 +405,9 @@ function get_product_attributes($product)
 			'default' => $product->get_variation_default_attribute($attribute_name),
 			'selected' => false,
 			'type' => $type,
-			'settings' => (object)$parser_settings[0],
-			'drawer' => (object)$parser_settings[1],
-			'data' => (object) $wc_attr ? $wc_attr['data'] : [],
+			'settings' => (object) remove_empty_from_array($parser_settings[0]),
+			'drawer' => (object)remove_empty_from_array($parser_settings[1]),
+			'data' => (object) $wc_attr ? remove_empty_from_array($wc_attr['data']) : [],
 		];
 		$options = [];
 

@@ -161,6 +161,11 @@ body {
 	display: flex;
 	overflow: hidden;
 	border-radius: var(--sa-border-radius);
+	&.sa_image {
+		width: 100%;
+		max-width: 100%;
+		height: auto;
+	}
 
 	&.sa_no {
 		justify-content: center;

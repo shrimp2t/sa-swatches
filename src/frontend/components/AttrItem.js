@@ -31,7 +31,6 @@ const AttrItem = ({ attr }) => {
 
 	const willShowDetail =
 		settings?.viewAttrDetail && attr?.data?.description?.length;
-	console.log("attr?.data", willShowDetail, settings, attr?.data);
 
 	return (
 		<div
