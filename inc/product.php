@@ -29,10 +29,12 @@ function scripts()
 	}
 	$assets['dependencies'][] = 'jquery';
 
+	$settings = get_option_settings();
+
 	wp_register_script('sa_wc_swatches', $assets['files']['js'], $assets['dependencies'], $assets['version']);
 	wp_enqueue_script('sa_wc_swatches');
 
-	wp_register_style('sa_wc_swatches', $assets['files']['css'], [], $assets['version']);
+	wp_register_style('sa_wc_swatches', $assets['files']['css'], ['wp-components'], $assets['version']);
 	wp_enqueue_style('sa_wc_swatches');
 
 	$sample_product = new WC_Product_Variation();
@@ -57,11 +59,12 @@ function scripts()
 
 	$configs =  [
 		'ajax' => add_query_arg(['action' => 'sa_wc_ajax', 'nonce' => wp_create_nonce('sa_wc_ajax')], admin_url('admin-ajax.php')),
-		'settings' => (object) get_option_settings(),
+		'settings' => (object) $settings,
 		'i18n' => [
 			'add_cart' => $sample_product->add_to_cart_text(),
 			'select_options' => $variable_product->add_to_cart_text(),
 			'select_attr' => __('Select %s', 'domain'),
+			'btn_details' => __('Details', 'domain'),
 		],
 	];
 

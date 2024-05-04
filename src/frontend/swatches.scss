@@ -275,6 +275,10 @@ body {
 	.sa_attr_values {
 		margin-left: auto;
 	}
+	.sa_opt_selected_prev {
+		display: flex;
+		justify-content: flex-end;
+	}
 }
 
 // --- Loop ------------------
@@ -347,5 +351,21 @@ body {
 		}
 	}
 }
+
+.sa_attr_details {
+	font-size: 80%;
+}
+
+// .sa_attr_desc_modal {
+// 	.components-modal__content {
+// 		margin-top: 45px;
+// 		padding: 1.5em;
+// 	}
+// 	.components-modal__header {
+// 		height: 45px;
+// 		padding: 1.5em;
+// 		background: #fff;
+// 	}
+// }
 
 @import "./scss/drawer.scss";

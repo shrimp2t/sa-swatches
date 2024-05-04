@@ -43,8 +43,7 @@ jQuery(($) => {
 		appEl.insertAfter(table);
 		const settings = {
 			layout: preSettings?.form_layout || "separate", // inline | separate | drawer
-			showAttrDesc: true, // Show attribute description.
-			showAttrLabel: true,
+			viewAttrDetail: true,
 			option: preSettings?.form_layout === "drawer" ? drawerOption : option,
 			drawer: {
 				option: option,
@@ -249,7 +248,7 @@ jQuery(($) => {
 			settings: {
 				layout: "inline",
 				loop: true,
-				showAttrLabel: false,
+				showAttrDetails: false,
 				align: preSettings?.shop_align || "center",
 				option: {
 					layout: "inline",

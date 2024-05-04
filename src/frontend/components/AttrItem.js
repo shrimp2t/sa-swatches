@@ -1,5 +1,5 @@
 import { useState, useEffect } from "@wordpress/element";
-import { Spinner, Modal } from "@wordpress/components";
+import { Modal } from "@wordpress/components";
 import { useAppContext } from "./context";
 import Drawer from "./Drawer";
 import Option from "./Option";
@@ -8,6 +8,7 @@ import AttrOptions from "./AttrOptions";
 const AttrItem = ({ attr }) => {
 	const { attrs, selected, settings } = useAppContext();
 	const [isOpen, setIsOpen] = useState(false);
+	const [isOpenModal, setOpenModal] = useState(false);
 
 	let selectedLabel = "";
 	const selectedVal = selected?.[attr?.name] || false;
@@ -27,6 +28,10 @@ const AttrItem = ({ attr }) => {
 	let showColon = ["separate"].includes(settings.layout);
 	let showValue = ["separate"].includes(settings.layout);
 	const { showAttrLabel = true, loop = false } = settings;
+
+	const willShowDetail =
+		settings?.viewAttrDetail && attr?.data?.description?.length;
+	console.log("attr?.data", willShowDetail, settings, attr?.data);
 
 	return (
 		<div
@@ -51,7 +56,10 @@ const AttrItem = ({ attr }) => {
 			<div className={[!loop ? "sa_attr_values" : "sa_loop_values"].join(" ")}>
 				{settings.layout === "drawer" ? (
 					<>
-						<div onClick={() => setIsOpen(true)}>
+						<div
+							className="sa_opt_selected_prev"
+							onClick={() => setIsOpen(true)}
+						>
 							<Option
 								option={option}
 								attrName={attr.name}
@@ -68,7 +76,11 @@ const AttrItem = ({ attr }) => {
 						<Drawer
 							isOpen={isOpen}
 							onClose={() => setIsOpen(false)}
-							title={SA_WC_SWATCHES.i18n.select_attr.replace("%s", attr?.label)}
+							title={
+								attr?.data?.button_label?.length
+									? attr?.data?.button_label
+									: SA_WC_SWATCHES.i18n.select_attr.replace("%s", attr?.label)
+							}
 						>
 							<AttrOptions
 								attr={attr}
@@ -88,6 +100,39 @@ const AttrItem = ({ attr }) => {
 						}}
 					/>
 				)}
+
+				{willShowDetail ? (
+					<>
+						<a
+							className="sa_attr_details"
+							onClick={(e) => {
+								console.log("CLICK____");
+								e.preventDefault();
+								setOpenModal(true);
+							}}
+							href="#"
+						>
+							{SA_WC_SWATCHES.i18n.btn_details}
+						</a>
+
+						{isOpenModal && (
+							<Modal
+								size="medium"
+								className="sa_attr_desc_modal"
+								// style={{ width: 600 }}
+								onRequestClose={() => setOpenModal(false)}
+							>
+								<div className="sa_modal_inner">
+									<div
+										dangerouslySetInnerHTML={{
+											__html: attr?.data?.description,
+										}}
+									></div>
+								</div>
+							</Modal>
+						)}
+					</>
+				) : null}
 			</div>
 		</div>
 	);

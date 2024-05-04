@@ -18,6 +18,7 @@ function install()
 		`attr_id` bigint(20) NOT NULL,
 		`settings` longtext DEFAULT NULL,
 		`button_label` varchar(255) DEFAULT NULL,
+		`title` varchar(255) DEFAULT NULL,
 		`description` longtext DEFAULT NULL,
 		PRIMARY KEY  (attr_id)
 	) $charset_collate;";

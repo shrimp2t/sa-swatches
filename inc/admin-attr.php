@@ -337,9 +337,11 @@ function update_attribute($id, $data = [])
 	global $wpdb;
 
 	$desc =  isset($_POST['sa_attr_desc']) ? wp_unslash($_POST['sa_attr_desc']) : '';
-	$label =  isset($_POST['sa_attr_btn_label']) ? sanitize_text_field($_POST['sa_attr_btn_label']) : '';
+	$label =  isset($_POST['sa_attr_btn_label']) ? wp_unslash($_POST['sa_attr_btn_label']) : '';
+	$title =  isset($_POST['sa_attr_modal_title']) ? wp_unslash($_POST['sa_attr_modal_title']) : '';
 	$save_data =  [
 		'description' =>  $desc,
+		'title' =>  $title,
 		'button_label' =>  $label,
 	];
 	$table =  $wpdb->prefix . 'sa_attr_tax_data';
@@ -376,12 +378,19 @@ function add_attribute_fields()
 	<div class="form-field">
 		<label for="sa_attr_btn_label"><?php esc_html_e('Button label', 'domain'); ?></label>
 		<div class="sa_attribute_field">
-			<input name="sa_attr_btn_label" id="sa_attr_btn_label" type="text" value="" maxlength="28">
+			<input name="sa_attr_btn_label" id="sa_attr_btn_label" type="text" value="">
 			<p class="description"><?php _e('E.g: View chart size', 'domain'); ?></p>
 		</div>
 	</div>
 	<div class="form-field">
-		<label for="sa_attribute_settings"><?php esc_html_e('Attribute description', 'domain'); ?></label>
+		<label for="sa_attr_modal_title"><?php esc_html_e('Modal title', 'domain'); ?></label>
+		<div class="sa_attribute_field">
+			<input name="sa_attr_modal_title" id="sa_attr_modal_title" type="text" value="">
+			<p class="description"><?php _e('E.g: View chart size', 'domain'); ?></p>
+		</div>
+	</div>
+	<div class="form-field">
+		<label for="sa_attribute_settings"><?php esc_html_e('Description', 'domain'); ?></label>
 		<div class="sa_attribute_field"><?php wp_editor("", 'sa_attr_desc', ['textarea_rows' => 15]); ?></div>
 		<div class="sa_attribute_settings"></div>
 	</div>
@@ -400,13 +409,21 @@ function edit_attribute_fields()
 			<label for="sa_attr_btn_label"><?php esc_html_e('Button label', 'domain'); ?></label>
 		</th>
 		<td>
-			<div class="sa_attribute_field "><input name="sa_attr_btn_label" id="sa_attr_btn_label" type="text" value="<?php echo esc_attr($data['button_label']); ?>" maxlength="28"></div>
+			<div class="sa_attribute_field "><input name="sa_attr_btn_label" id="sa_attr_btn_label" type="text" value="<?php echo esc_attr($data['button_label']); ?>"></div>
 			<p class="description"><?php _e('E.g: View chart size', 'domain'); ?></p>
 		</td>
 	</tr>
 	<tr class="form-field form-required">
 		<th scope="row" valign="top">
-			<label for="sa_attribute_settings"><?php esc_html_e('Advanced settings', 'domain'); ?></label>
+			<label for="sa_attr_modal_title"><?php esc_html_e('Modal title', 'domain'); ?></label>
+		</th>
+		<td>
+			<div class="sa_attribute_field "><input name="sa_attr_modal_title" id="sa_attr_modal_title" type="text" value="<?php echo esc_attr($data['title']); ?>"></div>
+		</td>
+	</tr>
+	<tr class="form-field form-required">
+		<th scope="row" valign="top">
+			<label for="sa_attribute_settings"><?php esc_html_e('Description', 'domain'); ?></label>
 		</th>
 		<td>
 			<div class="sa_attribute_field "><?php wp_editor($data['description'], 'sa_attr_desc', ['textarea_rows' => 15]); ?></div>

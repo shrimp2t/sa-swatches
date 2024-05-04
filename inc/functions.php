@@ -34,6 +34,7 @@ function get_custom_attr_data($attr_id)
 	$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE attr_id = %d LIMIT 1", $attr_id), ARRAY_A);
 	$row = wp_parse_args($row, [
 		'attr_id' => 0,
+		'title' => '',
 		'description' => '',
 		'button_label' => '',
 	]);

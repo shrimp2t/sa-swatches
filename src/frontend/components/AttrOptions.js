@@ -12,21 +12,23 @@ const AttrOptions = ({ attr, settings }) => {
 	}
 
 	return (
-		<div className={classes.join(" ")}>
-			{attr?.options.map((option) => {
-				return (
-					<Option
-						key={[attr.id, option.id]}
-						attrName={attr.name}
-						attrId={attr.id}
-						option={option}
-						settings={settings}
-					/>
-				);
-			})}
-		</div>
+		<>
+			<div className={classes.join(" ")}>
+				{attr?.options.map((option) => {
+					return (
+						<Option
+							key={[attr.id, option.id]}
+							attrName={attr.name}
+							attrId={attr.id}
+							option={option}
+							settings={settings}
+						/>
+					);
+				})}
+			</div>
+
+		</>
 	);
 };
-
 
 export default AttrOptions;
