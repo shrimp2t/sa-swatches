@@ -11,10 +11,10 @@ add_action('sa_wc_api/get_attr_settings', __NAMESPACE__ . '\rest_get_attr_settin
 add_action('sa_wc_api/add_term', __NAMESPACE__ . '\rest_add_term');
 add_action('sa_wc_api/get_product_attrs', __NAMESPACE__ . '\rest_get_product_attrs');
 
-function get_image_data($image_id)
+function get_image_data($image_id, $image_size = 'thumbnail')
 {
 	$data = [];
-	$thumb =  wp_get_attachment_image_src($image_id, 'thumbnail');
+	$thumb =  wp_get_attachment_image_src($image_id, $image_size);
 	if ($thumb) {
 		$data['thumbnail'] =  $thumb[0];
 	}
@@ -91,7 +91,7 @@ function get_terms_data($terms, $type = null, $pid = null, $tax = null)
 }
 
 
-function get_custom_terms_data($terms, $type = null, $pid = null, $tax = null)
+function get_custom_terms_data($terms, $type = null, $pid = null, $tax = null, $image_size = 'thumbnail')
 {
 
 	$list = [];
@@ -121,7 +121,7 @@ function get_custom_terms_data($terms, $type = null, $pid = null, $tax = null)
 			if (isset($custom['swatch'])) {
 				$item_data['custom_swatch'] = $custom['swatch'];
 				if ($custom['swatch']['type'] === 'sa_image' && isset($custom['swatch']['value'])) {
-					$image = get_image_data($custom['swatch']['value']);
+					$image = get_image_data($custom['swatch']['value'], $image_size);
 					$item_data['custom_swatch'] = array_merge($item_data['custom_swatch'], $image);
 				}
 			}
@@ -388,8 +388,8 @@ function get_product_attributes($product)
 	$attributes = $product->get_variation_attributes();
 	$attrs = get_wc_tax_attrs();
 	$attr_data = [];
-
 	$all_settings =  get_post_meta($product->get_id(), '_sa_attr_settings', true);
+	$image_size = 'woocommerce_thumbnail';
 
 	foreach ($attributes as $attribute_name => $attr_options) {
 		$key =  sanitize_title($attribute_name);
@@ -424,7 +424,7 @@ function get_product_attributes($product)
 				)
 			);
 
-			$options = get_terms_data($terms, $type, $product->get_id(), $attribute_name);
+			$options = get_terms_data($terms, $type, $product->get_id(), $attribute_name, $image_size);
 		} else {
 			$attr_data[$key]['tax'] = false;
 			$custom_terms = [];
@@ -437,7 +437,7 @@ function get_product_attributes($product)
 				];
 			}
 
-			$options = get_custom_terms_data($custom_terms, $type, $product->get_id(), $attribute_name);
+			$options = get_custom_terms_data($custom_terms, $type, $product->get_id(), $attribute_name, $image_size);
 		}
 		$attr_data[$key]['options'] = $options;
 	}
