@@ -153,7 +153,7 @@ function rest_add_term($post)
 	$r = wp_insert_term($name, $tax);
 	if (isset($r['term_id'])) {
 		$attrs = get_wc_tax_attrs();
-		$type =  $tax && isset($attrs[$tax]) ? $attrs[$tax] : false;
+		$type =  $tax && isset($attrs[$tax]) ? $attrs[$tax]['type'] : false;
 		$term = get_term($r['term_id'], $tax);
 		$swatch = get_swatch_data($term->term_id, $type);
 		$data =  [
@@ -191,7 +191,7 @@ function rest_get_tax_terms($post)
 	$type = isset($post['type']) ? sanitize_text_field($post['type']) : '';
 	$attrs = get_wc_tax_attrs();
 	if (!$type) {
-		$type =  $tax && isset($attrs[$tax]) ? $attrs[$tax] : false;
+		$type =  $tax && isset($attrs[$tax]) ? $attrs[$tax]['type'] : false;
 	}
 
 	$terms = [];
@@ -393,7 +393,7 @@ function get_product_attributes($product)
 
 	foreach ($attributes as $attribute_name => $attr_options) {
 		$key =  sanitize_title($attribute_name);
-		$type =  $attribute_name && isset($attrs[$attribute_name]) ? $attrs[$attribute_name] : null;
+		$type =  $attribute_name && isset($attrs[$attribute_name]) ? $attrs[$attribute_name]['type'] : null;
 		$parser_settings = parserSettings(isset($all_settings[$key]) ?  $all_settings[$key] : []);
 
 		$attr_data[$key] = [

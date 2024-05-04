@@ -38,7 +38,10 @@ function get_wc_tax_attrs()
 	if (!empty($attribute_taxonomies)) {
 		foreach ($attribute_taxonomies as $tax) {
 			$name =  wc_attribute_taxonomy_name($tax->attribute_name);
-			$attr_map_types[$name] = $tax->attribute_type;
+			$attr_map_types[$name] = [
+				'type' => $tax->attribute_type,
+				'id' => $tax->attribute_id,
+			];
 		}
 	}
 	$GLOBALS[$key] = $attr_map_types;
@@ -59,7 +62,19 @@ function get_ajax_configs()
 }
 
 
+function get_custom_attr_data($attr_id)
+{
+	global $wpdb;
+	$table = $wpdb->prefix . 'sa_attr_tax_data';
 
+	$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE attr_id = %d LIMIT 1", $attr_id), ARRAY_A);
+	$row = wp_parse_args($row, [
+		'attr_id' => 0,
+		'description' => '',
+		'button_label' => '',
+	]);
+	return $row;
+}
 
 function get_text_settings_for_admin()
 {

@@ -5,6 +5,7 @@ namespace SA_WC_SWATCHES\Admin\Attr;
 use function SA_WC_SWATCHES\get_assets;
 use function SA_WC_SWATCHES\get_wc_tax_attrs;
 use function SA_WC_SWATCHES\get_ajax_configs;
+use function SA_WC_SWATCHES\get_custom_attr_data;
 
 function get_swatch_data($term_id)
 {
@@ -48,7 +49,7 @@ function get_current_tax_type()
 
 	$t = get_current_tax();
 	$attrs = get_wc_tax_attrs();
-	$type =  $t && isset($attrs[$t]) ? $attrs[$t] : false;
+	$type =  $t && isset($attrs[$t]) ? $attrs[$t]['type'] : false;
 	$GLOBALS[$key] = [
 		'tax' => $t,
 		'type' => $type,
@@ -329,23 +330,86 @@ function admin_scripts()
 }
 
 
+// do_action( 'woocommerce_attribute_updated', $id, $data, $old_slug );
+
+function update_attribute($id, $data = [])
+{
+	global $wpdb;
+
+	$desc =  isset($_POST['sa_attr_desc']) ? wp_unslash($_POST['sa_attr_desc']) : '';
+	$label =  isset($_POST['sa_attr_btn_label']) ? sanitize_text_field($_POST['sa_attr_btn_label']) : '';
+	$save_data =  [
+		'description' =>  $desc,
+		'button_label' =>  $label,
+	];
+	$table =  $wpdb->prefix . 'sa_attr_tax_data';
+	$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE attr_id = %d LIMIT 1", $id));
+
+	if ($row) {
+		$wpdb->update(
+			$table,
+			$save_data,
+			array('attr_id' => $id),
+		);
+	} else {
+		$save_data['attr_id'] = $id;
+		$wpdb->insert(
+			$table,
+			$save_data,
+		);
+	}
+}
+
+function delete_attribute($id)
+{
+	global $wpdb;
+	$table =  $wpdb->prefix . 'sa_attr_tax_data';
+	$wpdb->query($wpdb->prepare("DELETE FROM {$table} WHERE attr_id = %d", $id));
+}
+add_action('woocommerce_attribute_updated', __NAMESPACE__ . '\update_attribute', 10, 2);
+add_action('woocommerce_attribute_added', __NAMESPACE__ . '\update_attribute', 10, 2);
+add_action('woocommerce_attribute_deleted', __NAMESPACE__ . '\delete_attribute', 10, 1);
+
 function add_attribute_fields()
 {
 ?>
 	<div class="form-field">
-		<label for="sa_attribute_settings"><?php esc_html_e('Advanced settings', 'woocommerce'); ?></label>
+		<label for="sa_attr_btn_label"><?php esc_html_e('Button label', 'domain'); ?></label>
+		<div class="sa_attribute_field">
+			<input name="sa_attr_btn_label" id="sa_attr_btn_label" type="text" value="" maxlength="28">
+			<p class="description"><?php _e('E.g: View chart size', 'domain'); ?></p>
+		</div>
+	</div>
+	<div class="form-field">
+		<label for="sa_attribute_settings"><?php esc_html_e('Attribute description', 'domain'); ?></label>
+		<div class="sa_attribute_field"><?php wp_editor("", 'sa_attr_desc', ['textarea_rows' => 15]); ?></div>
 		<div class="sa_attribute_settings"></div>
 	</div>
 <?php
 }
 function edit_attribute_fields()
 {
+
+	$id = isset($_GET['edit']) ? absint($_GET['edit']) : 0;
+	$data = get_custom_attr_data($id);
+
+
 ?>
 	<tr class="form-field form-required">
 		<th scope="row" valign="top">
-			<label for="sa_attribute_settings"><?php esc_html_e('Advanced settings', 'woocommerce'); ?></label>
+			<label for="sa_attr_btn_label"><?php esc_html_e('Button label', 'domain'); ?></label>
 		</th>
 		<td>
+			<div class="sa_attribute_field "><input name="sa_attr_btn_label" id="sa_attr_btn_label" type="text" value="<?php echo esc_attr($data['button_label']); ?>" maxlength="28"></div>
+			<p class="description"><?php _e('E.g: View chart size', 'domain'); ?></p>
+		</td>
+	</tr>
+	<tr class="form-field form-required">
+		<th scope="row" valign="top">
+			<label for="sa_attribute_settings"><?php esc_html_e('Advanced settings', 'domain'); ?></label>
+		</th>
+		<td>
+			<div class="sa_attribute_field "><?php wp_editor($data['description'], 'sa_attr_desc', ['textarea_rows' => 15]); ?></div>
 			<div class="sa_attribute_settings"></div>
 		</td>
 	</tr>

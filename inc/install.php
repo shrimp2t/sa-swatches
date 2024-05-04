@@ -15,8 +15,9 @@ function install()
 	$charset_collate = $wpdb->get_charset_collate();
 
 	$sql = "CREATE TABLE $table_name (
-		`attr_id` bigint(20) NOT NULL AUTO_INCREMENT,
+		`attr_id` bigint(20) NOT NULL,
 		`settings` longtext DEFAULT NULL,
+		`button_label` varchar(255) DEFAULT NULL,
 		`description` longtext DEFAULT NULL,
 		PRIMARY KEY  (attr_id)
 	) $charset_collate;";
