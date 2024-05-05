@@ -1,16 +1,26 @@
 import "./admin.scss";
 import { __ } from "@wordpress/i18n";
+import { set, get } from "lodash";
 import React from "react";
 import { render, useState, useEffect } from "@wordpress/element";
+import OptionSettings from "./OptionSettings";
 
 const Settings = ({ onChange, values }) => {
 	const handleOnChange = (key, value) => {
 		onChange((prev) => {
-			const next = { ...prev, [key]: value, _t: Date.now() };
-			if (["", null, undefined].includes(value)) {
-				delete next[key];
-			}
+			let next = { ...prev };
+			// if (["", null, undefined].includes(value)) {
+			// 	delete next[key];
+			// }
+
+			set(next, key, value);
 			return next;
+
+			// let next = { ...prev, [key]: value, _t: Date.now() };
+			// if (["", null, undefined].includes(value)) {
+			// 	delete next[key];
+			// }
+			// return next;
 		});
 	};
 
@@ -50,117 +60,36 @@ const Settings = ({ onChange, values }) => {
 					</div>
 
 					<div class="form-item">
-						<label className="form_label">Label</label>
+						<label className="form_label">{__("Swatch image", "domain")}</label>
 						<div className="form_value">
-							<select
-								value={values?.label || ""}
-								defaultValue={""}
-								onChange={(e) => {
-									const v = e.target.value;
-									handleOnChange("label", v);
-								}}
-							>
-								{Object.keys(SA_WC_SWATCHES.configs.show_hide).map((k) => (
-									<option value={k} key={k}>
-										{SA_WC_SWATCHES.configs.show_hide[k]}
-									</option>
-								))}
-							</select>
-						</div>
-					</div>
-
-					<div class="form-item">
-						<label className="form_label">{__("Item Layout", "domain")}</label>
-						<div className="form_value">
-							<select
-								value={values?.layout}
-								defaultValue={`inline`}
-								onChange={(e) => {
-									handleOnChange("layout", e.target.value);
-								}}
-							>
-								{Object.keys(SA_WC_SWATCHES.configs.option_layout).map(
-									(key) => (
-										<option value={key} key={key}>
-											{SA_WC_SWATCHES.configs.option_layout[key]}
-										</option>
-									),
-								)}
-							</select>
-						</div>
-					</div>
-					<div class="form-item">
-						<label className="form_label">
-							{__("Items per row", "domain")}
-						</label>
-						<div className="form_value">
-							<input
-								value={values?.col}
-								type="number"
-								placeholder="Auto"
-								step={1}
-								onChange={(e) => {
-									handleOnChange("col", e.target.value);
-								}}
-								size={3}
-							/>
-						</div>
-					</div>
-					<div class="form-item">
-						<label className="form_label">{__("Swatch size", "domain")}</label>
-						<div className="form_value">
-							<input
-								value={values?.size}
-								type="number"
-								onChange={(e) => {
-									handleOnChange("size", e.target.value);
-								}}
-								size={3}
+							<OptionSettings
+								objKey={"option_image"}
+								values={values}
+								handleOnChange={handleOnChange}
 							/>
 						</div>
 					</div>
 
 					<div class="form-item">
-						<label className="form_label">
-							{__("Image swatch style", "domain")}
-						</label>
+						<label className="form_label">{__("Swatch color", "domain")}</label>
 						<div className="form_value">
-							<select
-								value={values?.swatch_image || ""}
-								defaultValue={""}
-								onChange={(e) => {
-									const v = e.target.value;
-									handleOnChange("swatch_image", v);
-								}}
-							>
-								{Object.keys(SA_WC_SWATCHES.configs.swatch_style).map((key) => (
-									<option value={key} key={key}>
-										{SA_WC_SWATCHES.configs.swatch_style[key]}
-									</option>
-								))}
-							</select>
+							<OptionSettings
+								objKey={"option_color"}
+								values={values}
+								handleOnChange={handleOnChange}
+							/>
 						</div>
 					</div>
-
 					<div class="form-item">
 						<label className="form_label">
-							{__("Color swatch style", "domain")}
+							{__("Swatch default", "domain")}
 						</label>
 						<div className="form_value">
-							<select
-								value={values?.swatch_color || ""}
-								defaultValue={""}
-								onChange={(e) => {
-									const v = e.target.value;
-									handleOnChange("swatch_color", v);
-								}}
-							>
-								{Object.keys(SA_WC_SWATCHES.configs.swatch_style).map((key) => (
-									<option value={key} key={key}>
-										{SA_WC_SWATCHES.configs.swatch_style[key]}
-									</option>
-								))}
-							</select>
+							<OptionSettings
+								objKey={"option_default"}
+								values={values}
+								handleOnChange={handleOnChange}
+							/>
 						</div>
 					</div>
 				</div>
@@ -194,7 +123,7 @@ const Settings = ({ onChange, values }) => {
 
 						<div class="form-item">
 							<label className="form_label">
-								{__("Item Layout", "domain")}
+								{__("Item layout", "domain")}
 							</label>
 							<div className="form_value">
 								<select
@@ -217,7 +146,39 @@ const Settings = ({ onChange, values }) => {
 
 						<div class="form-item">
 							<label className="form_label">
-								{__("Swatch size", "domain")}
+								{__("Swatch image size", "domain")}
+							</label>
+							<div className="form_value">
+								<input
+									value={values?.drawer_size_image}
+									type="number"
+									onChange={(e) => {
+										handleOnChange("drawer_size_image", e.target.value);
+									}}
+									size={3}
+								/>
+							</div>
+						</div>
+
+						<div class="form-item">
+							<label className="form_label">
+								{__("Swatch color size", "domain")}
+							</label>
+							<div className="form_value">
+								<input
+									value={values?.drawer_size_color}
+									type="number"
+									onChange={(e) => {
+										handleOnChange("drawer_size_color", e.target.value);
+									}}
+									size={3}
+								/>
+							</div>
+						</div>
+
+						<div class="form-item">
+							<label className="form_label">
+								{__("Swatch size default", "domain")}
 							</label>
 							<div className="form_value">
 								<input
@@ -230,20 +191,6 @@ const Settings = ({ onChange, values }) => {
 								/>
 							</div>
 						</div>
-
-						{/* <div class="form-item">
-              <label className="form_label">{__('Item min width', 'domain')}</label>
-              <div className="form_value">
-                <input
-                  value={values?.drawer_minWidth}
-                  type="number"
-                  onChange={(e) => {
-                    handleOnChange("drawer_minWidth", e.target.value);
-                  }}
-                  size={3}
-                />
-              </div>
-            </div> */}
 
 						<div class="form-item">
 							<label className="form_label">
