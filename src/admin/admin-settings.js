@@ -6,13 +6,13 @@ import { render, useState, useEffect } from "@wordpress/element";
 import OptionSettings from "./OptionSettings";
 
 const Settings = ({ onChange, values }) => {
+	const getVal = (key, defaultVal = "") => {
+		return get(values, `${key}`, defaultVal);
+	};
+
 	const handleOnChange = (key, value) => {
 		onChange((prev) => {
 			let next = { ...prev };
-			// if (["", null, undefined].includes(value)) {
-			// 	delete next[key];
-			// }
-
 			set(next, key, value);
 			return next;
 
@@ -37,11 +37,11 @@ const Settings = ({ onChange, values }) => {
 						<label className="form_label">{__("Form Layout", "domain")}</label>
 						<div className="form_value">
 							<select
-								value={values?.form_layout || ""}
+								value={getVal("single.layout")}
 								defaultValue={""}
 								onChange={(e) => {
 									const v = e.target.value;
-									handleOnChange("form_layout", v);
+									handleOnChange("single.layout", v);
 								}}
 							>
 								{Object.keys(SA_WC_SWATCHES.configs.main_layout).map((k) => (
@@ -63,7 +63,7 @@ const Settings = ({ onChange, values }) => {
 						<label className="form_label">{__("Swatch image", "domain")}</label>
 						<div className="form_value">
 							<OptionSettings
-								objKey={"option_image"}
+								objKey={"single.option.image"}
 								values={values}
 								handleOnChange={handleOnChange}
 							/>
@@ -74,7 +74,7 @@ const Settings = ({ onChange, values }) => {
 						<label className="form_label">{__("Swatch color", "domain")}</label>
 						<div className="form_value">
 							<OptionSettings
-								objKey={"option_color"}
+								objKey={"single.option.color"}
 								values={values}
 								handleOnChange={handleOnChange}
 							/>
@@ -86,14 +86,14 @@ const Settings = ({ onChange, values }) => {
 						</label>
 						<div className="form_value">
 							<OptionSettings
-								objKey={"option_default"}
+								objKey={"single.option.default"}
 								values={values}
 								handleOnChange={handleOnChange}
 							/>
 						</div>
 					</div>
 				</div>
-				{["drawer"].includes(values?.form_layout) ? (
+				{["drawer"].includes(getVal("single.layout")) ? (
 					<div className="group-items">
 						<div className="sa_heading has_desc">
 							<h3>{__("Selected Option Settings", "domain")}</h3>
@@ -101,142 +101,45 @@ const Settings = ({ onChange, values }) => {
 								{__("Apply for drawer layout only.", "domain")}
 							</p>
 						</div>
-						<div class="form-item">
-							<label className="form_label">{__("Label", "domain")}</label>
-							<div className="form_value">
-								<select
-									value={values?.drawer_label || ""}
-									defaultValue={""}
-									onChange={(e) => {
-										const v = e.target.value;
-										handleOnChange("drawer_label", v);
-									}}
-								>
-									{Object.keys(SA_WC_SWATCHES.configs.show_hide).map((key) => (
-										<option value={key} key={key}>
-											{SA_WC_SWATCHES.configs.show_hide[key]}
-										</option>
-									))}
-								</select>
-							</div>
-						</div>
 
 						<div class="form-item">
 							<label className="form_label">
-								{__("Item layout", "domain")}
+								{__("Swatch image", "domain")}
 							</label>
 							<div className="form_value">
-								<select
-									value={values?.drawer_layout}
-									defaultValue={`inline`}
-									onChange={(e) => {
-										handleOnChange("drawer_layout", e.target.value);
-									}}
-								>
-									{Object.keys(SA_WC_SWATCHES.configs.option_layout).map(
-										(key) => (
-											<option value={key} key={key}>
-												{SA_WC_SWATCHES.configs.option_layout[key]}
-											</option>
-										),
-									)}
-								</select>
-							</div>
-						</div>
-
-						<div class="form-item">
-							<label className="form_label">
-								{__("Swatch image size", "domain")}
-							</label>
-							<div className="form_value">
-								<input
-									value={values?.drawer_size_image}
-									type="number"
-									onChange={(e) => {
-										handleOnChange("drawer_size_image", e.target.value);
-									}}
-									size={3}
+								<OptionSettings
+									objKey={"drawer.option.image"}
+									values={values}
+									fields={["layout", "size", "style"]}
+									handleOnChange={handleOnChange}
 								/>
 							</div>
 						</div>
 
 						<div class="form-item">
 							<label className="form_label">
-								{__("Swatch color size", "domain")}
+								{__("Swatch color", "domain")}
 							</label>
 							<div className="form_value">
-								<input
-									value={values?.drawer_size_color}
-									type="number"
-									onChange={(e) => {
-										handleOnChange("drawer_size_color", e.target.value);
-									}}
-									size={3}
+								<OptionSettings
+									objKey={"drawer.option.color"}
+									values={values}
+									fields={["layout", "size", "style"]}
+									handleOnChange={handleOnChange}
 								/>
 							</div>
 						</div>
-
 						<div class="form-item">
 							<label className="form_label">
-								{__("Swatch size default", "domain")}
+								{__("Swatch default", "domain")}
 							</label>
 							<div className="form_value">
-								<input
-									value={values?.drawer_size}
-									type="number"
-									onChange={(e) => {
-										handleOnChange("drawer_size", e.target.value);
-									}}
-									size={3}
+								<OptionSettings
+									objKey={"drawer.option.default"}
+									values={values}
+									fields={["layout", "size", "style"]}
+									handleOnChange={handleOnChange}
 								/>
-							</div>
-						</div>
-
-						<div class="form-item">
-							<label className="form_label">
-								{__("Image swatch style", "domain")}
-							</label>
-							<div className="form_value">
-								<select
-									value={values?.drawer_swatch_image || ""}
-									defaultValue={""}
-									onChange={(e) => {
-										const v = e.target.value;
-										handleOnChange("drawer_swatch_image", v);
-									}}
-								>
-									{Object.keys(SA_WC_SWATCHES.configs.swatch_style).map(
-										(key) => (
-											<option value={key} key={key}>
-												{SA_WC_SWATCHES.configs.swatch_style[key]}
-											</option>
-										),
-									)}
-								</select>
-							</div>
-						</div>
-
-						<div class="form-item">
-							<label className="form_label">
-								{__("Color swatch style", "domain")}
-							</label>
-							<div className="form_value">
-								<select
-									value={values?.drawer_swatch_color || ""}
-									defaultValue={""}
-									onChange={(e) => {
-										const v = e.target.value;
-										handleOnChange("drawer_swatch_color", v);
-									}}
-								>
-									{Object.keys(SA_WC_SWATCHES.configs.swatch_style).map(
-										(key) => (
-											<option value={key} key={key}>
-												{SA_WC_SWATCHES.configs.swatch_style[key]}
-											</option>
-										),
-									)}
-								</select>
 							</div>
 						</div>
 					</div>
@@ -258,7 +161,7 @@ const Settings = ({ onChange, values }) => {
 								defaultValue={"yes"}
 								onChange={(e) => {
 									const v = e.target.value;
-									handleOnChange("shop_show", v);
+									handleOnChange("shop.show", v);
 								}}
 							>
 								{Object.keys(SA_WC_SWATCHES.configs.yes_no).map((key) => (
@@ -284,7 +187,7 @@ const Settings = ({ onChange, values }) => {
 								defaultValue={""}
 								onChange={(e) => {
 									const v = e.target.value;
-									handleOnChange("shop_position", v);
+									handleOnChange("shop.position", v);
 								}}
 							>
 								{Object.keys(SA_WC_SWATCHES.configs.position).map((key) => (
@@ -306,7 +209,7 @@ const Settings = ({ onChange, values }) => {
 								defaultValue={""}
 								onChange={(e) => {
 									const v = e.target.value;
-									handleOnChange("shop_align", v);
+									handleOnChange("shop.align", v);
 								}}
 							>
 								{Object.keys(SA_WC_SWATCHES.configs.align).map((key) => (
@@ -328,7 +231,7 @@ const Settings = ({ onChange, values }) => {
 								defaultValue={"yes"}
 								onChange={(e) => {
 									const v = e.target.value;
-									handleOnChange("shop_selection", v);
+									handleOnChange("shop.selection", v);
 								}}
 							>
 								{Object.keys(SA_WC_SWATCHES.configs.yes_no).map((key) => (
@@ -341,60 +244,36 @@ const Settings = ({ onChange, values }) => {
 					</div>
 
 					<div class="form-item">
-						<label className="form_label">{__("Swatch size", "domain")}</label>
+						<label className="form_label">{__("Swatch image", "domain")}</label>
 						<div className="form_value">
-							<input
-								value={values?.shop_size}
-								type="number"
-								onChange={(e) => {
-									handleOnChange("shop_size", e.target.value);
-								}}
-								size={3}
+							<OptionSettings
+								objKey={"shop.option.image"}
+								values={values}
+								handleOnChange={handleOnChange}
 							/>
 						</div>
 					</div>
 
 					<div class="form-item">
-						<label className="form_label">
-							{__("Image swatch style", "domain")}
-						</label>
+						<label className="form_label">{__("Swatch color", "domain")}</label>
 						<div className="form_value">
-							<select
-								value={values?.shop_swatch_image || ""}
-								defaultValue={""}
-								onChange={(e) => {
-									const v = e.target.value;
-									handleOnChange("shop_swatch_image", v);
-								}}
-							>
-								{Object.keys(SA_WC_SWATCHES.configs.swatch_style).map((key) => (
-									<option value={key} key={key}>
-										{SA_WC_SWATCHES.configs.swatch_style[key]}
-									</option>
-								))}
-							</select>
+							<OptionSettings
+								objKey={"shop.option.color"}
+								values={values}
+								handleOnChange={handleOnChange}
+							/>
 						</div>
 					</div>
-
 					<div class="form-item">
 						<label className="form_label">
-							{__("Color swatch style", "domain")}
+							{__("Swatch default", "domain")}
 						</label>
 						<div className="form_value">
-							<select
-								value={values?.shop_swatch_color || ""}
-								defaultValue={""}
-								onChange={(e) => {
-									const v = e.target.value;
-									handleOnChange("shop_swatch_color", v);
-								}}
-							>
-								{Object.keys(SA_WC_SWATCHES.configs.swatch_style).map((key) => (
-									<option value={key} key={key}>
-										{SA_WC_SWATCHES.configs.swatch_style[key]}
-									</option>
-								))}
-							</select>
+							<OptionSettings
+								objKey={"shop.option.default"}
+								values={values}
+								handleOnChange={handleOnChange}
+							/>
 						</div>
 					</div>
 				</div>

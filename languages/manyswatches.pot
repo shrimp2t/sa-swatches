@@ -3,104 +3,80 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
-#: src/admin/OptionSettings.js:103
+#: src/admin/OptionSettings.js:106
+msgid "Size"
+msgstr ""
+
+#: src/admin/OptionSettings.js:111
+msgid "Auto"
+msgstr ""
+
+#: src/admin/OptionSettings.js:122
 msgid "Style"
 msgstr ""
 
-#: src/admin/OptionSettings.js:32
+#: src/admin/OptionSettings.js:27
+msgid "Settings"
+msgstr ""
+
+#: src/admin/OptionSettings.js:42
 msgid "Item Layout"
 msgstr ""
 
-#: src/admin/OptionSettings.js:72
+#: src/admin/OptionSettings.js:88
 msgid "Items per row"
-msgstr ""
-
-#: src/admin/OptionSettings.js:89
-msgid "Size"
 msgstr ""
 
 #: src/admin/admin-settings.js:101
 msgid "Apply for drawer layout only."
 msgstr ""
 
-#: src/admin/admin-settings.js:105
-msgid "Label"
-msgstr ""
-
-#: src/admin/admin-settings.js:126
-msgid "Item layout"
-msgstr ""
-
-#: src/admin/admin-settings.js:149
-msgid "Swatch image size"
-msgstr ""
-
-#: src/admin/admin-settings.js:165
-msgid "Swatch color size"
-msgstr ""
-
-#: src/admin/admin-settings.js:181
-msgid "Swatch size default"
-msgstr ""
-
-#: src/admin/admin-settings.js:247
+#: src/admin/admin-settings.js:150
 msgid "Variations in shop & archive pages"
 msgstr ""
 
-#: src/admin/admin-settings.js:250
+#: src/admin/admin-settings.js:153
 msgid "Layout Settings"
 msgstr ""
 
-#: src/admin/admin-settings.js:254
+#: src/admin/admin-settings.js:157
 msgid "Enable"
 msgstr ""
 
-#: src/admin/admin-settings.js:276
+#: src/admin/admin-settings.js:179
 msgid "Options Settings"
 msgstr ""
 
-#: src/admin/admin-settings.js:280
+#: src/admin/admin-settings.js:183
 msgid "Position"
+msgstr ""
+
+#: src/admin/admin-settings.js:204
+msgid "Swatches align"
+msgstr ""
+
+#: src/admin/admin-settings.js:226
+msgid "Allow attributes selection"
+msgstr ""
+
+#: src/admin/admin-settings.js:247
+msgid "Swatch image"
+msgstr ""
+
+#: src/admin/admin-settings.js:258
+msgid "Swatch color"
+msgstr ""
+
+#: src/admin/admin-settings.js:269
+msgid "Swatch default"
 msgstr ""
 
 #: src/admin/admin-settings.js:30
 msgid "Variations in product page"
 msgstr ""
 
-#: src/admin/admin-settings.js:301
-msgid "Swatches align"
-msgstr ""
-
-#: src/admin/admin-settings.js:323
-msgid "Allow attributes selection"
-msgstr ""
-
-#: src/admin/admin-settings.js:344
-msgid "Swatch size"
-msgstr ""
-
-#: src/admin/admin-settings.js:359
-msgid "Image swatch style"
-msgstr ""
-
 #: src/admin/admin-settings.js:37
 msgid "Form Layout"
-msgstr ""
-
-#: src/admin/admin-settings.js:381
-msgid "Color swatch style"
-msgstr ""
-
-#: src/admin/admin-settings.js:63
-msgid "Swatch image"
-msgstr ""
-
-#: src/admin/admin-settings.js:74
-msgid "Swatch color"
-msgstr ""
-
-#: src/admin/admin-settings.js:85
-msgid "Swatch default"
 msgstr ""
 
 #: src/admin/admin-settings.js:99
