@@ -132,17 +132,17 @@ function loop_swatches($html, $product, $args)
 	return $html_swatches . $html;
 }
 
-add_filter('woocommerce_loop_add_to_cart_link', __NAMESPACE__ . '\loop_swatches', 1, 3);
+// add_filter('woocommerce_loop_add_to_cart_link', __NAMESPACE__ . '\loop_swatches', 1, 3);
 
 
 
-function get_the_swatches($echo = true)
+function get_the_swatches()
 {
 	global $product;
 	$id = $product->get_id();
 	$type = $product->get_type();
 	if ('variable' != $type) {
-		return;
+		return null;
 	}
 
 	$link  = apply_filters('woocommerce_loop_product_link', get_the_permalink(), $product);
@@ -153,7 +153,11 @@ function get_the_swatches($echo = true)
 
 function loop_swatches_before($template_name)
 {
-	if ('before@' . $template_name != get_swatches_position()) {
+	$pos = get_swatches_position();
+	if (strpos($pos, $template_name) > 0) {
+		maybe_add_swatches();
+	}
+	if ('before@' . $template_name != $pos) {
 		return;
 	}
 	echo get_the_swatches();
@@ -169,8 +173,9 @@ function loop_swatches_after($template_name)
 	echo get_the_swatches();
 }
 
-// add_action('woocommerce_before_template_part', __NAMESPACE__ . '\loop_swatches_before', 1, 3);
-// add_action('woocommerce_after_template_part', __NAMESPACE__ . '\loop_swatches_after', 1, 3);
+add_action('woocommerce_before_template_part', __NAMESPACE__ . '\loop_swatches_before', 1, 3);
+add_action('woocommerce_after_template_part', __NAMESPACE__ . '\loop_swatches_after', 1, 3);
+add_action('woocommerce_after_shop_loop_item', __NAMESPACE__ . '\maybe_remove_swatches', 9999999, 3);
 
 
 function loop_classes($classes, $product)
@@ -214,19 +219,33 @@ function loop_product_supports($is_support,  $feature, $product)
 }
 
 
-// add_filter('pre_render_block', function ($content, $parsed_block, $parent_block) {
-// 	if ($parsed_block['blockName'] == 'woocommerce/product-button') {
-// 		maybe_add_swatches();
-// 	}
-// 	return $content;
-// }, 1, 3);
+add_filter('pre_render_block', function ($content, $parsed_block, $parent_block) {
+	if ($parsed_block['blockName'] == 'woocommerce/product-button') {
+		maybe_add_swatches();
+	}
+	return $content;
+}, 1, 3);
 
 add_filter('render_block', function ($content, $parsed_block, $parent_block) {
 	if ($parsed_block['blockName'] == 'woocommerce/product-button') {
-		maybe_add_swatches();
+		$pos = get_swatches_position();
+		if (!$pos) {
+			return $content;
+		}
+		// maybe_add_swatches();
+		$html_swatches = get_the_swatches(false);
+		if (!$html_swatches) {
+			return $content;
+		}
 
-
-
+		switch ($pos) {
+			case 'after@loop/add-to-cart.php':
+				return  '<div class="sa_loop_wc_block">' . $content . $html_swatches . '</div>';
+				break;
+			case 'before@loop/add-to-cart.php':
+				return '<div class="sa_loop_wc_block">' . $html_swatches . $content . '</div>';
+				break;
+		}
 
 		maybe_remove_swatches();
 	}
