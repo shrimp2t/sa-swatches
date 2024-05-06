@@ -7,6 +7,7 @@ import AttrOptions from "./AttrOptions";
 
 const AttrItem = ({ attr }) => {
   const { attrs, selected, settings } = useAppContext();
+  const { selection = true } = settings;
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenModal, setOpenModal] = useState(false);
 
@@ -40,10 +41,6 @@ const AttrItem = ({ attr }) => {
     case 'image':
     case 'sa_image':
       optSettings = { ...settings?.option?.image || {} };
-      if (inDrawer) {
-        console.log('___AÂDFF', settings?.drawer?.option?.image)
-      }
-
       optSelectedSettings = { ...settings?.drawer?.option?.image || {} };
       break;
     case 'color':
@@ -55,11 +52,6 @@ const AttrItem = ({ attr }) => {
       optSettings = { ...settings?.drawer?.option?.default || {} };
       optSelectedSettings = { ...settings?.drawer?.option?.default || {} };
   }
-
-  if (inDrawer) {
-    console.log('optSettings', attr?.label, optSelectedSettings, settings);
-  }
-
 
 
   return (
@@ -87,7 +79,13 @@ const AttrItem = ({ attr }) => {
           <>
             <div
               className="sa_opt_selected_prev"
-              onClick={() => setIsOpen(true)}
+              onClick={(e) => {
+                e.preventDefault();
+                if (!selection) {
+                  return;
+                }
+                setIsOpen(true)
+              }}
             >
               <Option
                 option={option}
@@ -106,7 +104,13 @@ const AttrItem = ({ attr }) => {
             </div>
             <Drawer
               isOpen={isOpen}
-              onClose={() => setIsOpen(false)}
+              onClose={() => {
+                e.preventDefault();
+                if (!selection) {
+                  return;
+                }
+                setIsOpen(false)
+              }}
               title={
                 attr?.data?.button_label?.length
                   ? attr?.data?.button_label
@@ -141,6 +145,9 @@ const AttrItem = ({ attr }) => {
               onClick={(e) => {
                 console.log("CLICK____");
                 e.preventDefault();
+                if (!selection) {
+                  return;
+                }
                 setOpenModal(true);
               }}
               href="#"

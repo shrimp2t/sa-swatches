@@ -15,14 +15,7 @@ const Option = ({
 }) => {
   const { setSelected, defaults, selected, availableAttrs, appId, settings: globalSettings } =
     useAppContext();
-  const onCLick = (value) => {
-    setSelected((prev) => {
-      if (prev?.[attrName] === value) {
-        return { ...prev, [attrName]: null, __t: Date.now(), __c: attrName };
-      }
-      return { ...prev, [attrName]: value, __t: Date.now(), __c: attrName };
-    });
-  };
+  const { selection = true, loop = false } = globalSettings;
 
   // console.log('settings', settings);
   const optionSettings = {
@@ -58,9 +51,7 @@ const Option = ({
 
   // if (swatch?.type === 'sa_color') {
 
-
-  const { loop = false } = settings;
-
+  
   let selectedVal =
     typeof selected[attrName] !== "undefined"
       ? selected?.[attrName]
@@ -106,6 +97,10 @@ const Option = ({
     isChecked = true;
   }
 
+  if (!selection) {
+    isClickable = false;
+  }
+
   classes.push("type_" + (swatch?.type || "mixed"));
 
   const isBox = ["box"].includes(swatch?.layout);
@@ -123,6 +118,10 @@ const Option = ({
     // image_style,
     // color_style,
   } = swatch;
+
+  if ( ! isBox ) {
+    console.log( 'optionSettings', optionSettings, settings );
+  }
 
   const swatchSize = Number(size);
 
@@ -159,7 +158,6 @@ const Option = ({
   }
 
 
-
   if (!checkActive && !selectedVal && willShowLabel) {
     willShowLabel = false;
   }
@@ -184,6 +182,19 @@ const Option = ({
     "data-tooltip-id": tooltipId,
   };
 
+
+  const onCLick = (value) => {
+    if (!selection) {
+      return;
+    }
+    setSelected((prev) => {
+      if (prev?.[attrName] === value) {
+        return { ...prev, [attrName]: null, __t: Date.now(), __c: attrName };
+      }
+      return { ...prev, [attrName]: value, __t: Date.now(), __c: attrName };
+    });
+  };
+
   if (clickable && isClickable) {
     divProps.onClick = () => {
       if (isClickable) {
@@ -191,7 +202,6 @@ const Option = ({
       }
     };
   }
-
 
   return (
     <>

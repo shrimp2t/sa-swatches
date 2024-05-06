@@ -123,9 +123,7 @@ jQuery(($) => {
 		appEl.off("found_variation");
 		appEl.off("reset_data");
 
-		appEl.on("click", function (e) {
-			e.preventDefault();
-		});
+
 
 		const buildLink = (args) => {
 			const usp = new URLSearchParams(args);
@@ -223,6 +221,21 @@ jQuery(($) => {
 			})
 			.catch((e) => { });
 
+		const loopSettings = {
+			layout: "inline",
+			loop: true,
+			selection: preSettings?.shop?.selection == !'no' ? true : false,
+			showAttrLabel: false,
+			align: preSettings?.shop?.align || "center",
+			option: preSettings?.shop?.option,
+		};
+
+		if (loopSettings?.selection) {
+			appEl.on("click", function (e) {
+				e.preventDefault();
+			});
+		}
+
 		const args = {
 			pid,
 			variants: [],
@@ -230,13 +243,7 @@ jQuery(($) => {
 			onChange: (selected) => {
 				console.log("selected", selected);
 			},
-			settings: {
-				layout: "inline",
-				loop: true,
-				showAttrLabel: false,
-				align: preSettings?.shop?.align || "center",
-				option: preSettings?.shop?.option,
-			},
+			settings: loopSettings,
 			form: appEl,
 		};
 
