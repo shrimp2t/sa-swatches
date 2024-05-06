@@ -28,7 +28,8 @@ jQuery(($) => {
 		appEl.insertAfter(table);
 		const settings = {
 			layout: preSettings?.single?.layout || "separate", // inline | separate | drawer
-			viewAttrDetail: true,
+			viewAttrDetail:
+				preSettings?.single?.viewAttrDetail !== "hide" ? true : false,
 			option: option,
 			drawer: {
 				option: drawerOption,
@@ -60,7 +61,7 @@ jQuery(($) => {
 						form.trigger("sa_variants", [res?.data]);
 					}
 				})
-				.catch((e) => { });
+				.catch((e) => {});
 		}
 
 		const args = {
@@ -110,7 +111,6 @@ jQuery(($) => {
 		const blockParent = addCartBtn.parent();
 		if (isBlockBtn) {
 			blockContext = blockParent.data("wc-context");
-			console.log("blockContext", blockContext);
 		}
 
 		let price = wrap.find(".price");
@@ -122,8 +122,6 @@ jQuery(($) => {
 		appEl.off("click");
 		appEl.off("found_variation");
 		appEl.off("reset_data");
-
-
 
 		const buildLink = (args) => {
 			const usp = new URLSearchParams(args);
@@ -219,12 +217,12 @@ jQuery(($) => {
 					appEl.trigger("sa_variants", [res?.data]);
 				}
 			})
-			.catch((e) => { });
+			.catch((e) => {});
 
 		const loopSettings = {
 			layout: "inline",
 			loop: true,
-			selection: preSettings?.shop?.selection == !'no' ? true : false,
+			selection: preSettings?.shop?.selection == !"no" ? true : false,
 			showAttrLabel: false,
 			align: preSettings?.shop?.align || "center",
 			option: preSettings?.shop?.option,
@@ -235,6 +233,8 @@ jQuery(($) => {
 				e.preventDefault();
 			});
 		}
+
+		console.log("loopSettings", loopSettings);
 
 		const args = {
 			pid,
