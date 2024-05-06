@@ -2,6 +2,7 @@
 
 namespace SA_WC_SWATCHES;
 
+use Exception;
 
 function get_assets($path)
 {
@@ -44,9 +45,11 @@ function get_image_data($image_id, $image_size = 'thumbnail')
 function get_swatch_data($term_id, $type = null, $image_size = 'thumbnail')
 {
 	$data = get_term_meta($term_id, '_sa_wc_swatch', true);
-	if (!is_array($data)) {
+
+	if (!is_array($data) && is_string($data)) {
 		$data = json_decode($data, true);
 	}
+
 
 	if (!is_array($data)) {
 		$data = [];

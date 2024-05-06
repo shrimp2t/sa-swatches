@@ -43,10 +43,11 @@ function save_term_fields($term_id)
 {
 
 	if (isset($_POST['sa_wc_attr_swatch'])) {
+		$data = wp_unslash(json_decode(wp_unslash($_POST['sa_wc_attr_swatch']), true));
 		update_term_meta(
 			$term_id,
 			'_sa_wc_swatch',
-			json_encode($_POST['sa_wc_attr_swatch'])
+			$data,
 		);
 	}
 }
@@ -54,6 +55,10 @@ function save_term_fields($term_id)
 
 function get_term_swatch($term_id)
 {
+
+	return get_swatch_data( $term_id );
+
+
 	$data = get_term_meta($term_id, '_sa_wc_swatch', true);
 	if (!is_array($data)) {
 		$data = json_decode($data);
@@ -100,8 +105,7 @@ function add_term_fields_text($taxonomy)
 	<div class="form-field">
 		<label for="sa_wc_attr_swatch"><?php _e('Swatch label') ?></label>
 		<div id="sa_wc_attr_swatch_el">
-			<input type="text" name="sa_wc_attr_swatch[value]" id="sa_wc_attr_swatch" />
-			<input type="hidden" name="sa_wc_attr_swatch[type]" value="text" />
+			<input type="text" name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" />
 		</div>
 	</div>
 <?php
@@ -111,10 +115,9 @@ function add_term_fields_color($taxonomy)
 {
 ?>
 	<div class="form-field">
-		<label for="sa_wc_attr_swatch"><?php _e('Swatch color') ?></label>
+		<label for="sa_wc_attr_swatch"><?php _e('Swatch color', 'domain') ?></label>
 		<div id="sa_wc_attr_swatch_el">
-			<input type="hidden" name="sa_wc_attr_swatch[value]" id="sa_wc_attr_swatch" />
-			<input type="hidden" name="sa_wc_attr_swatch[type]" value="color" />
+			<input type="hidden" name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" />
 		</div>
 	</div>
 <?php
@@ -125,10 +128,9 @@ function add_term_fields_image($taxonomy)
 ?>
 	<div class="form-field">
 
-		<label for="sa_wc_attr_swatch"><?php _e('Swatch image') ?></label>
+		<label for="sa_wc_attr_swatch"><?php _e('Swatch image', 'domain') ?></label>
 		<div id="sa_wc_attr_swatch_el">
-			<input type="hidden" name="sa_wc_attr_swatch[value]" id="sa_wc_attr_swatch" />
-			<input type="hidden" name="sa_wc_attr_swatch[type]" value="image" />
+			<input type="hidden" name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" />
 		</div>
 	</div>
 <?php
@@ -144,8 +146,7 @@ function edit_term_fields_text($term, $taxonomy)
 		<th><label for="sa_wc_attr_swatch"><?php _e('Swatch label') ?></label></th>
 		<td>
 			<div id="sa_wc_attr_swatch_el">
-				<input name="sa_wc_attr_swatch[value]" id="sa_wc_attr_swatch" type="text" value="<?php echo esc_attr($data['value']) ?>" />
-				<input type="hidden" name="sa_wc_attr_swatch[type]" value="text" />
+				<input type="hidden" name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" />
 			</div>
 		</td>
 	</tr>
@@ -156,15 +157,12 @@ function edit_term_fields_color($term, $taxonomy)
 {
 
 	// get meta data value
-	$data = get_swatch_data($term->term_id);
-
+	$data = get_term_swatch($term->term_id);
 ?><tr class="form-field">
 		<th><label for="sa_wc_attr_swatch_color"><?php _e('Swatch label') ?></label></th>
 		<td>
 			<div id="sa_wc_attr_swatch_el">
-				<input name="sa_wc_attr_swatch[value]" id="sa_wc_attr_swatch" type="hidden" value="<?php echo esc_attr($data['value']) ?>" />
-				<input type="hidden" name="sa_wc_attr_swatch[type]" value="color" />
-				<input type="hidden" name="sa_wc_attr_swatch[value2]" value="" />
+				<input name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" type="hidden" value="<?php echo esc_attr(json_encode($data)) ?>" />
 			</div>
 		</td>
 	</tr>
@@ -174,16 +172,12 @@ function edit_term_fields_color($term, $taxonomy)
 function edit_term_fields_image($term, $taxonomy)
 {
 
-	$data = get_swatch_data($term->term_id);
-
+	$data = get_term_swatch($term->term_id);
 ?><tr class="form-field">
 		<th><label for="sa_wc_attr_swatch_image"><?php _e('Swatch image') ?></label></th>
 		<td>
 			<div id="sa_wc_attr_swatch_el">
-				<input name="sa_wc_attr_swatch[value]" id="sa_wc_attr_swatch" type="hidden" value="<?php echo esc_attr($data['value']) ?>" />
-				<input type="hidden" name="sa_wc_attr_swatch[src]" value="" />
-				<input type="hidden" name="sa_wc_attr_swatch[id]" value="" />
-				<input type="hidden" name="sa_wc_attr_swatch[type]" value="image" />
+				<input name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" type="hidden" value="<?php echo esc_attr(json_encode($data)) ?>" />
 			</div>
 		</td>
 	</tr>

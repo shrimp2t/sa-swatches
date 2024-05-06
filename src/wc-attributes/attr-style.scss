@@ -443,14 +443,23 @@
 
 
 .sa_wc_attr_main {
+
+	.sa_swatch {
+		width: 100px;
+		height: 100px;
+		border: 1px solid #8c8f94;
+
+	}
+
+	.wc_swatch_colors .sa_swatch {
+		background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill-opacity=".05"><path d="M8 0h8v8H8zM0 8h8v8H0z"/></svg>');
+	}
+
 	.wc_swatch_image_wrap {
 		display: flex;
 		gap: 15px;
 
-		.wc_swatch_image {
-			width: 100px;
-			height: 100px;
-		}
+
 
 		.act {
 			display: flex;

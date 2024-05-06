@@ -140,12 +140,7 @@ const Image2 = ({ data, type, onChange, clear }) => {
 const App = () => {
 	const onChange = (data) => {
 		console.log("onChange", data);
-		if (SA_WC_SWATCHES?.current_tax?.type === "sa_image") {
-			jQuery("input#sa_wc_attr_swatch").val(data?.id);
-		}
-		if (SA_WC_SWATCHES?.current_tax?.type === "sa_color") {
-			jQuery("input#sa_wc_attr_swatch").val(data);
-		}
+		jQuery("input#sa_wc_attr_swatch").val(JSON.stringify({ ...data, type: SA_WC_SWATCHES?.current_tax?.type }));
 	};
 	return (
 		<div className="sa_wc_attr_main">
