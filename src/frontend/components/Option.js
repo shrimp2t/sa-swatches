@@ -193,21 +193,6 @@ const Option = ({
   }
 
 
-
-  if (swatch?.type === 'sa_image') {
-    console.log('swatch____', swatch);
-  }
-
-  if (isDrawerPrev) {
-    console.log('cssSwatch____11111', cssSwatch);
-
-    // cssSwatch = {
-    //   width: `30px`,
-    //   height: `30px`,
-    // };
-  }
-
-
   return (
     <>
       <div className="sa_opt_wrap" style={css}>
