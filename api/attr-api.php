@@ -4,6 +4,8 @@ namespace SA_WC_SWATCHES\API\Attrs;
 
 use function SA_WC_SWATCHES\get_wc_tax_attrs;
 use function SA_WC_SWATCHES\remove_empty_from_array;
+use function SA_WC_SWATCHES\get_image_data;
+use function SA_WC_SWATCHES\get_swatch_data;
 
 add_action('sa_wc_api/update_term_swatch', __NAMESPACE__ . '\rest_update_term_swatch');
 add_action('sa_wc_api/update_custom_swatch', __NAMESPACE__ . '\rest_update_custom_swatch');
@@ -11,44 +13,6 @@ add_action('sa_wc_api/get_terms', __NAMESPACE__ . '\rest_get_tax_terms');
 add_action('sa_wc_api/get_attr_settings', __NAMESPACE__ . '\rest_get_attr_settings');
 add_action('sa_wc_api/add_term', __NAMESPACE__ . '\rest_add_term');
 add_action('sa_wc_api/get_product_attrs', __NAMESPACE__ . '\rest_get_product_attrs');
-
-function get_image_data($image_id, $image_size = 'thumbnail')
-{
-	$data = [];
-	$thumb =  wp_get_attachment_image_src($image_id, $image_size);
-	if ($thumb) {
-		$data['thumbnail'] =  $thumb[0];
-	}
-	$full =  wp_get_attachment_image_src($image_id, 'full');
-	if ($thumb) {
-		$data['full'] =  $full[0];
-	}
-	return $data;
-}
-
-function get_swatch_data($term_id, $type = null, $image_size = 'thumbnail')
-{
-	$data = get_term_meta($term_id, '_sa_wc_swatch', true);
-	if (!is_array($data)) {
-		$data = json_decode($data, true);
-	}
-
-	if (!is_array($data)) {
-		$data = [];
-	}
-
-	$data = wp_parse_args($data, [
-		'value' => '',
-		'type' => '',
-	]);
-
-	if ($type === 'sa_image' && $data['value']) {
-		$image = get_image_data($data['value'], $image_size);
-		$data = array_merge($data, $image);
-	}
-
-	return $data;
-}
 
 
 function get_terms_data($terms, $type = null, $pid = null, $tax = null, $image_size = 'thumbnail')

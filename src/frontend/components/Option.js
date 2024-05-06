@@ -4,231 +4,281 @@ import { Tooltip } from "react-tooltip";
 import { cleanObj } from "../common/variants";
 
 const Option = ({
-	option,
-	attrName,
-	clickable = true,
-	settings = {},
-	checkActive = true,
-	showIcon = true,
-	noSelect = false,
+  option,
+  attrName,
+  clickable = true,
+  settings = {},
+  checkActive = true,
+  showIcon = true,
+  noSelect = false,
+  isDrawerPrev = false,
 }) => {
-	const { setSelected, defaults, selected, availableAttrs, appId } =
-		useAppContext();
-	const onCLick = (value) => {
-		setSelected((prev) => {
-			if (prev?.[attrName] === value) {
-				return { ...prev, [attrName]: null, __t: Date.now(), __c: attrName };
-			}
-			return { ...prev, [attrName]: value, __t: Date.now(), __c: attrName };
-		});
-	};
+  const { setSelected, defaults, selected, availableAttrs, appId, settings: globalSettings } =
+    useAppContext();
+  const onCLick = (value) => {
+    setSelected((prev) => {
+      if (prev?.[attrName] === value) {
+        return { ...prev, [attrName]: null, __t: Date.now(), __c: attrName };
+      }
+      return { ...prev, [attrName]: value, __t: Date.now(), __c: attrName };
+    });
+  };
 
-	const swatch = {
-		...cleanObj(settings || {}),
-		...cleanObj(option?.swatch || {}),
-		...cleanObj(option?.custom_swatch || {}),
-	};
+  // console.log('settings', settings);
+  const optionSettings = {
+    ...cleanObj(option?.swatch || {}),
+    ...cleanObj(option?.custom_swatch || {}),
+  }
 
-	const { loop = false } = settings;
+  let gloalSettings = {};
+  switch (optionSettings.type) {
+    case 'image':
+    case 'sa_image':
+      if (!isDrawerPrev) {
+        gloalSettings = { ...globalSettings?.option?.image || {} };
+      }
+      break;
+    case 'color':
+    case 'sa_color':
+      if (!isDrawerPrev) {
+        gloalSettings = { ...settings?.color || {} };
+      }
+      break;
+    default:
+      if (!isDrawerPrev) {
+        gloalSettings = { ...settings?.default || {} };
+      }
 
-	let selectedVal =
-		typeof selected[attrName] !== "undefined"
-			? selected?.[attrName]
-			: defaults?.[attrName];
+  }
 
-	const classes = ["sa_attr_option"];
-	let isActive = true;
-	let isClickable = true;
-	let isChecked = false;
+  const swatch = {
+    ...cleanObj(settings),
+    ...cleanObj(optionSettings || {}),
+  };
 
-	classes.push(`sa_opt_layout_${swatch.layout}`);
+  // if (swatch?.type === 'sa_color') {
 
-	if (availableAttrs?.[attrName]) {
-		if (
-			availableAttrs?.[attrName]?.includes(option?.slug) ||
-			availableAttrs?.[attrName]?.includes("")
-		) {
-			isActive = true;
-		} else {
-			isActive = false;
-			isClickable = false;
-		}
-	} else {
-		isActive = false;
-		isClickable = false;
-	}
 
-	if (checkActive) {
-		if (isActive) {
-			classes.push("sa_active");
-		} else {
-			classes.push("sa_inactive");
-		}
-	}
+  const { loop = false } = settings;
 
-	if (!selectedVal) {
-		classes.push("sa_not_select");
-	}
+  let selectedVal =
+    typeof selected[attrName] !== "undefined"
+      ? selected?.[attrName]
+      : defaults?.[attrName];
 
-	if (selectedVal === option?.slug) {
-		classes.push("sa_selected");
-		isClickable = true;
-		isChecked = true;
-	}
+  const classes = ["sa_attr_option"];
+  let isActive = true;
+  let isClickable = true;
+  let isChecked = false;
 
-	classes.push("type_" + (swatch?.type || "mixed"));
+  classes.push(`sa_opt_layout_${swatch.layout}`);
 
-	const isBox = ["box"].includes(swatch?.layout);
-	let css = {};
-	let cssSwatch = {};
-	let cssSwatchLabel = {};
-	const {
-		label: showLabel = "yes",
-		col = 0,
-		size = 0,
-		image_style,
-		color_style,
-	} = swatch;
+  if (availableAttrs?.[attrName]) {
+    if (
+      availableAttrs?.[attrName]?.includes(option?.slug) ||
+      availableAttrs?.[attrName]?.includes("")
+    ) {
+      isActive = true;
+    } else {
+      isActive = false;
+      isClickable = false;
+    }
+  } else {
+    isActive = false;
+    isClickable = false;
+  }
 
-	if (col > 0) {
-		css = {
-			flexBasis: `${100 / col}%`,
-			width: `${100 / col}%`,
-		};
-	}
+  if (checkActive) {
+    if (isActive) {
+      classes.push("sa_active");
+    } else {
+      classes.push("sa_inactive");
+    }
+  }
 
-	if (size > 0 && !isBox) {
-		cssSwatch = {
-			width: `${size}px`,
-			height: `${size}px`,
-		};
-		cssSwatchLabel = {
-			minHeight: `${size}px`,
-			minWidth: `${size}px`,
-			justifyContent: "center",
-		};
-	} else if (isBox && size > 0) {
-		cssSwatch = {
-			width: `${size}px`,
-			height: `${size}px`,
-		};
-	}
+  if (!selectedVal) {
+    classes.push("sa_not_select");
+  }
 
-	const hasSwatch = ["sa_image", "sa_color"].includes(swatch?.type);
+  if (selectedVal === option?.slug) {
+    classes.push("sa_selected");
+    isClickable = true;
+    isChecked = true;
+  }
 
-	let willShowLabel = !["hide", "no", false].includes(showLabel);
-	if (!willShowLabel && !hasSwatch) {
-		willShowLabel = true;
-	}
+  classes.push("type_" + (swatch?.type || "mixed"));
 
-	if (!checkActive && !selectedVal && willShowLabel) {
-		willShowLabel = false;
-	}
+  const isBox = ["box"].includes(swatch?.layout);
+  let css = {};
+  let cssSwatch = {};
+  let cssSwatchLabel = {};
+  if (isDrawerPrev) {
+    delete swatch.col;
+  }
+  const {
+    label: showLabel = "yes",
+    col = 0,
+    size = 0,
+    style = false,
+    // image_style,
+    // color_style,
+  } = swatch;
 
-	if (!willShowLabel) {
-		classes.push("sa_no_label");
-	} else {
-		classes.push("sa_has_label");
-	}
+  const swatchSize = Number(size);
 
-	let isCircle = false;
-	if (hasSwatch) {
-		if ("sa_image" === swatch?.type && image_style) {
-			classes.push("sa_style_" + image_style);
-			isCircle = image_style === "circle";
-		}
+  if (col > 0) {
+    css = {
+      flexBasis: `${100 / col}%`,
+      width: `${100 / col}%`,
+    };
+  }
 
-		if ("sa_color" === swatch?.type && color_style) {
-			classes.push("sa_style_" + color_style);
-			isCircle = color_style === "circle";
-		}
-	}
+  if (swatchSize > 0) {
+    cssSwatch = {
+      width: `${swatchSize}px`,
+      height: `${swatchSize}px`,
+    };
+  }
 
-	const tooltipId = `${appId}-${attrName}-${option.slug}-${checkActive}`;
-	const divProps = {
-		className: classes.join(" "),
-		"data-tooltip-id": tooltipId,
-	};
+  if (swatchSize > 0 && !isBox) {
+    cssSwatchLabel = {
+      minHeight: `${swatchSize}px`,
+      minWidth: `${swatchSize}px`,
+      justifyContent: "center",
+    };
+  }
 
-	if (clickable && isClickable) {
-		divProps.onClick = () => {
-			if (isClickable) {
-				onCLick(option?.slug);
-			}
-		};
-	}
+  const hasSwatch = ["sa_image", 'image', "sa_color", 'color'].includes(swatch?.type);
+  let willShowLabel = !["hide", "no", false].includes(showLabel);
+  if (isDrawerPrev) {
+    willShowLabel = false;
+  }
 
-	return (
-		<>
-			<div className="sa_opt_wrap" style={css}>
-				<div {...divProps}>
-					{checkActive && ["checkbox"].includes(settings?.layout) && (
-						<span className="sa_checkbox_wrap">
-							<span className="sa_checkbox"></span>
-						</span>
-					)}
-					{swatch?.type === "sa_color" ? (
-						<span className="sa_swatch_wrap">
-							<span className="sa_swatch sa_color" style={cssSwatch}>
-								<div className="sa_color_inner">
-									<span
-										className="sa_color_item"
-										style={{ background: `${swatch?.value}` }}
-									></span>
+  if (!willShowLabel && !hasSwatch) {
+    willShowLabel = true;
+  }
 
-									{swatch?.more?.length ? (
-										<>
-											{swatch?.more.map((c) => (
-												<span
-													key={c}
-													className="sa_color_item"
-													style={{ background: `${c}` }}
-												></span>
-											))}
-										</>
-									) : null}
-								</div>
-							</span>
-						</span>
-					) : null}
 
-					{swatch?.type === "sa_image" ? (
-						<span className="sa_swatch_wrap">
-							<span className="sa_swatch sa_image" style={cssSwatch}>
-								<span className="sa_image_item">
-									<img alt="" src={swatch?.thumbnail || swatch?.full} />
-								</span>
-							</span>
-						</span>
-					) : null}
 
-					{noSelect && !selectedVal && (
-						<span className="sa_swatch_wrap">
-							<span className="sa_swatch sa_no" style={cssSwatch}>
-								<span className="sa_no_item">{"..."}</span>
-							</span>
-						</span>
-					)}
+  if (!checkActive && !selectedVal && willShowLabel) {
+    willShowLabel = false;
+  }
 
-					{willShowLabel && (
-						<span className="sa_opt_label" style={cssSwatchLabel}>
-							{option?.custom_name || option?.name}
-						</span>
-					)}
+  if (!willShowLabel) {
+    classes.push("sa_no_label");
+  } else {
+    classes.push("sa_has_label");
+  }
 
-					{!isCircle && showIcon && isChecked && (
-						<div className="sa_icon">
-							<IconCheck />
-						</div>
-					)}
-				</div>
-			</div>
+  let isCircle = false;
+  if (hasSwatch || isDrawerPrev) {
+    if (style) {
+      classes.push("sa_style_" + style);
+      isCircle = style === "circle";
+    }
+  }
 
-			<Tooltip className="sa_tooltip" style={{ zIndex: 999999 }} id={tooltipId}>
-				{option?.custom_name || option?.name}
-			</Tooltip>
-		</>
-	);
+  const tooltipId = `${appId}-${attrName}-${option.slug}-${checkActive}`;
+  const divProps = {
+    className: classes.join(" "),
+    "data-tooltip-id": tooltipId,
+  };
+
+  if (clickable && isClickable) {
+    divProps.onClick = () => {
+      if (isClickable) {
+        onCLick(option?.slug);
+      }
+    };
+  }
+
+
+
+  if (swatch?.type === 'sa_image') {
+    console.log('swatch____', swatch);
+  }
+
+  if (isDrawerPrev) {
+    console.log('cssSwatch____11111', cssSwatch);
+
+    // cssSwatch = {
+    //   width: `30px`,
+    //   height: `30px`,
+    // };
+  }
+
+
+  return (
+    <>
+      <div className="sa_opt_wrap" style={css}>
+        <div {...divProps}>
+          {checkActive && ["checkbox"].includes(settings?.layout) && (
+            <span className="sa_checkbox_wrap">
+              <span className="sa_checkbox"></span>
+            </span>
+          )}
+          {swatch?.type === "sa_color" ? (
+            <span className="sa_swatch_wrap">
+              <span className="sa_swatch sa_color" style={cssSwatch}>
+                <div className="sa_color_inner">
+                  <span
+                    className="sa_color_item"
+                    style={{ background: `${swatch?.value}` }}
+                  ></span>
+
+                  {swatch?.more?.length ? (
+                    <>
+                      {swatch?.more.map((c) => (
+                        <span
+                          key={c}
+                          className="sa_color_item"
+                          style={{ background: `${c}` }}
+                        ></span>
+                      ))}
+                    </>
+                  ) : null}
+                </div>
+              </span>
+            </span>
+          ) : null}
+
+          {swatch?.type === "sa_image" ? (
+            <span className="sa_swatch_wrap">
+              <span className="sa_swatch sa_image" style={cssSwatch}>
+                <span className="sa_image_item">
+                  <img alt="" src={swatch?.thumbnail || swatch?.full} />
+                </span>
+              </span>
+            </span>
+          ) : null}
+
+          {noSelect && !selectedVal && (
+            <span className="sa_swatch_wrap">
+              <span className="sa_swatch sa_no sa_swatch_placeholder" style={cssSwatch}>
+                <span className="sa_no_item">{"..."}</span>
+              </span>
+            </span>
+          )}
+
+          {willShowLabel && (
+            <span className="sa_opt_label" style={cssSwatchLabel}>
+              {option?.custom_name || option?.name}
+            </span>
+          )}
+
+          {!isCircle && showIcon && isChecked && (
+            <div className="sa_icon">
+              <IconCheck />
+            </div>
+          )}
+        </div>
+      </div>
+
+      <Tooltip className="sa_tooltip" style={{ zIndex: 999999 }} id={tooltipId}>
+        {option?.custom_name || option?.name}
+      </Tooltip>
+    </>
+  );
 };
 
 export default Option;

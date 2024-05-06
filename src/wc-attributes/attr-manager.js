@@ -80,8 +80,6 @@ const Image2 = ({ data, type, onChange, clear }) => {
 				...sizes,
 			};
 
-			
-
 			setImage(data);
 			onChange?.(data);
 		});
@@ -184,7 +182,9 @@ const AppCol = ({ data, term_id }) => {
 			term_id,
 		};
 
-		// console.log("saveData", saveData);
+		if (saveData?.type === 'sa_image') {
+			saveData.value = changeData?.id;
+		}
 
 		sendReq({
 			url: SA_WC_SWATCHES?.ajax,

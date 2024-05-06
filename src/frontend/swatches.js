@@ -13,22 +13,10 @@ const { SA_WC_SWATCHES } = window;
 jQuery(($) => {
 	const preSettings = cleanObj(SA_WC_SWATCHES.settings, true);
 
-	const option = {
-		layout: preSettings?.layout || "inline", // box || inline | checkbox
-		col: parseInt(preSettings?.col), // Number: apply for layout [box] only.
-		size: preSettings?.size || 22, // not apply for [box] layout.
-		label: preSettings?.label, //  yes | no | <>empty
-		image_style: preSettings?.swatch_image,
-		color_style: preSettings?.swatch_color,
-	};
+	const { option = {} } = preSettings?.single || {};
+	const { option: drawerOption = {} } = preSettings?.drawer || {};
 
-	const drawerOption = {
-		layout: preSettings?.drawer_layout || "inline", // box || inline | checkbox
-		size: preSettings?.drawer_size, // not apply for [box] layout.
-		label: preSettings?.drawer_label, //  yes | no | <>empty
-		image_style: preSettings?.drawer_swatch_image,
-		color_style: preSettings?.drawer_swatch_color,
-	};
+	console.log('drawerOption', drawerOption);
 
 	$(".variations_form").each(function () {
 		const form = $(this);
@@ -42,11 +30,12 @@ jQuery(($) => {
 		});
 		appEl.insertAfter(table);
 		const settings = {
-			layout: preSettings?.form_layout || "separate", // inline | separate | drawer
+			layout: preSettings?.single?.layout || "separate", // inline | separate | drawer
 			viewAttrDetail: true,
-			option: preSettings?.form_layout === "drawer" ? drawerOption : option,
+			viewAttrDetail: true,
+			option: option,
 			drawer: {
-				option: option,
+				option: drawerOption,
 			},
 		};
 
@@ -75,7 +64,7 @@ jQuery(($) => {
 						form.trigger("sa_variants", [res?.data]);
 					}
 				})
-				.catch((e) => {});
+				.catch((e) => { });
 		}
 
 		const args = {
@@ -236,7 +225,7 @@ jQuery(($) => {
 					appEl.trigger("sa_variants", [res?.data]);
 				}
 			})
-			.catch((e) => {});
+			.catch((e) => { });
 
 		const args = {
 			pid,

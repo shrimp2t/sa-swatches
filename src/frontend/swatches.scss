@@ -16,6 +16,7 @@ body {
 	flex-direction: column;
 	gap: var(--sa-row-gap);
 	margin-bottom: var(--sa-row-margin);
+
 	&:last-child {
 		margin-bottom: 0px;
 	}
@@ -161,6 +162,7 @@ body {
 	display: flex;
 	overflow: hidden;
 	border-radius: var(--sa-border-radius);
+
 	&.sa_image {
 		width: 100%;
 		max-width: 100%;
@@ -197,6 +199,11 @@ body {
 			display: block;
 		}
 	}
+}
+
+.sa_opt_layout_box {
+	display: flex;
+	flex-direction: column;
 }
 
 // -- Option layout -----------------------
@@ -280,6 +287,7 @@ body {
 	.sa_attr_values {
 		margin-left: auto;
 	}
+
 	.sa_opt_selected_prev {
 		display: flex;
 		justify-content: flex-end;
@@ -338,11 +346,14 @@ body {
 	display: block;
 	padding-bottom: var(--sa-row-margin);
 }
+
 .sa_vtb_wrap {
 	transition: all linear 0.3s;
+
 	&.sa_hidden {
 		overflow: hidden;
 	}
+
 	&.sa_loading {
 		display: block;
 		position: relative;
