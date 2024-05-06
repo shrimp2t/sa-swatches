@@ -145,14 +145,14 @@ const AttrItem = ({ attr }) => {
               }}
               href="#"
             >
-              {SA_WC_SWATCHES.i18n.btn_details}
+              {attr?.data?.button_label?.length ? attr?.data?.button_label : SA_WC_SWATCHES.i18n.btn_details}
             </a>
 
             {isOpenModal && (
               <Modal
                 size="medium"
                 className="sa_attr_desc_modal"
-                // style={{ width: 600 }}
+                title={attr?.data?.title}
                 onRequestClose={() => setOpenModal(false)}
               >
                 <div className="sa_modal_inner">

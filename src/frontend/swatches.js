@@ -29,7 +29,6 @@ jQuery(($) => {
 		const settings = {
 			layout: preSettings?.single?.layout || "separate", // inline | separate | drawer
 			viewAttrDetail: true,
-			viewAttrDetail: true,
 			option: option,
 			drawer: {
 				option: drawerOption,
