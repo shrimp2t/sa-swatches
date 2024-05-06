@@ -234,16 +234,9 @@ jQuery(($) => {
 			settings: {
 				layout: "inline",
 				loop: true,
-				showAttrDetails: false,
-				align: preSettings?.shop_align || "center",
-				option: {
-					layout: "inline",
-					label: "hide",
-					loop: true,
-					size: preSettings?.shop_size,
-					image_style: preSettings?.shop_swatch_image,
-					color_style: preSettings?.shop_swatch_color,
-				},
+				showAttrLabel: false,
+				align: preSettings?.shop?.align || "center",
+				option: preSettings?.shop?.option,
 			},
 			form: appEl,
 		};
