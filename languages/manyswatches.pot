@@ -242,6 +242,7 @@ msgstr ""
 
 #: src/components/fields/image.js:78
 #: src/components/fields/repeater.js:108
+#: src/wc-attributes/attr-manager.js:132
 msgid "Remove"
 msgstr ""
 
@@ -259,6 +260,10 @@ msgstr ""
 
 #: src/components/fields/responsive.js:76
 msgid "Mobile"
+msgstr ""
+
+#: src/wc-attributes/attr-manager.js:124
+msgid "Upload"
 msgstr ""
 
 #: src/wc-attributes/components/SortableList.js:141

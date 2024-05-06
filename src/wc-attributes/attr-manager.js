@@ -1,7 +1,5 @@
-import { Button, ColorPalette, Popover } from "@wordpress/components";
-// import { SketchPicker } from 'react-color';
-// import { Popover } from "react-tiny-popover";
-
+import { Button } from "@wordpress/components";
+import { __ } from "@wordpress/i18n";
 import React from "react";
 import { render, useState, useMemo, useEffect } from "@wordpress/element";
 import ColorPicker from "./components/ColorPicker";
@@ -123,7 +121,7 @@ const Image2 = ({ data, type, onChange, clear }) => {
 			{"full" === type ? (
 				<div className="act">
 					<Button size="small" onClick={handleOpen} variant="secondary">
-						Upload
+						{__('Upload', 'domain')}
 					</Button>
 					<Button
 						onClick={handleRemove}
@@ -131,7 +129,7 @@ const Image2 = ({ data, type, onChange, clear }) => {
 						size="small"
 						variant="secondary"
 					>
-						Remove
+						{__('Remove', 'domain')}
 					</Button>
 				</div>
 			) : null}
@@ -150,7 +148,7 @@ const App = () => {
 		}
 	};
 	return (
-		<>
+		<div className="sa_wc_attr_main">
 			{SA_WC_SWATCHES?.current_tax?.type === "sa_image" ? (
 				<Image2
 					id={window.SA_WC_SWATCHES?.current_term?.value}
@@ -167,12 +165,11 @@ const App = () => {
 					onChange={onChange}
 				/>
 			) : null}
-		</>
+		</div>
 	);
 };
 
 const AppCol = ({ data, term_id }) => {
-	// console.log("Load_data", data);
 	const onChange = (changeData) => {
 		console.log("onChange__col", changeData);
 

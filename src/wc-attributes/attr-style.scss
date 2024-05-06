@@ -119,10 +119,12 @@
 .wc_swatch_color {
 	width: 40px;
 	height: 40px;
+
 	&.x2 {
 		width: 80px;
 		height: 80px;
 	}
+
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -146,10 +148,12 @@
 
 .color_item {
 	position: relative;
+
 	.wc_swatch_color {
 		position: relative;
 		z-index: 2;
 	}
+
 	.remove {
 		position: absolute;
 		cursor: pointer;
@@ -184,6 +188,7 @@
 .sa_space {
 	display: flex;
 	gap: 10px;
+
 	&.sa_wrap {
 		flex-wrap: wrap;
 	}
@@ -198,6 +203,7 @@
 .col_swatch {
 	width: 50px;
 }
+
 .sa_swatch {
 	width: 30px;
 	height: 30px;
@@ -238,14 +244,17 @@
 }
 
 .wc_swatch_color_picker {
+
 	// z-index: 999999;
 	.components-color-picker {
 		.components-flex {
 			padding: 0px 5px 5px;
 		}
+
 		.react-colorful__saturation {
 			margin-bottom: 10px;
 		}
+
 		.components-input-control__container {
 			width: 100%;
 		}
@@ -255,10 +264,10 @@
 			min-height: 25px !important;
 		}
 
-		> div:nth-child(2) {
+		>div:nth-child(2) {
 			padding-top: 0px;
 
-			> div:nth-child(1) {
+			>div:nth-child(1) {
 				display: none;
 			}
 		}
@@ -275,6 +284,7 @@
 	* {
 		box-sizing: border-box;
 	}
+
 	.button,
 	button {
 		display: inline-flex;
@@ -291,16 +301,19 @@
 		display: flex;
 		gap: 1em;
 		align-items: center;
+
 		.form_label {
 			align-items: center;
 			font-weight: 600;
 		}
+
 		.form_value {
 			margin-left: auto;
 			flex-basis: 220px;
 			width: 220px;
 			display: flex;
 		}
+
 		input,
 		select {
 			max-width: 100%;
@@ -420,9 +433,30 @@
 		margin: 0px;
 		font-size: 16px;
 	}
+
 	.sa_desc {
 		margin-bottom: 0px;
 		font-style: italic;
 		opacity: 0.8;
 	}
+}
+
+
+.sa_wc_attr_main {
+	.wc_swatch_image_wrap {
+		display: flex;
+		gap: 15px;
+
+		.wc_swatch_image {
+			width: 100px;
+			height: 100px;
+		}
+
+		.act {
+			display: flex;
+			gap: 10px;
+			flex-direction: column;
+		}
+	}
+
 }
