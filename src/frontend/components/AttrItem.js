@@ -49,9 +49,11 @@ const AttrItem = ({ attr }) => {
       optSelectedSettings = { ...settings?.drawer?.option?.color || {} };
       break;
     default:
-      optSettings = { ...settings?.drawer?.option?.default || {} };
+      optSettings = { ...settings?.option?.default || {} };
       optSelectedSettings = { ...settings?.drawer?.option?.default || {} };
   }
+
+  console.log( 'optSelectedSettings____', optSelectedSettings )
 
 
   return (
