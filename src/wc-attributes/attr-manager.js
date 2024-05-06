@@ -46,8 +46,8 @@ const sendReq = ({ url, path, method, data, body, params }) => {
 	});
 };
 
-const Image2 = ({ id, type, onChange, clear }) => {
-	const [image, setImage] = useState(null);
+const Image2 = ({ data, type, onChange, clear }) => {
+	const [image, setImage] = useState(data || {});
 
 	const frame = useMemo(() => {
 		// https://github.com/WordPress/gutenberg/blob/HEAD/packages/block-editor/src/components/media-upload/README.md
@@ -80,6 +80,8 @@ const Image2 = ({ id, type, onChange, clear }) => {
 				...sizes,
 			};
 
+			
+
 			setImage(data);
 			onChange?.(data);
 		});
@@ -102,39 +104,6 @@ const Image2 = ({ id, type, onChange, clear }) => {
 		}
 	}, []);
 
-	useEffect(() => {
-		if (id)
-			sendReq({
-				path: `wp/v2/media/${id}?_fields=id,media_details`,
-			})
-				.then((res) => {
-					if (res?.id) {
-						const sizes = {};
-						if (res?.media_details.sizes?.thumbnail?.source_url) {
-							sizes.thumbnail = res?.media_details.sizes?.thumbnail?.source_url;
-						}
-						if (res?.media_details.sizes?.thumbnail?.url) {
-							sizes.thumbnail = res?.media_details.sizes?.thumbnail?.url;
-						}
-						if (res?.media_details.sizes?.full?.source_url) {
-							sizes.full = res?.media_details.sizes?.full?.source_url;
-						}
-						if (res?.media_details.sizes?.full?.url) {
-							sizes.full = res?.media_details.sizes?.full?.url;
-						}
-
-						const data = {
-							id: res?.id,
-							...sizes,
-						};
-
-						setImage(data);
-					} else {
-						setImage(false);
-					}
-				})
-				.catch((e) => console.log(e));
-	}, [id]);
 	const handleRemove = () => {
 		setImage(false);
 		onChange?.(false);
@@ -233,7 +202,7 @@ const AppCol = ({ data, term_id }) => {
 	return (
 		<>
 			{SA_WC_SWATCHES?.current_tax?.type === "sa_image" ? (
-				<Image2 id={data?.value} onChange={onChange} />
+				<Image2 data={data} onChange={onChange} />
 			) : null}
 
 			{SA_WC_SWATCHES?.current_tax?.type === "sa_color" ? (

@@ -2,7 +2,7 @@ import req from "../../common/req";
 import ImagePicker from "./ImagePicker";
 import ColorPicker from "./ColorPicker";
 
-const ColSwatch = ({ term, tax, type, setSelectedList }) => {
+const ColSwatch = ({ term, tax, type, setSelectedList, setList }) => {
 	const onChange = (changeData) => {
 		let saveData = {
 			...changeData,
@@ -10,6 +10,10 @@ const ColSwatch = ({ term, tax, type, setSelectedList }) => {
 			type,
 			term_id: term.id,
 		};
+
+		if (type === 'sa_image') {
+			saveData.value = changeData?.id;
+		}
 
 		saveData.pid = SA_WC_SWATCHES?.pid;
 
@@ -25,6 +29,16 @@ const ColSwatch = ({ term, tax, type, setSelectedList }) => {
 				console.log("Update_meta", res);
 				if (res?.data) {
 					setSelectedList?.((prev) => {
+						const next = prev.map((el) => {
+							if (el.id === res?.data?.id) {
+								return res?.data;
+							}
+							return el;
+						});
+
+						return next;
+					});
+					setList?.((prev) => {
 						const next = prev.map((el) => {
 							if (el.id === res?.data?.id) {
 								return res?.data;
@@ -65,6 +79,7 @@ const TableOptions = ({
 	taxonomy,
 	type,
 	list,
+	setList,
 }) => {
 	return (
 		<table className="sa_swatch_table wp-list-table widefat striped fixed table-view-list">
@@ -83,6 +98,7 @@ const TableOptions = ({
 						<tr key={term.id}>
 							<ColSwatch
 								setSelectedList={setSelectedList}
+								setList={setList}
 								term={term}
 								tax={taxonomy}
 								type={type}

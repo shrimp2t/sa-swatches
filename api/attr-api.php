@@ -28,8 +28,11 @@ function get_image_data($image_id, $image_size = 'thumbnail')
 
 function get_swatch_data($term_id, $type = null, $image_size = 'thumbnail')
 {
+	$data = get_term_meta($term_id, '_sa_wc_swatch', true);
+	if (!is_array($data)) {
+		$data = json_decode($data, true);
+	}
 
-	$data = json_decode(get_term_meta($term_id, '_sa_wc_swatch', true), true);
 	if (!is_array($data)) {
 		$data = [];
 	}
@@ -303,7 +306,7 @@ function rest_update_term_swatch($post)
 	update_term_meta(
 		$term_id,
 		'_sa_wc_swatch',
-		json_encode($data)
+		$data
 	);
 
 	$term = get_term($term_id, $tax);
@@ -345,7 +348,7 @@ function rest_update_custom_swatch($post)
 	update_term_meta(
 		$term_id,
 		'_sa_wc_swatch',
-		json_encode($data)
+		$data
 	);
 
 	$term = get_term($term_id, $tax);

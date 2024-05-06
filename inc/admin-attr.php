@@ -6,26 +6,8 @@ use function SA_WC_SWATCHES\get_assets;
 use function SA_WC_SWATCHES\get_wc_tax_attrs;
 use function SA_WC_SWATCHES\get_ajax_configs;
 use function SA_WC_SWATCHES\get_custom_attr_data;
+use function SA_WC_SWATCHES\get_swatch_data;
 
-function get_swatch_data($term_id)
-{
-
-	$data =  get_term_meta($term_id, '_sa_wc_swatch', true);
-	if (!is_array($data)) {
-		$data = json_decode($data, true);
-	}
-
-	if (!is_array($data)) {
-		$data = [];
-	}
-
-	$data = wp_parse_args($data, [
-		'value' => '',
-		'type' => '',
-	]);
-
-	return $data;
-}
 
 
 function get_current_tax()
@@ -35,7 +17,6 @@ function get_current_tax()
 	}
 	return false;
 }
-
 
 
 

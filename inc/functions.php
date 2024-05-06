@@ -26,6 +26,51 @@ function get_assets($path)
 }
 
 
+
+function get_image_data($image_id, $image_size = 'thumbnail')
+{
+	$data = [];
+	$thumb =  wp_get_attachment_image_src($image_id, $image_size);
+	if ($thumb) {
+		$data['thumbnail'] =  $thumb[0];
+	}
+	$full =  wp_get_attachment_image_src($image_id, 'full');
+	if ($thumb) {
+		$data['full'] =  $full[0];
+	}
+	return $data;
+}
+
+function get_swatch_data($term_id, $type = null, $image_size = 'thumbnail')
+{
+	$data = get_term_meta($term_id, '_sa_wc_swatch', true);
+	if (!is_array($data)) {
+		$data = json_decode($data, true);
+	}
+
+	if (!is_array($data)) {
+		$data = [];
+	}
+
+	$data = wp_parse_args($data, [
+		'value' => '',
+		'type' => '',
+	]);
+
+	if (!$type) {
+		$type = $data['type'];
+	}
+
+	if ($type === 'sa_image' && $data['value']) {
+		$image = get_image_data($data['value'], $image_size);
+		$data = array_merge($data, $image);
+	}
+
+	return $data;
+}
+
+
+
 function get_custom_attr_data($attr_id)
 {
 	global $wpdb;

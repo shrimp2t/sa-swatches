@@ -208,6 +208,7 @@ const App = ({
 		taxonomy,
 		type,
 		list,
+		setList,
 	};
 
 	return (
