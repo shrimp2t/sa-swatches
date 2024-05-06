@@ -12,11 +12,8 @@ const { SA_WC_SWATCHES } = window;
 
 jQuery(($) => {
 	const preSettings = cleanObj(SA_WC_SWATCHES.settings, true);
-
 	const { option = {} } = preSettings?.single || {};
 	const { option: drawerOption = {} } = preSettings?.drawer || {};
-
-	console.log('drawerOption', drawerOption);
 
 	$(".variations_form").each(function () {
 		const form = $(this);
