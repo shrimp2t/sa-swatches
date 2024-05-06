@@ -187,7 +187,7 @@ const Settings = ({ onChange, values }) => {
 						</label>
 						<div className="form_value">
 							<select
-								value={values?.shop_show || ""}
+								value={values?.shop.show || ""}
 								defaultValue={"yes"}
 								onChange={(e) => {
 									const v = e.target.value;
@@ -215,7 +215,7 @@ const Settings = ({ onChange, values }) => {
 						</label>
 						<div className="form_value">
 							<select
-								value={values?.shop_position || ""}
+								value={values?.shop?.position || ""}
 								defaultValue={""}
 								onChange={(e) => {
 									const v = e.target.value;

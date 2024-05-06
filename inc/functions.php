@@ -148,8 +148,12 @@ function get_text_settings_for_admin()
 		],
 
 		'position' => [
-			'before_add_cart' => __('Before add cart', 'sa-wc-swatches'),
-			'after_add_cart' => __('After add cart', 'sa-wc-swatches'),
+			'before@loop/add-to-cart.php' => __('Before add cart', 'sa-wc-swatches'),
+			'after@loop/add-to-cart.php' => __('After add cart', 'sa-wc-swatches'),
+
+			// 'before@loop/price.php' => __('Before price', 'sa-wc-swatches'),
+			// 'after@loop/price.php' => __('After price', 'sa-wc-swatches'),
+
 		],
 
 
