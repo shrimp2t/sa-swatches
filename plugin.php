@@ -44,13 +44,6 @@ function load_textdomain()
 }
 
 
-function render_block_core_archives()
-{
-?>
-	test
-<?php
-}
-
 /**
  * Registers the block using the metadata loaded from the `block.json` file.
  * Behind the scenes, it registers also all assets so they can be enqueued
@@ -70,109 +63,22 @@ function blocks_init()
 }
 
 
-
-
-function add_blocks_css()
-{
-	// $asset_file = include SA_WC_SWATCHES_PATH . '/build/plugins.asset.php';
-	// wp_enqueue_script(
-	// 	'sa_wc_swatches-plugins',
-	// 	SA_WC_SWATCHES_URL . '/build/plugins.js',
-	// 	array_merge($asset_file['dependencies'], []),
-	// 	$asset_file['version'],
-	// 	true
-	// );
-}
-
-
-/**
- * @see wp_enqueue_block_style()
- *
- * @see /wp-includes/class-wp-block.php
- *
- * @param [type] $block_content
- * @param [type] $block
- * @return void
- */
-function add_blocks_render_css($block_content, $block)
-{
-	return;
-	// var_dump($block);
-	// $css = isset($block['attrs']['pm_style']) ? $block['attrs']['pm_style'] : false;
-	/**
-	 * Add style support
-	 *
-	 * file wp-includes/block-supports/elements.php
-	 *
-	 * add_filter( 'the_content', 'do_blocks', 9 );
-	 * Can use wp_enqueue_style() here.
-	 */
-	// if ($css) {
-	// 	wp_enqueue_block_support_styles($css);
-	// }
-	return $block_content;
-}
-
-
-
-
-// register custom meta tag field
-function register_post_meta()
-{
-	// $post_types = get_post_types();
-	// foreach ($post_types as $type) {
-	// 	register_post_meta($type, 'sa_wc_swatches_css', array(
-	// 		'show_in_rest' => true,
-	// 		'single' => true,
-	// 		'type' => 'object',
-	// 	));
-	// }
-}
-
-
 add_action('init', __NAMESPACE__ . '\blocks_init');
-// add_action('enqueue_block_editor_assets', __NAMESPACE__ . '\add_blocks_css', 1);
-// add_filter('render_block', __NAMESPACE__ . '\add_blocks_render_css', 66, 2);
-// add_action('init', __NAMESPACE__ . '\register_post_meta', 999);
 
-
-
-
-// app\public\wp-content\plugins\woocommerce\assets\js\admin\meta-boxes-product.js
-// app\public\wp-content\plugins\woocommerce\includes\admin\meta-boxes\views\html-product-attribute-inner.php
-// app\public\wp-content\plugins\woocommerce\includes\admin\class-wc-admin-assets.php
-// https://github.com/WordPress/gutenberg/blob/HEAD/packages/block-editor/src/components/media-upload/README.md
-// https://dev.to/diballesteros/how-to-create-a-stunning-side-drawer-with-react-spring-bja
 
 function add_attribute_types($options)
 {
-	$options['sa_color'] = __('Color');
-	$options['sa_image'] = __('Image');
+	$options['sa_color'] = __('Color', 'sa-wc-swatches');
+	$options['sa_image'] = __('Image', 'sa-wc-swatches');
 	return $options;
 }
 add_filter('product_attributes_type_selector', __NAMESPACE__ . '\add_attribute_types', 9999);
 
 
-// function load_template($template, $template_name)
-// {
-// 	if ('single-product/add-to-cart/variable.php' === $template_name) {
-// 		$new_file = SA_WC_SWATCHES_PATH . '/wc-templates/' . $template_name;
-// 		if (file_exists($new_file)) {
-// 			return $new_file;
-// 		}
-// 	}
-
-// 	return $template;
-// }
-
-// add_filter('wc_get_template', __NAMESPACE__ . '\load_template', 99999, 2);
-
-
-
 function plugin_add_settings_link($links)
 {
 	$url = admin_url('admin.php?page=wc-settings&tab=advanced&section=sa_swatches');
-	$settings_link = '<a href="' . esc_url($url) . '">' . __('Settings', 'domain') . '</a>';
+	$settings_link = '<a href="' . esc_url($url) . '">' . __('Settings', 'sa-wc-swatches') . '</a>';
 	array_push($links, $settings_link);
 	return $links;
 }

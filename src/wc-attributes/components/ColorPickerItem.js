@@ -33,6 +33,7 @@ const ColorPickerItem = ({ color, onChange, confirm, size = "def" }) => {
 						className="wc_swatch_color_picker"
 						placement={`left-start`}
 						offset={15}
+						noArrow={false}
 						onClose={() => {
 							setIsVisible(false);
 						}}

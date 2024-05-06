@@ -210,6 +210,7 @@
 	display: flex;
 	overflow: hidden;
 	border-radius: 3px;
+	border: 1px solid #8c8f94;
 
 	&.sa_no {
 		justify-content: center;
@@ -244,6 +245,10 @@
 }
 
 .wc_swatch_color_picker {
+
+	.components-popover__content {
+		padding: 10px;
+	}
 
 	// z-index: 999999;
 	.components-color-picker {
@@ -339,6 +344,11 @@
 		.sa_drawer_inner {
 			display: block;
 			margin-top: 15px;
+
+			.sa_swatch {
+				width: 40px;
+				height: 40px;
+			}
 		}
 
 		table {
@@ -441,25 +451,25 @@
 	}
 }
 
+.wc_swatch_colors .sa_swatch {
+	background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill-opacity=".05"><path d="M8 0h8v8H8zM0 8h8v8H0z"/></svg>');
+}
 
 .sa_wc_attr_main {
 
-	.sa_swatch {
+	.sa_swatch,
+	.wc_swatch_image {
 		width: 100px;
 		height: 100px;
 		border: 1px solid #8c8f94;
 
 	}
 
-	.wc_swatch_colors .sa_swatch {
-		background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill-opacity=".05"><path d="M8 0h8v8H8zM0 8h8v8H0z"/></svg>');
-	}
+
 
 	.wc_swatch_image_wrap {
 		display: flex;
 		gap: 15px;
-
-
 
 		.act {
 			display: flex;

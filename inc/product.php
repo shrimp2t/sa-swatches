@@ -63,8 +63,8 @@ function scripts()
 		'i18n' => [
 			'add_cart' => $sample_product->add_to_cart_text(),
 			'select_options' => $variable_product->add_to_cart_text(),
-			'select_attr' => __('Select %s', 'domain'),
-			'btn_details' => __('Details', 'domain'),
+			'select_attr' => __('Select %s', 'sa-wc-swatches'),
+			'btn_details' => __('Details', 'sa-wc-swatches'),
 		],
 	];
 

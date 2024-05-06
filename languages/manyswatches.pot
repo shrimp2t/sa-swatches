@@ -242,7 +242,7 @@ msgstr ""
 
 #: src/components/fields/image.js:78
 #: src/components/fields/repeater.js:108
-#: src/wc-attributes/attr-manager.js:132
+#: src/wc-attributes/attr-manager.js:131
 msgid "Remove"
 msgstr ""
 
@@ -262,7 +262,7 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: src/wc-attributes/attr-manager.js:124
+#: src/wc-attributes/attr-manager.js:123
 msgid "Upload"
 msgstr ""
 

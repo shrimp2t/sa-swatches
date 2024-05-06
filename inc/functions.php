@@ -135,45 +135,45 @@ function get_text_settings_for_admin()
 	$config = [
 
 		'main_layout' => [
-			'separate' => __('Separate', 'domain'),
-			'inline' => __('Inline', 'domain'),
-			'drawer' => __('Drawer', 'domain'),
+			'separate' => __('Separate', 'sa-wc-swatches'),
+			'inline' => __('Inline', 'sa-wc-swatches'),
+			'drawer' => __('Drawer', 'sa-wc-swatches'),
 		],
 
 		'option_layout' => [
-			'' => __('Default', 'domain'),
-			'inline' => __('Inline', 'domain'),
-			'box' => __('Box', 'domain'),
-			'checkbox' => __('Checkbox', 'domain'),
+			'' => __('Default', 'sa-wc-swatches'),
+			'inline' => __('Inline', 'sa-wc-swatches'),
+			'box' => __('Box', 'sa-wc-swatches'),
+			'checkbox' => __('Checkbox', 'sa-wc-swatches'),
 		],
 
 		'position' => [
-			'before_add_cart' => __('Before add cart', 'domain'),
-			'after_add_cart' => __('After add cart', 'domain'),
+			'before_add_cart' => __('Before add cart', 'sa-wc-swatches'),
+			'after_add_cart' => __('After add cart', 'sa-wc-swatches'),
 		],
 
 
 		'align' => [
-			'' => __('Default', 'domain'),
-			'center' => __('Center', 'domain'),
-			'left' => __('Left', 'domain'),
-			'right' => __('Right', 'domain'),
+			'' => __('Default', 'sa-wc-swatches'),
+			'center' => __('Center', 'sa-wc-swatches'),
+			'left' => __('Left', 'sa-wc-swatches'),
+			'right' => __('Right', 'sa-wc-swatches'),
 		],
 
 		'swatch_style' => [
-			'' => __('Default', 'domain'),
-			'box' => __('Box', 'domain'),
-			'circle' => __('Circle', 'domain'),
+			'' => __('Default', 'sa-wc-swatches'),
+			'box' => __('Box', 'sa-wc-swatches'),
+			'circle' => __('Circle', 'sa-wc-swatches'),
 		],
 		'yes_no' => [
-			'' => __('Default', 'domain'),
-			'yes' => __('Yes', 'domain'),
-			'no' => __('No', 'domain'),
+			'' => __('Default', 'sa-wc-swatches'),
+			'yes' => __('Yes', 'sa-wc-swatches'),
+			'no' => __('No', 'sa-wc-swatches'),
 		],
 		'show_hide' => [
-			'' => __('Default', 'domain'),
-			'show' => __('Show', 'domain'),
-			'hide' => __('Hide', 'domain'),
+			'' => __('Default', 'sa-wc-swatches'),
+			'show' => __('Show', 'sa-wc-swatches'),
+			'hide' => __('Hide', 'sa-wc-swatches'),
 		],
 
 

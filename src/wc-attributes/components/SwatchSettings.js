@@ -12,7 +12,7 @@ const SwatchSettings = ({ onChange, values }) => {
 
 	const handleReset = (e) => {
 		e.preventDefault();
-		const c = confirm(__("Reset all settings?", "domain"));
+		const c = confirm(__("Reset all settings?", 'sa-wc-swatches'));
 		if (c) {
 			onChange((prev) => {
 				return { _t: Date.now() };
@@ -26,7 +26,7 @@ const SwatchSettings = ({ onChange, values }) => {
 		<>
 			<div className="settings-form">
 				<div className="sa_heading">
-					<h3>{__("Options Settings", "domain")}</h3>
+					<h3>{__("Options Settings", 'sa-wc-swatches')}</h3>
 				</div>
 
 				<div class="form-item">
@@ -49,7 +49,7 @@ const SwatchSettings = ({ onChange, values }) => {
 					</div>
 				</div>
 				<div class="form-item">
-					<label className="form_label">{__("Item layout", "domain")}</label>
+					<label className="form_label">{__("Item layout", 'sa-wc-swatches')}</label>
 					<div className="form_value">
 						<select
 							value={values?.layout || ""}
@@ -67,7 +67,7 @@ const SwatchSettings = ({ onChange, values }) => {
 					</div>
 				</div>
 				<div class="form-item">
-					<label className="form_label">{__("Items per row", "domain")}</label>
+					<label className="form_label">{__("Items per row", 'sa-wc-swatches')}</label>
 					<div className="form_value">
 						<input
 							value={values?.col || ""}
@@ -82,12 +82,12 @@ const SwatchSettings = ({ onChange, values }) => {
 					</div>
 				</div>
 				<div class="form-item">
-					<label className="form_label">{__("Swatch size", "domain")}</label>
+					<label className="form_label">{__("Swatch size", 'sa-wc-swatches')}</label>
 					<div className="form_value">
 						<input
 							value={values?.size || ""}
 							type="number"
-							placeholder={__("Default", "domain")}
+							placeholder={__("Default", 'sa-wc-swatches')}
 							onChange={(e) => {
 								handleOnChange("size", e.target.value);
 							}}
@@ -97,13 +97,13 @@ const SwatchSettings = ({ onChange, values }) => {
 				</div>
 
 				<div className="sa_heading has_desc">
-					<h3>{__("Selected Option Settings", "domain")}</h3>
+					<h3>{__("Selected Option Settings", 'sa-wc-swatches')}</h3>
 					<p className="sa_desc">
-						{__("Apply for drawer layout only.", "domain")}
+						{__("Apply for drawer layout only.", 'sa-wc-swatches')}
 					</p>
 				</div>
 				<div class="form-item">
-					<label className="form_label">{__("Label", "domain")}</label>
+					<label className="form_label">{__("Label", 'sa-wc-swatches')}</label>
 					<div className="form_value">
 						<select
 							value={values?.drawer_label || ""}
@@ -123,7 +123,7 @@ const SwatchSettings = ({ onChange, values }) => {
 				</div>
 
 				<div class="form-item">
-					<label className="form_label">{__("Item layout", "domain")}</label>
+					<label className="form_label">{__("Item layout", 'sa-wc-swatches')}</label>
 					<div className="form_value">
 						<select
 							value={values?.drawer_layout || ""}
@@ -142,12 +142,12 @@ const SwatchSettings = ({ onChange, values }) => {
 				</div>
 
 				<div class="form-item">
-					<label className="form_label">{__("Swatch size", "domain")}</label>
+					<label className="form_label">{__("Swatch size", 'sa-wc-swatches')}</label>
 					<div className="form_value">
 						<input
 							value={values?.drawer_size || ""}
 							type="number"
-							placeholder={__("Default", "domain")}
+							placeholder={__("Default", 'sa-wc-swatches')}
 							onChange={(e) => {
 								handleOnChange("drawer_size", e.target.value);
 							}}
@@ -159,7 +159,7 @@ const SwatchSettings = ({ onChange, values }) => {
 
 			<div className="form-action" style={{ paddingTop: "20px" }}>
 				<button type="button" onClick={handleReset} className="button">
-					{__("Reset", "domain")}
+					{__("Reset", 'sa-wc-swatches')}
 				</button>
 			</div>
 		</>

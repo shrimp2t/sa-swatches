@@ -39,3 +39,11 @@ https://www.unipresscorp.com/magicslideshow-commercial3/example3.html
 https://amazingslider.com/examples/jquery-gallery-with-vertical-thumbnails-id28/#
 
 https://www.jqueryscript.net/demo/Simple-Clean-jQuery-Vertical-Product-Gallery/#
+
+## Links
+
+// app\public\wp-content\plugins\woocommerce\assets\js\admin\meta-boxes-product.js
+// app\public\wp-content\plugins\woocommerce\includes\admin\meta-boxes\views\html-product-attribute-inner.php
+// app\public\wp-content\plugins\woocommerce\includes\admin\class-wc-admin-assets.php
+// https://github.com/WordPress/gutenberg/blob/HEAD/packages/block-editor/src/components/media-upload/README.md
+// https://dev.to/diballesteros/how-to-create-a-stunning-side-drawer-with-react-spring-bja

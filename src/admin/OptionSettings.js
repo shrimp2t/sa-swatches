@@ -24,7 +24,7 @@ const OptionSettings = ({
 	return (
 		<div>
 			<Button variant="secondary" onClick={() => setIsVisible(!isVisible)}>
-				{__("Settings", "domain")}
+				{__("Settings", 'sa-wc-swatches')}
 			</Button>
 			{isVisible && (
 				<Popover
@@ -39,7 +39,7 @@ const OptionSettings = ({
 					{showAll || fields.includes("layout") ? (
 						<div class="form-item">
 							<label className="form_label">
-								{__("Item Layout", "domain")}
+								{__("Item Layout", 'sa-wc-swatches')}
 							</label>
 							<div className="form_value">
 								<select
@@ -85,13 +85,13 @@ const OptionSettings = ({
 					{showAll || fields.includes("col") ? (
 						<div class="form-item">
 							<label className="form_label">
-								{__("Items per row", "domain")}
+								{__("Items per row", 'sa-wc-swatches')}
 							</label>
 							<div className="form_value">
 								<input
 									value={getVal("col")}
 									type="number"
-									placeholder={__("Auto", "domain")}
+									placeholder={__("Auto", 'sa-wc-swatches')}
 									step={1}
 									onChange={(e) => {
 										handleOnChange(keyName("col"), e.target.value);
@@ -103,12 +103,12 @@ const OptionSettings = ({
 					) : null}
 					{showAll || fields.includes("size") ? (
 						<div class="form-item">
-							<label className="form_label">{__("Size", "domain")}</label>
+							<label className="form_label">{__("Size", 'sa-wc-swatches')}</label>
 							<div className="form_value">
 								<input
 									value={getVal("size")}
 									type="number"
-									placeholder={__("Auto", "domain")}
+									placeholder={__("Auto", 'sa-wc-swatches')}
 									onChange={(e) => {
 										handleOnChange(keyName("size"), e.target.value);
 									}}
@@ -119,7 +119,7 @@ const OptionSettings = ({
 					) : null}
 					{showAll || fields.includes("style") ? (
 						<div class="form-item">
-							<label className="form_label">{__("Style", "domain")}</label>
+							<label className="form_label">{__("Style", 'sa-wc-swatches')}</label>
 							<div className="form_value">
 								<select
 									value={getVal("style")}

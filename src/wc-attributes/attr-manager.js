@@ -44,9 +44,8 @@ const sendReq = ({ url, path, method, data, body, params }) => {
 	});
 };
 
-const Image2 = ({ data, type, onChange, clear }) => {
-	const [image, setImage] = useState(data || {});
-
+const Image2 = ({ value, type, onChange, clear }) => {
+	const [image, setImage] = useState(value || {});
 	const frame = useMemo(() => {
 		// https://github.com/WordPress/gutenberg/blob/HEAD/packages/block-editor/src/components/media-upload/README.md
 		// https://github.com/xwp/wp-core-media-widgets/blob/905edbccfc2a623b73a93dac803c5335519d7837/wp-admin/js/widgets/media-gallery-widget.js
@@ -121,7 +120,7 @@ const Image2 = ({ data, type, onChange, clear }) => {
 			{"full" === type ? (
 				<div className="act">
 					<Button size="small" onClick={handleOpen} variant="secondary">
-						{__('Upload', 'domain')}
+						{__('Upload', 'sa-wc-swatches')}
 					</Button>
 					<Button
 						onClick={handleRemove}
@@ -129,7 +128,7 @@ const Image2 = ({ data, type, onChange, clear }) => {
 						size="small"
 						variant="secondary"
 					>
-						{__('Remove', 'domain')}
+						{__('Remove', 'sa-wc-swatches')}
 					</Button>
 				</div>
 			) : null}
@@ -146,7 +145,7 @@ const App = () => {
 		<div className="sa_wc_attr_main">
 			{SA_WC_SWATCHES?.current_tax?.type === "sa_image" ? (
 				<Image2
-					id={window.SA_WC_SWATCHES?.current_term?.value}
+					value={window.SA_WC_SWATCHES?.current_term}
 					clear={true}
 					autoSave={false}
 					onChange={onChange}
@@ -194,7 +193,7 @@ const AppCol = ({ data, term_id }) => {
 	return (
 		<>
 			{SA_WC_SWATCHES?.current_tax?.type === "sa_image" ? (
-				<Image2 data={data} onChange={onChange} />
+				<Image2 value={data} onChange={onChange} />
 			) : null}
 
 			{SA_WC_SWATCHES?.current_tax?.type === "sa_color" ? (
@@ -222,6 +221,7 @@ jQuery(".sa_wc_swatch").each(function () {
 });
 
 jQuery(window).on("taxonomy_term_added", (e, res) => {
+	console.log('New term added');
 	jQuery(".sa_wc_swatch")
 		.not(".sa_added")
 		.each(function () {

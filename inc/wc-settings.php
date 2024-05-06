@@ -2,7 +2,6 @@
 
 namespace SA_WC_SWATCHES\Admin\WC_Settings;
 
-
 use function SA_WC_SWATCHES\get_assets;
 use function SA_WC_SWATCHES\get_text_settings_for_admin;
 
@@ -53,11 +52,10 @@ add_filter('woocommerce_get_sections_advanced', __NAMESPACE__ . '\add_setting_se
 function add_setting_section($sections)
 {
 
-	$sections['sa_swatches'] = __('Product Swatches');
+	$sections['sa_swatches'] = __('Product Swatches', 'sa-wc-swatches');
 	return $sections;
 }
 
-// add_action( 'woocommerce_settings_{tab}', ...
 add_action('woocommerce_settings_advanced', __NAMESPACE__ . '\section_content');
 
 function section_content()
@@ -79,12 +77,12 @@ function add_fields($settings, $current_section)
 
 	$settings = array(
 		array(
-			'name' => __('Loading...', 'domain'),
+			'name' => __('Loading...', 'sa-wc-swatches'),
 			'type' => 'title',
 		),
 
 		array(
-			'name'     => __('Settings', 'domain'),
+			'name'     => __('Settings', 'sa-wc-swatches'),
 			'id'       => 'sa_swatches_settings',
 			'type'     => 'textarea',
 			'row_class' => 'sa_swatches_settings',
