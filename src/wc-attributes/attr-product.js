@@ -1,5 +1,5 @@
 import { Spinner, Modal } from "@wordpress/components";
-
+import { __ } from "@wordpress/i18n";
 import React from "react";
 import { render, useState, useEffect } from "@wordpress/element";
 import "./attr-style.scss";
@@ -33,12 +33,19 @@ const App = ({
 	const [settings, setSettings] = useState({});
 
 	useEffect(() => {
-		jQuery(document.body).on("sa_wc_admin_product_attr_settings", (evt, data) => {
-			console.log("sa_wc_admin_product_attr_settings__on", taxonomy, data?.[taxonomy]);
-			setSettings((prev) => {
-				return { ...prev, ...(data?.[taxonomy] || {}) };
-			});
-		});
+		jQuery(document.body).on(
+			"sa_wc_admin_product_attr_settings",
+			(evt, data) => {
+				console.log(
+					"sa_wc_admin_product_attr_settings__on",
+					taxonomy,
+					data?.[taxonomy],
+				);
+				setSettings((prev) => {
+					return { ...prev, ...(data?.[taxonomy] || {}) };
+				});
+			},
+		);
 	}, []);
 
 	useEffect(() => {
@@ -223,14 +230,14 @@ const App = ({
 			/>
 			<div className="sa_space">
 				<button type="button" className="button" onClick={() => setOpen(true)}>
-					Select Options
+					{__("Select Options", "sa-wc-swatches")}
 				</button>
 				<button
 					type="button"
 					className="button"
 					onClick={() => setOpen("settings")}
 				>
-					Settings
+					{__("Settings", "sa-wc-swatches")}
 				</button>
 			</div>
 			{isOpen && (
@@ -354,6 +361,13 @@ const saInit = () => {
 			}
 			console.log("selected", selected, taxonomy);
 			el.addClass("sa_added sa_hide");
+			el.parent().addClass("sa_wrapper_added");
+
+			if (el.hasClass("select2-hidden-accessible")) {
+				try {
+					el.select2("destroy");
+				} catch (e) {}
+			}
 
 			const handleChange = (list) => {
 				let custom = {};

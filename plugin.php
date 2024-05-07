@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name:       ManySwatches - Product Variation Swatches For WooCommerce
+ * Plugin Name:       SaSwatches - Product Variation Swatches For WooCommerce
  * Description:       Add more blocks with advanced settings for WooCommerce.
  * Requires at least: 6.5
  * Requires PHP:      7.0
@@ -11,7 +11,7 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       sa-wc-swatches
  *
- * @package           ManySwatches
+ * @package           SaSwatches
  */
 
 namespace SA_WC_SWATCHES;

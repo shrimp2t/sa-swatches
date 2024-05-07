@@ -1,0 +1,45 @@
+Tôi đang phát triển một WordPress plugin  và có cá đoạn giới thiệu sau:
+
+Plugin Name: Pure WC Variation Swatches
+
+
+Variation Swatches is easy to use WooCommerce product variation swatches plugin. It offers an aesthetic and professional experience to select attributes for variation products. It turns the product variation select options fields into radio images, colors, and label. It means with the help of this powerful WooCommerce color or image variation swatches plugin, you can show product variation items in images, colors, and label. So, you can say goodbye to dropdown product attribute fields.
+
+Variation Swatches for WooCommerce not only offers the color, image and label attributes in the single WooCommerce product. It also enables them in product quick view. If you’re using WooCommerce themes like Flatsome that comes with default Quick View option, you don’t need to hassle to load color and image swatches for variable product attributes in quick view separately.
+
+In the free WooCommerce attribute variation plugin, besides creating size, brand, image, color, and label variation swatches, you can handle the swatches shape style Rounded and Circle. On top of that, it allows you beautiful tooltips on variation swatch hover. Based on your requirement you enable and disable hover from the settings. To maximize and personalize your development process, the product attributes swatches comes an option to disable default plugin stylesheet so that you can personally write your own CSS.
+
+
+Plugin Name: Variation Swatches for WooCommerce
+
+Variation Swatches is easy to use WooCommerce product variation swatches plugin. It offers an aesthetic and professional experience to select attributes for variation products. It turns the product variation select options fields into radio images, colors, and label. It means with the help of this powerful WooCommerce color or image variation swatches plugin, you can show product variation items in images, colors, and label. So, you can say goodbye to dropdown product attribute fields.
+
+Variation Swatches for WooCommerce not only offers the color, image and label attributes in the single WooCommerce product. It also enables them in product quick view. If you’re using WooCommerce themes like Flatsome that comes with default Quick View option, you don’t need to hassle to load color and image swatches for variable product attributes in quick view separately.
+
+In the free WooCommerce attribute variation plugin, besides creating size, brand, image, color, and label variation swatches, you can handle the swatches shape style Rounded and Circle. On top of that, it allows you beautiful tooltips on variation swatch hover. Based on your requirement you enable and disable hover from the settings. To maximize and personalize your development process, the product attributes swatches comes an option to disable default plugin stylesheet so that you can personally write your own CSS.
+
+
+Plugin Name: Displaying variation swatches for WooCommerce is a very helpful and necessary feature for a WooCommerce website. Do you want your variations to look more decorated, with different styles, and you can even customize them? A plugin that helps you create and customize variation swatches for WooCommerce websites makes the variations of your items look impressive and professional. Customers find it more comfortable and convenient to view variations of products as swatches. It catches their eyes, therefore, they make a decision to purchase more quickly.
+
+What are WooCommerce Product Variations Swatches?
+
+WooCommerce Product Variations Swatches is a variation swatches for WooCommerce plugin that allows you to show the product attributes in the front end the way you design them in the back end. It contains multiple options for the admin to manage the settings of global attributes and make them display in different types, styles, or profiles. The admin can decide to show them on a single product page, or on the Product list. You can also customize the swatches profile, enable showing variation swatches for WooCommerce on the widget, add custom CSS to design variation swatches for WooCommerce, and do many more things with our plugin.
+
+
+
+Plugin của tôi có tên là "Sa Swatches -Variation Swatches for WooCommerce "
+
+Hay việt đoạn giới thiệu về plugin của tôi dựa vào các nội dung trên.
+
+
+=============
+
+
+
+Introducing 'Sa Swatches - Variation Swatches for WooCommerce,' the ultimate solution to enhance your WooCommerce store's product presentation.
+
+Gone are the days of uninspiring dropdown menus for product variations. With 'Sa Swatches,' you can transform attribute selection into a visually captivating experience. By replacing dull dropdowns with vibrant swatches, this plugin adds a touch of elegance to your product pages and quick views.
+
+But 'Sa Swatches' is more than just aesthetics. It's a tool for customization and personalization. Tailor swatch shapes, colors, and hover effects to match your brand's identity seamlessly. With its user-friendly interface and extensive features, this plugin empowers you to create a shopping experience that delights customers and boosts conversions.
+
+Give your WooCommerce store the makeover it deserves with 'Sa Swatches - Variation Swatches for WooCommerce.' Try it today and see the difference!"

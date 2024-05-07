@@ -180,6 +180,13 @@ add_action('woocommerce_after_shop_loop_item', __NAMESPACE__ . '\maybe_remove_sw
 
 function loop_classes($classes, $product)
 {
+	$pos = get_swatches_position();
+
+	if (!$pos) {
+		return $classes;
+	}
+
+
 	$type = $product->get_type();
 	if ('variable' != $type) {
 		// return $classes;

@@ -52,8 +52,6 @@ const AttrItem = ({ attr }) => {
 			optSelectedSettings = { ...(settings?.drawer?.option?.default || {}) };
 	}
 
-	console.log("optSelectedSettings____", optSelectedSettings);
-
 	return (
 		<div
 			className={[
@@ -106,9 +104,6 @@ const AttrItem = ({ attr }) => {
 							isOpen={isOpen}
 							onClose={(e) => {
 								e.preventDefault();
-								if (!selection) {
-									return;
-								}
 								setIsOpen(false);
 							}}
 							title={
