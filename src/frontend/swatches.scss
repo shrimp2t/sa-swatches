@@ -86,6 +86,7 @@ body {
 			border: var(--sa-border-width) solid var(--sa-border-color);
 			border-radius: 100px;
 			opacity: 0;
+			transition: all linear 0.3s;
 		}
 	}
 
@@ -128,6 +129,7 @@ body {
 
 		.sa_checkbox {
 			background: var(--sa-check-active-bg);
+			border-color: #fff;
 
 			&::before {
 				border-color: var(--sa-check-active-bg);
