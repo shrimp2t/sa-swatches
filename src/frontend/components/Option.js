@@ -95,7 +95,7 @@ const Option = ({
 		classes.push("sa_not_select");
 	}
 
-	if (selectedVal === option?.slug) {
+	if (selectedVal && selectedVal === option?.slug) {
 		classes.push("sa_selected");
 		isClickable = true;
 		isChecked = true;
@@ -124,6 +124,7 @@ const Option = ({
 			width: `${100 / col}%`,
 		};
 	}
+
 
 	if (swatchSize > 0) {
 		cssSwatch = {

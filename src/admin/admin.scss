@@ -31,6 +31,23 @@
 		flex-basis: 200px;
 		font-weight: 600;
 	}
+
+	.form_value {
+		flex-basis: 200px;
+		width: 200px;
+		margin-left: auto;
+
+		>input,
+		>select {
+			width: 100%;
+		}
+
+		.components-base-control,
+		input,
+		select {
+			border-radius: 3px;
+		}
+	}
 }
 
 .sa-settings-form {
@@ -53,6 +70,7 @@
 .group-items {
 	padding: 0px 1.5em 1.5em;
 	border-bottom: 1px solid #c3c4c7;
+
 	&:last-child {
 		border-bottom: 0px none;
 	}
@@ -60,10 +78,11 @@
 
 .sa_wc_setting_popover {
 	background: #fff;
+
 	.components-popover__content {
 		padding: 1.5em;
 		display: flex;
-		gap: 15px;
+		gap: 20px;
 		flex-direction: column;
 	}
 }

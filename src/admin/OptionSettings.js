@@ -2,7 +2,7 @@ import { set, get } from "lodash";
 import { Button, Popover } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
 
-import { useState } from "@wordpress/element";
+import { useState, useRef } from "@wordpress/element";
 
 const OptionSettings = ({
 	handleOnChange,
@@ -11,6 +11,7 @@ const OptionSettings = ({
 	fields = undefined,
 }) => {
 	const [isVisible, setIsVisible] = useState(false);
+	const ref = useRef(false);
 	const keyName = (key) => {
 		return `${objKey}.${key}`;
 	};
@@ -21,9 +22,10 @@ const OptionSettings = ({
 
 	const showAll = !fields || !fields?.length;
 
+
 	return (
 		<div>
-			<Button variant="secondary" onClick={() => setIsVisible(!isVisible)}>
+			<Button ref={ref} variant="secondary" onClick={() => setIsVisible(!isVisible)}>
 				{__("Settings", 'sa-wc-swatches')}
 			</Button>
 			{isVisible && (
@@ -32,6 +34,7 @@ const OptionSettings = ({
 					className="sa_wc_setting_popover"
 					offset={15}
 					noArrow={false}
+					anchor={ref?.current}
 					onClose={() => {
 						setIsVisible(false);
 					}}
@@ -63,7 +66,7 @@ const OptionSettings = ({
 
 					{showAll || fields.includes("label") ? (
 						<div class="form-item">
-							<label className="form_label">Label</label>
+							<label className="form_label">{__("Label", 'sa-wc-swatches')}</label>
 							<div className="form_value">
 								<select
 									value={getVal("label")}
@@ -90,7 +93,7 @@ const OptionSettings = ({
 							<div className="form_value">
 								<input
 									value={getVal("col")}
-									type="number"
+									type="search"
 									placeholder={__("Auto", 'sa-wc-swatches')}
 									step={1}
 									onChange={(e) => {
@@ -101,7 +104,8 @@ const OptionSettings = ({
 							</div>
 						</div>
 					) : null}
-					{showAll || fields.includes("size") ? (
+
+					{(showAll || fields.includes("size")) ? (
 						<div class="form-item">
 							<label className="form_label">{__("Size", 'sa-wc-swatches')}</label>
 							<div className="form_value">
@@ -117,6 +121,7 @@ const OptionSettings = ({
 							</div>
 						</div>
 					) : null}
+
 					{showAll || fields.includes("style") ? (
 						<div class="form-item">
 							<label className="form_label">{__("Style", 'sa-wc-swatches')}</label>

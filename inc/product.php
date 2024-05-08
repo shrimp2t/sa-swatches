@@ -29,16 +29,18 @@ function get_option_settings()
 function get_swatches_position()
 {
 	$settings =  get_option_settings();
+	$default = 'before@loop/add-to-cart.php';
 	try {
-		if ($settings['shop']['show'] != 'yes') {
-			return false;
+		if (!isset($settings['shop'])) {
+			return $default;
 		}
 
-		$pos = isset($settings['shop']['position']) ? $settings['shop']['position'] : 'before@loop/add-to-cart.php';
+		$pos = isset($settings['shop']['position']) ? $settings['shop']['position'] : $default;
 		return $pos;
 	} catch (Exception $e) {
 		return false;
 	}
+	return false;
 }
 
 
@@ -58,6 +60,15 @@ function scripts()
 
 	wp_register_style('sa_wc_swatches', $assets['files']['css'], ['wp-components'], $assets['version']);
 	wp_enqueue_style('sa_wc_swatches');
+
+	$custom_css = "";
+	if (isset($settings['single']['pooverSize'])) {
+		$custom_css = "--sa-popover-size: {$settings['single']['pooverSize']};";
+	}
+	if ($custom_css) {
+		$custom_css = "body{ {$custom_css} }";
+	}
+	wp_add_inline_style('sa_wc_swatches', $custom_css);
 
 	$sample_product = new WC_Product_Variation();
 	$sample_product->set_parent_data([

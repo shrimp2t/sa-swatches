@@ -4,6 +4,7 @@ import { set, get } from "lodash";
 import React from "react";
 import { render, useState, useEffect } from "@wordpress/element";
 import OptionSettings from "./OptionSettings";
+import { __experimentalUnitControl as UnitControl } from "@wordpress/components";
 
 const Settings = ({ onChange, values }) => {
 	const getVal = (key, defaultVal = "") => {
@@ -52,6 +53,22 @@ const Settings = ({ onChange, values }) => {
 									</option>
 								))}
 							</select>
+						</div>
+					</div>
+
+					<div class="form-item">
+						<label className="form_label">
+							{__("Popover size", "sa-wc-swatches")}
+						</label>
+						<div className="form_value">
+							<UnitControl
+							placeholder="Auto"
+								value={getVal("single.pooverSize")}
+								onChange={(v) => {
+									handleOnChange("single.pooverSize", v);
+								}}
+							/>
+							
 						</div>
 					</div>
 

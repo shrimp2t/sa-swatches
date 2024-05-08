@@ -9,6 +9,7 @@ body {
 	--sa-swatch-gap: 10px;
 	--sa-option-padding: 5px;
 	--sa-row-margin: 1em;
+	--sa-popover-size: 300px;
 }
 
 .sa_attr_product {
@@ -282,6 +283,7 @@ body {
 // drawer layout -----------------------
 
 .sa_layout_drawer {
+	max-width: 500px;
 	.sa_attr {
 		align-items: center;
 	}
@@ -296,8 +298,44 @@ body {
 	}
 }
 
+.sa_layout_popover {
+	max-width: 500px;
+
+	.sa_attr {
+		align-items: center;
+	}
+
+	.sa_attr_values {
+		margin-left: auto;
+	}
+
+	.sa_opt_selected_prev {
+		display: flex;
+		justify-content: flex-end;
+	}
+}
+
+.sa_wc_popover_inner {
+
+	display: block;
+	padding: 1em;
+	width: var(--sa-popover-size, 300px);
+	min-width: 100px;
+	max-width: 100%;
+
+}
+
+.sa_wc_popover {
+	background: #fff;
+	&:focus-visible {
+		outline: none;
+	}
+}
+
+
 // --- Loop ------------------
 .sa_align_center {
+
 	.sa_loop_values,
 	.sa_attr_options {
 		justify-content: center;
@@ -305,6 +343,7 @@ body {
 }
 
 .sa_align_left {
+
 	.sa_loop_values,
 	.sa_attr_options {
 		justify-content: start;
@@ -312,6 +351,7 @@ body {
 }
 
 .sa_align_right {
+
 	.sa_loop_values,
 	.sa_attr_options {
 		justify-content: right;

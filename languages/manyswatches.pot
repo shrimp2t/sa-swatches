@@ -3,10 +3,148 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
+#: src/admin/OptionSettings.js:110
+msgid "Size"
+msgstr ""
+
+#: src/admin/OptionSettings.js:115
+msgid "Auto"
+msgstr ""
+
+#: src/admin/OptionSettings.js:127
+#: src/wc-attributes/components/SwatchSettings.js:184
+msgid "Style"
+msgstr ""
+
+#: src/admin/OptionSettings.js:29
+#: src/admin/OptionSettings.js:32
+#: src/admin/OptionSettings.js:28
+#: src/admin/OptionSettings.js:27
+#: src/wc-attributes/attr-product.js:240
+msgid "Settings"
+msgstr ""
+
+#: src/admin/OptionSettings.js:45
+msgid "Item Layout"
+msgstr ""
+
+#: src/admin/OptionSettings.js:69
+#: src/wc-attributes/components/SwatchSettings.js:130
+msgid "Label"
+msgstr ""
+
+#: src/admin/OptionSettings.js:91
+#: src/wc-attributes/components/SwatchSettings.js:70
+msgid "Items per row"
+msgstr ""
+
+#: src/admin/admin-settings.js:144
+#: src/admin/admin-settings.js:143
+#: src/admin/admin-settings.js:139
+#: src/admin/admin-settings.js:136
+#: src/admin/admin-settings.js:150
+#: src/admin/admin-settings.js:149
+#: src/admin/admin-settings.js:127
+#: src/wc-attributes/components/SwatchSettings.js:124
+msgid "Selected Option Settings"
+msgstr ""
+
+#: src/admin/admin-settings.js:146
+#: src/admin/admin-settings.js:145
+#: src/admin/admin-settings.js:141
+#: src/admin/admin-settings.js:138
+#: src/admin/admin-settings.js:152
+#: src/admin/admin-settings.js:151
+#: src/admin/admin-settings.js:129
+#: src/wc-attributes/components/SwatchSettings.js:126
+msgid "Apply for drawer layout only."
+msgstr ""
+
+#: src/admin/admin-settings.js:195
+msgid "Variations in shop & archive pages"
+msgstr ""
+
+#: src/admin/admin-settings.js:198
+msgid "Layout Settings"
+msgstr ""
+
+#: src/admin/admin-settings.js:203
+msgid "Enable"
+msgstr ""
+
+#: src/admin/admin-settings.js:226
+#: src/admin/admin-settings.js:225
+#: src/admin/admin-settings.js:221
+#: src/admin/admin-settings.js:218
+#: src/admin/admin-settings.js:232
+#: src/admin/admin-settings.js:231
+#: src/admin/admin-settings.js:209
+#: src/wc-attributes/components/SwatchSettings.js:29
+msgid "Options Settings"
+msgstr ""
+
+#: src/admin/admin-settings.js:231
+msgid "Position"
+msgstr ""
+
+#: src/admin/admin-settings.js:253
+msgid "Swatches align"
+msgstr ""
+
+#: src/admin/admin-settings.js:275
+msgid "Allow attributes selection"
+msgstr ""
+
+#: src/admin/admin-settings.js:297
+msgid "Swatch image"
+msgstr ""
+
+#: src/admin/admin-settings.js:31
+msgid "Variations in product page"
+msgstr ""
+
+#: src/admin/admin-settings.js:310
+msgid "Swatch color"
+msgstr ""
+
+#: src/admin/admin-settings.js:322
+msgid "Swatch default"
+msgstr ""
+
+#: src/admin/admin-settings.js:39
+msgid "Form Layout"
+msgstr ""
+
+#: src/admin/admin-settings.js:61
+msgid "Popover size"
+msgstr ""
+
+#: src/admin/admin-settings.js:77
+msgid "Attribute description"
+msgstr ""
+
 #: src/wc-attributes/attr-product.js:233
 msgid "Select Options"
 msgstr ""
 
-#: src/wc-attributes/attr-product.js:240
-msgid "Settings"
+#: src/admin/admin-settings.js:71
+#: src/admin/admin-settings.js:66
+#: src/wc-attributes/components/SwatchSettings.js:174
+msgid "Default"
+msgstr ""
+
+#: src/wc-attributes/components/SwatchSettings.js:15
+msgid "Reset all settings?"
+msgstr ""
+
+#: src/wc-attributes/components/SwatchSettings.js:150
+msgid "Item layout"
+msgstr ""
+
+#: src/wc-attributes/components/SwatchSettings.js:169
+msgid "Swatch size"
+msgstr ""
+
+#: src/wc-attributes/components/SwatchSettings.js:209
+msgid "Reset"
 msgstr ""

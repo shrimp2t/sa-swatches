@@ -1,5 +1,5 @@
-import { useState, useEffect } from "@wordpress/element";
-import { Modal } from "@wordpress/components";
+import { useState, useRef } from "@wordpress/element";
+import { Modal, Popover } from "@wordpress/components";
 import { useAppContext } from "./context";
 import Drawer from "./Drawer";
 import Option from "./Option";
@@ -10,6 +10,7 @@ const AttrItem = ({ attr }) => {
 	const { selection = true } = settings;
 	const [isOpen, setIsOpen] = useState(false);
 	const [isOpenModal, setOpenModal] = useState(false);
+	const ref = useRef(null);
 
 	let selectedLabel = "";
 	const selectedVal = selected?.[attr?.name] || false;
@@ -35,7 +36,7 @@ const AttrItem = ({ attr }) => {
 
 	let optSettings = {};
 	let optSelectedSettings = {};
-	const inDrawer = settings.layout === "drawer";
+	const inDrawer = ["drawer", 'popover'].includes(settings?.layout);
 	switch (attr.type) {
 		case "image":
 		case "sa_image":
@@ -77,6 +78,7 @@ const AttrItem = ({ attr }) => {
 					<>
 						<div
 							className="sa_opt_selected_prev"
+							ref={ref}
 							onClick={(e) => {
 								e.preventDefault();
 								if (!selection) {
@@ -100,27 +102,56 @@ const AttrItem = ({ attr }) => {
 								}}
 							/>
 						</div>
-						<Drawer
-							isOpen={isOpen}
-							onClose={(e) => {
-								e.preventDefault();
-								setIsOpen(false);
-							}}
-							title={
-								attr?.data?.button_label?.length
-									? attr?.data?.button_label
-									: SA_WC_SWATCHES.i18n.select_attr.replace("%s", attr?.label)
-							}
-						>
-							<AttrOptions
-								attr={attr}
-								settings={{
-									// ...(settings?.drawer?.option || {}),
-									...optSettings,
-									...(attr?.settings || {}),
-								}}
-							/>
-						</Drawer>
+						{
+							settings?.layout === 'popover' ?
+								(<>
+									{isOpen && <Popover
+										placement={`bottom`}
+										className="sa_wc_popover"
+										offset={15}
+										focusOnMount={true}
+										noArrow={false}
+										anchor={ref?.current}
+										onClose={() => {
+											setIsOpen(false);
+										}}
+									>
+
+										<div className="sa_wc_popover_inner">
+											<AttrOptions
+												attr={attr}
+												settings={{
+													// ...(settings?.drawer?.option || {}),
+													...optSettings,
+													...(attr?.settings || {}),
+												}}
+											/>
+										</div>
+
+									</Popover>}
+
+								</>) : (<Drawer
+									isOpen={isOpen}
+									onClose={(e) => {
+										e.preventDefault();
+										setIsOpen(false);
+									}}
+									title={
+										attr?.data?.button_label?.length
+											? attr?.data?.button_label
+											: SA_WC_SWATCHES.i18n.select_attr.replace("%s", attr?.label)
+									}
+								>
+									<AttrOptions
+										attr={attr}
+										settings={{
+											// ...(settings?.drawer?.option || {}),
+											...optSettings,
+											...(attr?.settings || {}),
+										}}
+									/>
+								</Drawer>)
+						}
 					</>
 				) : (
 					<AttrOptions

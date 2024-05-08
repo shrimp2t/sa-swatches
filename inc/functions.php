@@ -138,6 +138,7 @@ function get_text_settings_for_admin()
 			'separate' => __('Separate', 'sa-wc-swatches'),
 			'inline' => __('Inline', 'sa-wc-swatches'),
 			'drawer' => __('Drawer', 'sa-wc-swatches'),
+			'popover' => __('Popover', 'sa-wc-swatches'),
 		],
 
 		'option_layout' => [

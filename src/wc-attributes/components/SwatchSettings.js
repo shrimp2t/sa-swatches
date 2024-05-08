@@ -30,7 +30,7 @@ const SwatchSettings = ({ onChange, values }) => {
 				</div>
 
 				<div class="form-item">
-					<label className="form_label">{__("Label", "no")}</label>
+					<label className="form_label">{__("Label", "sa-wc-swatches")}</label>
 					<div className="form_value">
 						<select
 							value={values?.label || ""}
@@ -71,7 +71,7 @@ const SwatchSettings = ({ onChange, values }) => {
 					<div className="form_value">
 						<input
 							value={values?.col || ""}
-							type="number"
+							type="search"
 							placeholder="Auto"
 							step={1}
 							onChange={(e) => {
@@ -81,18 +81,42 @@ const SwatchSettings = ({ onChange, values }) => {
 						/>
 					</div>
 				</div>
+
 				<div class="form-item">
 					<label className="form_label">{__("Swatch size", 'sa-wc-swatches')}</label>
 					<div className="form_value">
 						<input
 							value={values?.size || ""}
-							type="number"
+							type="search"
 							placeholder={__("Default", 'sa-wc-swatches')}
 							onChange={(e) => {
 								handleOnChange("size", e.target.value);
 							}}
 							size={3}
 						/>
+					</div>
+				</div>
+
+
+				<div class="form-item">
+					<label className="form_label">{__("Style", 'sa-wc-swatches')}</label>
+					<div className="form_value">
+						<select
+							value={values?.style}
+							defaultValue={""}
+							onChange={(e) => {
+								const v = e.target.value;
+								handleOnChange('style', v);
+							}}
+						>
+							{Object.keys(SA_WC_SWATCHES.configs.swatch_style).map(
+								(key) => (
+									<option value={key} key={key}>
+										{SA_WC_SWATCHES.configs.swatch_style[key]}
+									</option>
+								),
+							)}
+						</select>
 					</div>
 				</div>
 
@@ -155,6 +179,29 @@ const SwatchSettings = ({ onChange, values }) => {
 						/>
 					</div>
 				</div>
+
+				<div class="form-item">
+					<label className="form_label">{__("Style", 'sa-wc-swatches')}</label>
+					<div className="form_value">
+						<select
+							value={values?.drawer_style}
+							defaultValue={""}
+							onChange={(e) => {
+								const v = e.target.value;
+								handleOnChange('drawer_style', v);
+							}}
+						>
+							{Object.keys(SA_WC_SWATCHES.configs.swatch_style).map(
+								(key) => (
+									<option value={key} key={key}>
+										{SA_WC_SWATCHES.configs.swatch_style[key]}
+									</option>
+								),
+							)}
+						</select>
+					</div>
+				</div>
+
 			</div>
 
 			<div className="form-action" style={{ paddingTop: "20px" }}>
