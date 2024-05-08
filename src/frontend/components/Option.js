@@ -130,6 +130,7 @@ const Option = ({
 		cssSwatch = {
 			width: `${swatchSize}px`,
 			height: `${swatchSize}px`,
+			minHeight: `${swatchSize}px`,
 		};
 	}
 
@@ -144,6 +145,13 @@ const Option = ({
 	const hasSwatch = ["sa_image", "image", "sa_color", "color"].includes(
 		swatch?.type,
 	);
+
+	if (selectedVal && ["sa_image", "image"].includes(
+		swatch?.type,
+	)) {
+		delete cssSwatch.height;
+	}
+
 	let willShowLabel = !["hide", "no", false].includes(showLabel);
 	if (isDrawerPrev) {
 		willShowLabel = false;
