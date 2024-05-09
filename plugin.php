@@ -16,6 +16,8 @@
 
 namespace SA_WC_SWATCHES;
 
+use Countable;
+use WP_Term;
 
 define('SA_WC_SWATCHES_BASEFILE', __FILE__);
 define('SA_WC_SWATCHES_URL', plugins_url('/', __FILE__));
@@ -84,3 +86,56 @@ function plugin_add_settings_link($links)
 }
 $plugin = plugin_basename(__FILE__);
 add_filter("plugin_action_links_$plugin", __NAMESPACE__ . '\plugin_add_settings_link');
+
+
+
+
+// $terms = apply_filters( 'get_the_terms', $terms, $post->ID, $taxonomy );
+
+add_filter('get_object_terms', function ($terms, $object_ids, $taxonomies, $args) {
+	if (!isset($_GET['debug'])) {
+		return  $terms;
+	}
+	if (!is_countable($terms) || !count($terms)) {
+		return $terms;
+	}
+
+	$post_id = $object_ids[0];
+	$taxonomy = $taxonomies[0];
+
+	$meta = get_post_meta($post_id, '_sa_attr_options_order', true);
+	if ($meta && is_array($meta)) {
+		if (!isset($meta[$taxonomy])) {
+			return $terms;
+		}
+
+		$customs = $meta[$taxonomy];
+		if (!is_array($customs) || !count($customs)) {
+			return $terms;
+		}
+
+		$array_keys = [];
+		foreach ($terms as $t) {
+			if (is_a($t, 'WP_Term')) {
+				$id = $t->term_id;
+			} else {
+				$id = $t;
+			}
+			$array_keys[$id] = $t;
+		}
+
+		$values = [];
+
+		foreach ($customs as $cid) {
+			if (isset($array_keys[$cid])) {
+				$values[] = $array_keys[$cid];
+				unset($array_keys[$cid]);
+			}
+		}
+
+		$values =  array_merge($values,  array_values($array_keys));
+		var_dump($values);
+		return $values;
+	}
+	return $terms;
+}, 100, 4);

@@ -62,6 +62,10 @@ function woocommerce_product_option_terms($attribute_taxonomy, $i, $attribute)
 	if (strpos($attribute_taxonomy->attribute_type, 'sa_') === false) {
 		return;
 	}
+
+	$at = new \WC_Product_Attribute();
+
+	var_dump($attribute->get_options());
 ?>
 	<select multiple="multiple" data-return_id="id" data-title="<?php echo esc_attr(wc_attribute_label($attribute->get_name())) ?>" data-selected="<?php echo json_encode($attribute->get_options()); ?>" data-placeholder="<?php esc_attr_e('Select values', 'woocommerce'); ?>" class="sa_attr_swatches multiselect attribute_values" name="attribute_values[<?php echo esc_attr($i); ?>][]" data-taxonomy="<?php echo esc_attr($attribute->get_taxonomy()); ?>">
 		<?php
@@ -111,19 +115,30 @@ function save_attribute_custom_meta($product)
 			$data = [];
 		}
 		$attribute_names = isset($data['attribute_names']) ?  $data['attribute_names'] : [];
+		$attribute_values = isset($data['attribute_values']) ?  $data['attribute_values'] : [];
+
 		if (!is_array($attribute_names)) {
 			$attribute_names = [];
+		}
+
+		if (!is_array($attribute_values)) {
+			$attribute_values = [];
 		}
 
 		$overwrite_swatches = isset($data['sa_overwrite_swatches']) && is_array($data['sa_overwrite_swatches']) ? $data['sa_overwrite_swatches'] : [];
 		$settings = isset($data['sa_attr_settings']) && is_array($data['sa_attr_settings']) ? $data['sa_attr_settings'] : [];
 		$save_data = [];
 		$save_settings = [];
+		$save_options_order = [];
 		foreach ($overwrite_swatches  as $k => $v) {
 			$name = isset($attribute_names[$k]) ? $attribute_names[$k] : false;
+
 			if ($name) {
 				$name = sanitize_title($name);
 				$save_data[$name] = remove_empty_from_array(json_decode($v, true));
+
+				$tax_name = wc_sanitize_taxonomy_name($name);
+				$save_options_order[$tax_name] = isset($attribute_values[$k]) ? $attribute_values[$k] : [];
 			}
 		}
 		foreach ($settings  as $k => $v) {
@@ -131,13 +146,12 @@ function save_attribute_custom_meta($product)
 			if ($name) {
 				$name = sanitize_title($name);
 				$save_settings[$name] = remove_empty_from_array(json_decode($v, true));
-
-
 				unset($save_settings[$name]['_t']);
 			}
 		}
 		update_post_meta($post_id, $key, $save_data);
 		update_post_meta($post_id, $key_settings, $save_settings);
+		update_post_meta($post_id, '_sa_attr_options_order', $save_options_order);
 	} catch (Exception $e) {
 		update_post_meta($post_id, $key, []);
 	}

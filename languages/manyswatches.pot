@@ -17,9 +17,6 @@ msgid "Style"
 msgstr ""
 
 #: src/admin/OptionSettings.js:29
-#: src/admin/OptionSettings.js:32
-#: src/admin/OptionSettings.js:28
-#: src/admin/OptionSettings.js:27
 #: src/wc-attributes/attr-product.js:240
 msgid "Settings"
 msgstr ""
@@ -39,23 +36,11 @@ msgid "Items per row"
 msgstr ""
 
 #: src/admin/admin-settings.js:144
-#: src/admin/admin-settings.js:143
-#: src/admin/admin-settings.js:139
-#: src/admin/admin-settings.js:136
-#: src/admin/admin-settings.js:150
-#: src/admin/admin-settings.js:149
-#: src/admin/admin-settings.js:127
 #: src/wc-attributes/components/SwatchSettings.js:124
 msgid "Selected Option Settings"
 msgstr ""
 
 #: src/admin/admin-settings.js:146
-#: src/admin/admin-settings.js:145
-#: src/admin/admin-settings.js:141
-#: src/admin/admin-settings.js:138
-#: src/admin/admin-settings.js:152
-#: src/admin/admin-settings.js:151
-#: src/admin/admin-settings.js:129
 #: src/wc-attributes/components/SwatchSettings.js:126
 msgid "Apply for drawer layout only."
 msgstr ""
@@ -73,12 +58,6 @@ msgid "Enable"
 msgstr ""
 
 #: src/admin/admin-settings.js:226
-#: src/admin/admin-settings.js:225
-#: src/admin/admin-settings.js:221
-#: src/admin/admin-settings.js:218
-#: src/admin/admin-settings.js:232
-#: src/admin/admin-settings.js:231
-#: src/admin/admin-settings.js:209
 #: src/wc-attributes/components/SwatchSettings.js:29
 msgid "Options Settings"
 msgstr ""
@@ -127,12 +106,6 @@ msgstr ""
 msgid "Select Options"
 msgstr ""
 
-#: src/admin/admin-settings.js:71
-#: src/admin/admin-settings.js:66
-#: src/wc-attributes/components/SwatchSettings.js:174
-msgid "Default"
-msgstr ""
-
 #: src/wc-attributes/components/SwatchSettings.js:15
 msgid "Reset all settings?"
 msgstr ""
@@ -143,6 +116,10 @@ msgstr ""
 
 #: src/wc-attributes/components/SwatchSettings.js:169
 msgid "Swatch size"
+msgstr ""
+
+#: src/wc-attributes/components/SwatchSettings.js:174
+msgid "Default"
 msgstr ""
 
 #: src/wc-attributes/components/SwatchSettings.js:209

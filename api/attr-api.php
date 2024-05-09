@@ -372,6 +372,9 @@ function get_product_attributes($product)
 			'default' => $product->get_variation_default_attribute($attribute_name),
 			'selected' => false,
 			'type' => $type,
+			'__attr_options' => $attr_options,
+			// '__options' => $attr_options->get_options(),
+			'___attributes' => $attributes,
 			'settings' => (object) remove_empty_from_array($parser_settings[0]),
 			'drawer' => (object)remove_empty_from_array($parser_settings[1]),
 			'data' => (object) $wc_attr ? remove_empty_from_array($wc_attr['data']) : [],
@@ -384,13 +387,22 @@ function get_product_attributes($product)
 		if ($product && taxonomy_exists($attribute_name)) {
 			$attr_data[$key]['tax'] = $attribute_name;
 			// Get terms if this is a taxonomy - ordered. We need the names too.
-			$terms = wc_get_product_terms(
-				$product->get_id(),
-				$attribute_name,
-				array(
-					'fields' => 'all',
-				)
-			);
+
+			$terms = get_terms([
+				'taxonomy' => $attribute_name,
+				'fields' => 'all',
+				'orderby' => 'include',
+				'include' => $attr_options,
+			]);
+			// $terms = wc_get_product_terms(
+			// 	$product->get_id(),
+			// 	$attribute_name,
+			// 	array(
+			// 		'fields' => 'all',
+			// 		'orderby' => 'include',
+			// 		'include' => $attr_options,
+			// 	)
+			// );
 
 			$options = get_terms_data($terms, $type, $product->get_id(), $attribute_name, $image_size);
 		} else {
