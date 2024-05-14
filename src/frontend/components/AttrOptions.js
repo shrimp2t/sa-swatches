@@ -1,5 +1,6 @@
 import Option from "./Option";
 
+
 const AttrOptions = ({ attr, settings }) => {
 	const classes = ["sa_attr_options"];
 	classes.push("sa_opts_l_" + settings?.layout);
@@ -13,7 +14,7 @@ const AttrOptions = ({ attr, settings }) => {
 
 	return (
 		<>
-			<div className={classes.join(" ")}>
+			<div  className={classes.join(" ")}>
 				{attr?.options.map((option) => {
 					return (
 						<Option
@@ -26,7 +27,6 @@ const AttrOptions = ({ attr, settings }) => {
 					);
 				})}
 			</div>
-
 		</>
 	);
 };

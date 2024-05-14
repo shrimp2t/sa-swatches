@@ -1,4 +1,4 @@
-import { useState, useRef } from "@wordpress/element";
+import { useState, useRef, useEffect } from "@wordpress/element";
 import { Modal, Popover } from "@wordpress/components";
 import { useAppContext } from "./context";
 import Drawer from "./Drawer";
@@ -11,6 +11,7 @@ const AttrItem = ({ attr }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isOpenModal, setOpenModal] = useState(false);
 	const ref = useRef(null);
+	const refValue = useRef(null);
 
 	let selectedLabel = "";
 	const selectedVal = selected?.[attr?.name] || false;
@@ -36,7 +37,7 @@ const AttrItem = ({ attr }) => {
 
 	let optSettings = {};
 	let optSelectedSettings = {};
-	const inDrawer = ["drawer", 'popover'].includes(settings?.layout);
+	const inDrawer = ["drawer", "popover"].includes(settings?.layout);
 	switch (attr.type) {
 		case "image":
 		case "sa_image":
@@ -52,6 +53,13 @@ const AttrItem = ({ attr }) => {
 			optSettings = { ...(settings?.option?.default || {}) };
 			optSelectedSettings = { ...(settings?.drawer?.option?.default || {}) };
 	}
+
+	useEffect(() => {
+		refValue.current.addEventListener("wheel", (event) => {
+			event.preventDefault();
+			refValue.current.scrollLeft += event.deltaY;
+		});
+	}, []);
 
 	return (
 		<div
@@ -73,7 +81,10 @@ const AttrItem = ({ attr }) => {
 				</div>
 			)}
 
-			<div className={[!loop ? "sa_attr_values" : "sa_loop_values"].join(" ")}>
+			<div
+				ref={refValue}
+				className={[!loop ? "sa_attr_values" : "sa_loop_values"].join(" ")}
+			>
 				{inDrawer ? (
 					<>
 						<div
@@ -102,10 +113,10 @@ const AttrItem = ({ attr }) => {
 								}}
 							/>
 						</div>
-						{
-							settings?.layout === 'popover' ?
-								(<>
-									{isOpen && <Popover
+						{settings?.layout === "popover" ? (
+							<>
+								{isOpen && (
+									<Popover
 										placement={`bottom`}
 										className="sa_wc_popover"
 										offset={15}
@@ -116,7 +127,6 @@ const AttrItem = ({ attr }) => {
 											setIsOpen(false);
 										}}
 									>
-
 										<div className="sa_wc_popover_inner">
 											<AttrOptions
 												attr={attr}
@@ -127,31 +137,32 @@ const AttrItem = ({ attr }) => {
 												}}
 											/>
 										</div>
-
-									</Popover>}
-
-								</>) : (<Drawer
-									isOpen={isOpen}
-									onClose={(e) => {
-										e.preventDefault();
-										setIsOpen(false);
+									</Popover>
+								)}
+							</>
+						) : (
+							<Drawer
+								isOpen={isOpen}
+								onClose={(e) => {
+									e.preventDefault();
+									setIsOpen(false);
+								}}
+								title={
+									attr?.data?.button_label?.length
+										? attr?.data?.button_label
+										: SA_WC_SWATCHES.i18n.select_attr.replace("%s", attr?.label)
+								}
+							>
+								<AttrOptions
+									attr={attr}
+									settings={{
+										// ...(settings?.drawer?.option || {}),
+										...optSettings,
+										...(attr?.settings || {}),
 									}}
-									title={
-										attr?.data?.button_label?.length
-											? attr?.data?.button_label
-											: SA_WC_SWATCHES.i18n.select_attr.replace("%s", attr?.label)
-									}
-								>
-									<AttrOptions
-										attr={attr}
-										settings={{
-											// ...(settings?.drawer?.option || {}),
-											...optSettings,
-											...(attr?.settings || {}),
-										}}
-									/>
-								</Drawer>)
-						}
+								/>
+							</Drawer>
+						)}
 					</>
 				) : (
 					<AttrOptions
