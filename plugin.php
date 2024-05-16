@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name:       SaSwatches - Product Variation Swatches For WooCommerce
- * Description:       Add more blocks with advanced settings for WooCommerce.
+ * Description:       Variation Swatches for WooCommerce the ultimate solution to enhance your WooCommerce store's product presentation.
  * Requires at least: 6.5
  * Requires PHP:      7.0
  * Version:           0.1.0
@@ -89,9 +89,6 @@ add_filter("plugin_action_links_$plugin", __NAMESPACE__ . '\plugin_add_settings_
 
 
 
-
-// $terms = apply_filters( 'get_the_terms', $terms, $post->ID, $taxonomy );
-
 add_filter('get_object_terms', function ($terms, $object_ids, $taxonomies, $args) {
 	if (!isset($_GET['debug'])) {
 		return  $terms;
@@ -134,8 +131,9 @@ add_filter('get_object_terms', function ($terms, $object_ids, $taxonomies, $args
 		}
 
 		$values =  array_merge($values,  array_values($array_keys));
-		var_dump($values);
+		// var_dump($values);
 		return $values;
 	}
+	
 	return $terms;
 }, 100, 4);

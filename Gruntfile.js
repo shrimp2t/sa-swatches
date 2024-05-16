@@ -55,7 +55,6 @@ module.exports = function (grunt) {
 
 		clean: {
 			main: [`${pkgInfo.name}`],
-			js: ["frontend"],
 			zip: ["*.zip"],
 		},
 
