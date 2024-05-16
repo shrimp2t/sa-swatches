@@ -28,15 +28,15 @@ const Settings = ({ onChange, values }) => {
 	return (
 		<>
 			<div className="sa-settings-form">
-				<h2>{__("Variations in product page", "sa-wc-swatches")}</h2>
+				<h2>{__("Variations in product page","sa-swatches")}</h2>
 				<div className="group-items">
 					<div className="sa_heading">
-						<h3>{__("Layout Settings", "sa-wc-swatches")}</h3>
+						<h3>{__("Layout Settings","sa-swatches")}</h3>
 					</div>
 
 					<div class="form-item">
 						<label className="form_label">
-							{__("Form Layout", "sa-wc-swatches")}
+							{__("Form Layout","sa-swatches")}
 						</label>
 						<div className="form_value">
 							<select
@@ -58,7 +58,7 @@ const Settings = ({ onChange, values }) => {
 
 					<div class="form-item">
 						<label className="form_label">
-							{__("Popover size", "sa-wc-swatches")}
+							{__("Popover size","sa-swatches")}
 						</label>
 						<div className="form_value">
 							<UnitControl
@@ -74,7 +74,7 @@ const Settings = ({ onChange, values }) => {
 
 					<div class="form-item">
 						<label className="form_label">
-							{__("Attribute description", "sa-wc-swatches")}
+							{__("Attribute description","sa-swatches")}
 						</label>
 						<div className="form_value">
 							<select
@@ -97,12 +97,12 @@ const Settings = ({ onChange, values }) => {
 
 				<div className="group-items">
 					<div className="sa_heading">
-						<h3>{__("Options Settings", "sa-wc-swatches")}</h3>
+						<h3>{__("Options Settings","sa-swatches")}</h3>
 					</div>
 
 					<div class="form-item">
 						<label className="form_label">
-							{__("Swatch image", "sa-wc-swatches")}
+							{__("Swatch image","sa-swatches")}
 						</label>
 						<div className="form_value">
 							<OptionSettings
@@ -115,7 +115,7 @@ const Settings = ({ onChange, values }) => {
 
 					<div class="form-item">
 						<label className="form_label">
-							{__("Swatch color", "sa-wc-swatches")}
+							{__("Swatch color","sa-swatches")}
 						</label>
 						<div className="form_value">
 							<OptionSettings
@@ -127,7 +127,7 @@ const Settings = ({ onChange, values }) => {
 					</div>
 					<div class="form-item">
 						<label className="form_label">
-							{__("Swatch default", "sa-wc-swatches")}
+							{__("Swatch default","sa-swatches")}
 						</label>
 						<div className="form_value">
 							<OptionSettings
@@ -141,15 +141,15 @@ const Settings = ({ onChange, values }) => {
 				{["drawer"].includes(getVal("single.layout")) ? (
 					<div className="group-items">
 						<div className="sa_heading has_desc">
-							<h3>{__("Selected Option Settings", "sa-wc-swatches")}</h3>
+							<h3>{__("Selected Option Settings","sa-swatches")}</h3>
 							<p className="sa_desc">
-								{__("Apply for drawer layout only.", "sa-wc-swatches")}
+								{__("Apply for drawer layout only.","sa-swatches")}
 							</p>
 						</div>
 
 						<div class="form-item">
 							<label className="form_label">
-								{__("Swatch image", "sa-wc-swatches")}
+								{__("Swatch image","sa-swatches")}
 							</label>
 							<div className="form_value">
 								<OptionSettings
@@ -163,7 +163,7 @@ const Settings = ({ onChange, values }) => {
 
 						<div class="form-item">
 							<label className="form_label">
-								{__("Swatch color", "sa-wc-swatches")}
+								{__("Swatch color","sa-swatches")}
 							</label>
 							<div className="form_value">
 								<OptionSettings
@@ -176,7 +176,7 @@ const Settings = ({ onChange, values }) => {
 						</div>
 						<div class="form-item">
 							<label className="form_label">
-								{__("Swatch default", "sa-wc-swatches")}
+								{__("Swatch default","sa-swatches")}
 							</label>
 							<div className="form_value">
 								<OptionSettings
@@ -192,15 +192,15 @@ const Settings = ({ onChange, values }) => {
 			</div>
 
 			<div className="sa-settings-form">
-				<h2>{__("Variations in shop & archive pages", "sa-wc-swatches")}</h2>
+				<h2>{__("Variations in shop & archive pages","sa-swatches")}</h2>
 				<div className="group-items">
 					<div className="sa_heading">
-						<h3>{__("Layout Settings", "sa-wc-swatches")}</h3>
+						<h3>{__("Layout Settings","sa-swatches")}</h3>
 					</div>
 
 					<div class="form-item">
 						<label className="form_label">
-							{__("Enable", "sa-wc-swatches")}
+							{__("Enable","sa-swatches")}
 						</label>
 						<div className="form_value">
 							<select
@@ -223,12 +223,12 @@ const Settings = ({ onChange, values }) => {
 
 				<div className="group-items">
 					<div className="sa_heading">
-						<h3>{__("Options Settings", "sa-wc-swatches")}</h3>
+						<h3>{__("Options Settings","sa-swatches")}</h3>
 					</div>
 
 					<div class="form-item">
 						<label className="form_label">
-							{__("Position", "sa-wc-swatches")}
+							{__("Position","sa-swatches")}
 						</label>
 						<div className="form_value">
 							<select
@@ -250,7 +250,7 @@ const Settings = ({ onChange, values }) => {
 
 					<div class="form-item">
 						<label className="form_label">
-							{__("Swatches align", "sa-wc-swatches")}
+							{__("Swatches align","sa-swatches")}
 						</label>
 						<div className="form_value">
 							<select
@@ -272,7 +272,7 @@ const Settings = ({ onChange, values }) => {
 
 					<div class="form-item">
 						<label className="form_label">
-							{__("Allow attributes selection", "sa-wc-swatches")}
+							{__("Allow attributes selection","sa-swatches")}
 						</label>
 						<div className="form_value">
 							<select
@@ -294,7 +294,7 @@ const Settings = ({ onChange, values }) => {
 
 					<div class="form-item">
 						<label className="form_label">
-							{__("Swatch image", "sa-wc-swatches")}
+							{__("Swatch image","sa-swatches")}
 						</label>
 						<div className="form_value">
 							<OptionSettings
@@ -307,7 +307,7 @@ const Settings = ({ onChange, values }) => {
 
 					<div class="form-item">
 						<label className="form_label">
-							{__("Swatch color", "sa-wc-swatches")}
+							{__("Swatch color","sa-swatches")}
 						</label>
 						<div className="form_value">
 							<OptionSettings
@@ -319,7 +319,7 @@ const Settings = ({ onChange, values }) => {
 					</div>
 					<div class="form-item">
 						<label className="form_label">
-							{__("Swatch default", "sa-wc-swatches")}
+							{__("Swatch default","sa-swatches")}
 						</label>
 						<div className="form_value">
 							<OptionSettings

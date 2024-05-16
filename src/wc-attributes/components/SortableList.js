@@ -138,11 +138,11 @@ const ListSelectedTermItem = ({
 						) : null}
 
 						<div className="box ">
-							<h3>{__("This product settings", 'sa-wc-swatches')}</h3>
+							<h3>{__("This product settings","sa-swatches")}</h3>
 							<div className="term-item__swatch_box settings-form">
 								<div class="form-item">
 									<label className="form_label">
-										{__("Swatch type", 'sa-wc-swatches')}
+										{__("Swatch type","sa-swatches")}
 									</label>
 									<div className="form_value">
 										<select
@@ -159,7 +159,7 @@ const ListSelectedTermItem = ({
 												});
 											}}
 										>
-											<option value={``}>{__("Default", 'sa-wc-swatches')}</option>
+											<option value={``}>{__("Default","sa-swatches")}</option>
 											{Object.keys(SA_WC_SWATCHES.att_types).map((key) => {
 												return (
 													<option value={key} key={key}>
@@ -171,7 +171,7 @@ const ListSelectedTermItem = ({
 									</div>
 								</div>
 								<div class="form-item">
-									<label className="form_label">{__("Swatch", 'sa-wc-swatches')}</label>
+									<label className="form_label">{__("Swatch","sa-swatches")}</label>
 									<div className="form_value">
 										{lastSwatch?.type === "sa_image" ? (
 											<ImagePicker
@@ -201,7 +201,7 @@ const ListSelectedTermItem = ({
 
 								<div class="form-item">
 									<label className="form_label">
-										{__("Custom name", 'sa-wc-swatches')}
+										{__("Custom name","sa-swatches")}
 									</label>
 									<div className="form_value">
 										<input
@@ -226,7 +226,7 @@ const ListSelectedTermItem = ({
 						</div>
 
 						<div className="sa_box">
-							<h3>{__("Global settings", 'sa-wc-swatches')}</h3>
+							<h3>{__("Global settings","sa-swatches")}</h3>
 							<div className="term-item swatch_box">
 								{term?.swatch?.type === "sa_image" ? (
 									<span className="img sa_border">

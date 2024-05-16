@@ -9,7 +9,7 @@
  * Author:            shrimp2t
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       sa-wc-swatches
+ * Text Domain:       sa-swatches
  *
  * @package           SaSwatches
  */
@@ -39,10 +39,10 @@ add_action('init', __NAMESPACE__ . '\load_textdomain');
 function load_textdomain()
 {
 	load_plugin_textdomain('sa-wc-swatches', false, SA_WC_SWATCHES_PATH . '/languages');
-	wp_set_script_translations('sa_wc_admin_settings', 'sa-wc-swatches');
-	wp_set_script_translations('sa_wc_admin_attr_manager', 'sa-wc-swatches');
-	wp_set_script_translations('sa_wc_swatches', 'sa-wc-swatches');
-	wp_set_script_translations('sa_wc_admin_product_attr', 'sa-wc-swatches');
+	wp_set_script_translations('sa_wc_admin_settings',"sa-swatches");
+	wp_set_script_translations('sa_wc_admin_attr_manager',"sa-swatches");
+	wp_set_script_translations('sa_wc_swatches',"sa-swatches");
+	wp_set_script_translations('sa_wc_admin_product_attr',"sa-swatches");
 }
 
 
@@ -70,8 +70,8 @@ add_action('init', __NAMESPACE__ . '\blocks_init');
 
 function add_attribute_types($options)
 {
-	$options['sa_color'] = __('Color', 'sa-wc-swatches');
-	$options['sa_image'] = __('Image', 'sa-wc-swatches');
+	$options['sa_color'] = __('Color',"sa-swatches");
+	$options['sa_image'] = __('Image',"sa-swatches");
 	return $options;
 }
 add_filter('product_attributes_type_selector', __NAMESPACE__ . '\add_attribute_types', 9999);
@@ -80,7 +80,7 @@ add_filter('product_attributes_type_selector', __NAMESPACE__ . '\add_attribute_t
 function plugin_add_settings_link($links)
 {
 	$url = admin_url('admin.php?page=wc-settings&tab=advanced&section=sa_swatches');
-	$settings_link = '<a href="' . esc_url($url) . '">' . __('Settings', 'sa-wc-swatches') . '</a>';
+	$settings_link = '<a href="' . esc_url($url) . '">' . __('Settings',"sa-swatches") . '</a>';
 	array_push($links, $settings_link);
 	return $links;
 }

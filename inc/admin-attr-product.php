@@ -63,11 +63,8 @@ function woocommerce_product_option_terms($attribute_taxonomy, $i, $attribute)
 		return;
 	}
 
-	$at = new \WC_Product_Attribute();
-
-	var_dump($attribute->get_options());
 ?>
-	<select multiple="multiple" data-return_id="id" data-title="<?php echo esc_attr(wc_attribute_label($attribute->get_name())) ?>" data-selected="<?php echo json_encode($attribute->get_options()); ?>" data-placeholder="<?php esc_attr_e('Select values', 'woocommerce'); ?>" class="sa_attr_swatches multiselect attribute_values" name="attribute_values[<?php echo esc_attr($i); ?>][]" data-taxonomy="<?php echo esc_attr($attribute->get_taxonomy()); ?>">
+	<select multiple="multiple" data-return_id="id" data-title="<?php echo esc_attr(wc_attribute_label($attribute->get_name())) ?>" data-selected="<?php echo wp_json_encode($attribute->get_options()); ?>" data-placeholder="<?php esc_attr_e('Select values', "sa-swatches"); ?>" class="sa_attr_swatches multiselect attribute_values" name="attribute_values[<?php echo esc_attr($i); ?>][]" data-taxonomy="<?php echo esc_attr($attribute->get_taxonomy()); ?>">
 		<?php
 		$selected_terms = $attribute->get_options();
 		if ($selected_terms) {

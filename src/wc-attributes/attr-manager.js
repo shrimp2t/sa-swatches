@@ -120,7 +120,7 @@ const Image2 = ({ value, type, onChange, clear }) => {
 			{"full" === type ? (
 				<div className="act">
 					<Button size="small" onClick={handleOpen} variant="secondary">
-						{__('Upload', 'sa-wc-swatches')}
+						{__('Upload',"sa-swatches")}
 					</Button>
 					<Button
 						onClick={handleRemove}
@@ -128,7 +128,7 @@ const Image2 = ({ value, type, onChange, clear }) => {
 						size="small"
 						variant="secondary"
 					>
-						{__('Remove', 'sa-wc-swatches')}
+						{__('Remove',"sa-swatches")}
 					</Button>
 				</div>
 			) : null}

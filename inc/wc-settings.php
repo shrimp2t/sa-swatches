@@ -52,7 +52,7 @@ add_filter('woocommerce_get_sections_advanced', __NAMESPACE__ . '\add_setting_se
 function add_setting_section($sections)
 {
 
-	$sections['sa_swatches'] = __('Product Swatches', 'sa-wc-swatches');
+	$sections['sa_swatches'] = __('Product Swatches',"sa-swatches");
 	return $sections;
 }
 
@@ -77,12 +77,12 @@ function add_fields($settings, $current_section)
 
 	$settings = array(
 		array(
-			'name' => __('Loading...', 'sa-wc-swatches'),
+			'name' => __('Loading...',"sa-swatches"),
 			'type' => 'title',
 		),
 
 		array(
-			'name'     => __('Settings', 'sa-wc-swatches'),
+			'name'     => __('Settings',"sa-swatches"),
 			'id'       => 'sa_swatches_settings',
 			'type'     => 'textarea',
 			'row_class' => 'sa_swatches_settings',

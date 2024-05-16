@@ -135,50 +135,50 @@ function get_text_settings_for_admin()
 	$config = [
 
 		'main_layout' => [
-			'separate' => __('Separate', 'sa-wc-swatches'),
-			'inline' => __('Inline', 'sa-wc-swatches'),
-			'drawer' => __('Drawer', 'sa-wc-swatches'),
-			'popover' => __('Popover', 'sa-wc-swatches'),
+			'separate' => __('Separate',"sa-swatches"),
+			'inline' => __('Inline',"sa-swatches"),
+			'drawer' => __('Drawer',"sa-swatches"),
+			'popover' => __('Popover',"sa-swatches"),
 		],
 
 		'option_layout' => [
-			'' => __('Default', 'sa-wc-swatches'),
-			'inline' => __('Inline', 'sa-wc-swatches'),
-			'box' => __('Box', 'sa-wc-swatches'),
-			'checkbox' => __('Checkbox', 'sa-wc-swatches'),
+			'' => __('Default',"sa-swatches"),
+			'inline' => __('Inline',"sa-swatches"),
+			'box' => __('Box',"sa-swatches"),
+			'checkbox' => __('Checkbox',"sa-swatches"),
 		],
 
 		'position' => [
-			'before@loop/add-to-cart.php' => __('Before add cart', 'sa-wc-swatches'),
-			'after@loop/add-to-cart.php' => __('After add cart', 'sa-wc-swatches'),
+			'before@loop/add-to-cart.php' => __('Before add cart',"sa-swatches"),
+			'after@loop/add-to-cart.php' => __('After add cart',"sa-swatches"),
 
-			// 'before@loop/price.php' => __('Before price', 'sa-wc-swatches'),
-			// 'after@loop/price.php' => __('After price', 'sa-wc-swatches'),
+			// 'before@loop/price.php' => __('Before price',"sa-swatches"),
+			// 'after@loop/price.php' => __('After price',"sa-swatches"),
 
 		],
 
 
 		'align' => [
-			'' => __('Default', 'sa-wc-swatches'),
-			'center' => __('Center', 'sa-wc-swatches'),
-			'left' => __('Left', 'sa-wc-swatches'),
-			'right' => __('Right', 'sa-wc-swatches'),
+			'' => __('Default',"sa-swatches"),
+			'center' => __('Center',"sa-swatches"),
+			'left' => __('Left',"sa-swatches"),
+			'right' => __('Right',"sa-swatches"),
 		],
 
 		'swatch_style' => [
-			'' => __('Default', 'sa-wc-swatches'),
-			'box' => __('Box', 'sa-wc-swatches'),
-			'circle' => __('Circle', 'sa-wc-swatches'),
+			'' => __('Default',"sa-swatches"),
+			'box' => __('Box',"sa-swatches"),
+			'circle' => __('Circle',"sa-swatches"),
 		],
 		'yes_no' => [
-			'' => __('Default', 'sa-wc-swatches'),
-			'yes' => __('Yes', 'sa-wc-swatches'),
-			'no' => __('No', 'sa-wc-swatches'),
+			'' => __('Default',"sa-swatches"),
+			'yes' => __('Yes',"sa-swatches"),
+			'no' => __('No',"sa-swatches"),
 		],
 		'show_hide' => [
-			'' => __('Default', 'sa-wc-swatches'),
-			'show' => __('Show', 'sa-wc-swatches'),
-			'hide' => __('Hide', 'sa-wc-swatches'),
+			'' => __('Default',"sa-swatches"),
+			'show' => __('Show',"sa-swatches"),
+			'hide' => __('Hide',"sa-swatches"),
 		],
 
 

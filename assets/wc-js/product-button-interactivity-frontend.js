@@ -1015,7 +1015,7 @@
 			}, p), r), !!u && (0, e.createElement)(ce, {
 				className: "wc-block-components-notice-banner__dismiss",
 				icon: d,
-				label: (0, l.__)("Dismiss this notice", "woocommerce"),
+				label: (0, l.__)("Dismiss this notice", "sa-swatches"),
 				onClick: e => {
 					"function" == typeof (null == e ? void 0 : e.preventDefault) && e.preventDefault && e.preventDefault(), s()
 				},

@@ -26,7 +26,7 @@ const OptionSettings = ({
 	return (
 		<div>
 			<Button ref={ref} variant="secondary" onClick={() => setIsVisible(!isVisible)}>
-				{__("Settings", 'sa-wc-swatches')}
+				{__("Settings","sa-swatches")}
 			</Button>
 			{isVisible && (
 				<Popover
@@ -42,7 +42,7 @@ const OptionSettings = ({
 					{showAll || fields.includes("layout") ? (
 						<div class="form-item">
 							<label className="form_label">
-								{__("Item Layout", 'sa-wc-swatches')}
+								{__("Item Layout","sa-swatches")}
 							</label>
 							<div className="form_value">
 								<select
@@ -66,7 +66,7 @@ const OptionSettings = ({
 
 					{showAll || fields.includes("label") ? (
 						<div class="form-item">
-							<label className="form_label">{__("Label", 'sa-wc-swatches')}</label>
+							<label className="form_label">{__("Label","sa-swatches")}</label>
 							<div className="form_value">
 								<select
 									value={getVal("label")}
@@ -88,13 +88,13 @@ const OptionSettings = ({
 					{showAll || fields.includes("col") ? (
 						<div class="form-item">
 							<label className="form_label">
-								{__("Items per row", 'sa-wc-swatches')}
+								{__("Items per row","sa-swatches")}
 							</label>
 							<div className="form_value">
 								<input
 									value={getVal("col")}
 									type="search"
-									placeholder={__("Auto", 'sa-wc-swatches')}
+									placeholder={__("Auto","sa-swatches")}
 									step={1}
 									onChange={(e) => {
 										handleOnChange(keyName("col"), e.target.value);
@@ -107,12 +107,12 @@ const OptionSettings = ({
 
 					{(showAll || fields.includes("size")) ? (
 						<div class="form-item">
-							<label className="form_label">{__("Size", 'sa-wc-swatches')}</label>
+							<label className="form_label">{__("Size","sa-swatches")}</label>
 							<div className="form_value">
 								<input
 									value={getVal("size")}
 									type="number"
-									placeholder={__("Auto", 'sa-wc-swatches')}
+									placeholder={__("Auto","sa-swatches")}
 									onChange={(e) => {
 										handleOnChange(keyName("size"), e.target.value);
 									}}
@@ -124,7 +124,7 @@ const OptionSettings = ({
 
 					{showAll || fields.includes("style") ? (
 						<div class="form-item">
-							<label className="form_label">{__("Style", 'sa-wc-swatches')}</label>
+							<label className="form_label">{__("Style","sa-swatches")}</label>
 							<div className="form_value">
 								<select
 									value={getVal("style")}

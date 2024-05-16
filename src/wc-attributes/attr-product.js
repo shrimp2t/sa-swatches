@@ -230,14 +230,14 @@ const App = ({
 			/>
 			<div className="sa_space">
 				<button type="button" className="button" onClick={() => setOpen(true)}>
-					{__("Select Options", "sa-wc-swatches")}
+					{__("Select Options","sa-swatches")}
 				</button>
 				<button
 					type="button"
 					className="button"
 					onClick={() => setOpen("settings")}
 				>
-					{__("Settings", "sa-wc-swatches")}
+					{__("Settings","sa-swatches")}
 				</button>
 			</div>
 			{isOpen && (
