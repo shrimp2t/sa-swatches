@@ -62,7 +62,7 @@ function column_content($content, $column_name, $term_id)
 			$tax =  get_current_tax_type();
 			$data = get_swatch_data($term_id);
 			if (in_array($tax['type'], ['sa_color', 'sa_image'])) {
-				$content =  '<div data-tax="' . esc_attr($tax['tax']) . '" data-swatch="' . esc_attr(json_encode($data)) . '" data-tax-type="' . esc_attr($tax['type']) . '" data-term_id="' . esc_attr($term_id) . '"  class="sa_wc_swatch"></div>';
+				$content =  '<div data-tax="' . esc_attr($tax['tax']) . '" data-swatch="' . esc_attr(wp_json_encode($data, JSON_NUMERIC_CHECK)) . '" data-tax-type="' . esc_attr($tax['type']) . '" data-term_id="' . esc_attr($term_id) . '"  class="sa_wc_swatch"></div>';
 			} else {
 				$content = esc_html($data['value']);
 			}
@@ -97,7 +97,7 @@ function add_term_fields_color($taxonomy)
 {
 ?>
 	<div class="form-field">
-		<label for="sa_wc_attr_swatch"><?php _e('Swatch color',"sa-swatches") ?></label>
+		<label for="sa_wc_attr_swatch"><?php _e('Swatch color', "sa-swatches") ?></label>
 		<div id="sa_wc_attr_swatch_el">
 			<input type="hidden" name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" />
 		</div>
@@ -110,7 +110,7 @@ function add_term_fields_image($taxonomy)
 ?>
 	<div class="form-field">
 
-		<label for="sa_wc_attr_swatch"><?php _e('Swatch image',"sa-swatches") ?></label>
+		<label for="sa_wc_attr_swatch"><?php _e('Swatch image', "sa-swatches") ?></label>
 		<div id="sa_wc_attr_swatch_el">
 			<input type="hidden" name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" />
 		</div>
@@ -125,7 +125,7 @@ function edit_term_fields_text($term, $taxonomy)
 	$data = get_swatch_data($term->term_id);
 
 ?><tr class="form-field">
-		<th><label for="sa_wc_attr_swatch"><?php _e('Swatch label',"sa-swatches") ?></label></th>
+		<th><label for="sa_wc_attr_swatch"><?php _e('Swatch label', "sa-swatches") ?></label></th>
 		<td>
 			<div id="sa_wc_attr_swatch_el">
 				<input type="hidden" name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" />
@@ -141,10 +141,10 @@ function edit_term_fields_color($term, $taxonomy)
 	// get meta data value
 	$data = get_term_swatch($term->term_id);
 ?><tr class="form-field">
-		<th><label for="sa_wc_attr_swatch_color"><?php _e('Swatch label',"sa-swatches") ?></label></th>
+		<th><label for="sa_wc_attr_swatch_color"><?php _e('Swatch label', "sa-swatches") ?></label></th>
 		<td>
 			<div id="sa_wc_attr_swatch_el">
-				<input name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" type="hidden" value="<?php echo esc_attr(json_encode($data)) ?>" />
+				<input name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" type="hidden" value="<?php echo esc_attr(wp_json_encode($data, JSON_NUMERIC_CHECK)) ?>" />
 			</div>
 		</td>
 	</tr>
@@ -156,10 +156,10 @@ function edit_term_fields_image($term, $taxonomy)
 
 	$data = get_term_swatch($term->term_id);
 ?><tr class="form-field">
-		<th><label for="sa_wc_attr_swatch_image"><?php _e('Swatch image',"sa-swatches") ?></label></th>
+		<th><label for="sa_wc_attr_swatch_image"><?php _e('Swatch image', "sa-swatches") ?></label></th>
 		<td>
 			<div id="sa_wc_attr_swatch_el">
-				<input name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" type="hidden" value="<?php echo esc_attr(json_encode($data)) ?>" />
+				<input name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" type="hidden" value="<?php echo esc_attr(wp_json_encode($data, JSON_NUMERIC_CHECK)) ?>" />
 			</div>
 		</td>
 	</tr>
@@ -300,7 +300,7 @@ function update_attribute($id, $data = [])
 		'button_label' =>  $label,
 	];
 	$table =  $wpdb->prefix . 'sa_attr_tax_data';
-	$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE attr_id = %d LIMIT 1", $id));
+	$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE attr_id = %d LIMIT 1", $id)); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 	if ($row) {
 		$wpdb->update(
@@ -321,7 +321,7 @@ function delete_attribute($id)
 {
 	global $wpdb;
 	$table =  $wpdb->prefix . 'sa_attr_tax_data';
-	$wpdb->query($wpdb->prepare("DELETE FROM {$table} WHERE attr_id = %d", $id));
+	$wpdb->query($wpdb->prepare("DELETE FROM {$table} WHERE attr_id = %d", $id)); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 }
 add_action('woocommerce_attribute_updated', __NAMESPACE__ . '\update_attribute', 10, 2);
 add_action('woocommerce_attribute_added', __NAMESPACE__ . '\update_attribute', 10, 2);
@@ -331,21 +331,21 @@ function add_attribute_fields()
 {
 ?>
 	<div class="form-field">
-		<label for="sa_attr_btn_label"><?php esc_html_e('Button label',"sa-swatches"); ?></label>
+		<label for="sa_attr_btn_label"><?php esc_html_e('Button label', "sa-swatches"); ?></label>
 		<div class="sa_attribute_field">
 			<input name="sa_attr_btn_label" id="sa_attr_btn_label" type="text" value="">
-			<p class="description"><?php _e('E.g: View chart size',"sa-swatches"); ?></p>
+			<p class="description"><?php _e('E.g: View chart size', "sa-swatches"); ?></p>
 		</div>
 	</div>
 	<div class="form-field">
-		<label for="sa_attr_modal_title"><?php esc_html_e('Modal title',"sa-swatches"); ?></label>
+		<label for="sa_attr_modal_title"><?php esc_html_e('Modal title', "sa-swatches"); ?></label>
 		<div class="sa_attribute_field">
 			<input name="sa_attr_modal_title" id="sa_attr_modal_title" type="text" value="">
-			<p class="description"><?php _e('E.g: View chart size',"sa-swatches"); ?></p>
+			<p class="description"><?php _e('E.g: View chart size', "sa-swatches"); ?></p>
 		</div>
 	</div>
 	<div class="form-field">
-		<label for="sa_attribute_settings"><?php esc_html_e('Description',"sa-swatches"); ?></label>
+		<label for="sa_attribute_settings"><?php esc_html_e('Description', "sa-swatches"); ?></label>
 		<div class="sa_attribute_field"><?php wp_editor("", 'sa_attr_desc', ['textarea_rows' => 15]); ?></div>
 		<div class="sa_attribute_settings"></div>
 	</div>
@@ -361,16 +361,16 @@ function edit_attribute_fields()
 ?>
 	<tr class="form-field form-required">
 		<th scope="row" valign="top">
-			<label for="sa_attr_btn_label"><?php esc_html_e('Button label',"sa-swatches"); ?></label>
+			<label for="sa_attr_btn_label"><?php esc_html_e('Button label', "sa-swatches"); ?></label>
 		</th>
 		<td>
 			<div class="sa_attribute_field "><input name="sa_attr_btn_label" id="sa_attr_btn_label" type="text" value="<?php echo esc_attr($data['button_label']); ?>"></div>
-			<p class="description"><?php _e('E.g: View chart size',"sa-swatches"); ?></p>
+			<p class="description"><?php _e('E.g: View chart size', "sa-swatches"); ?></p>
 		</td>
 	</tr>
 	<tr class="form-field form-required">
 		<th scope="row" valign="top">
-			<label for="sa_attr_modal_title"><?php esc_html_e('Modal title',"sa-swatches"); ?></label>
+			<label for="sa_attr_modal_title"><?php esc_html_e('Modal title', "sa-swatches"); ?></label>
 		</th>
 		<td>
 			<div class="sa_attribute_field "><input name="sa_attr_modal_title" id="sa_attr_modal_title" type="text" value="<?php echo esc_attr($data['title']); ?>"></div>
@@ -378,7 +378,7 @@ function edit_attribute_fields()
 	</tr>
 	<tr class="form-field form-required">
 		<th scope="row" valign="top">
-			<label for="sa_attribute_settings"><?php esc_html_e('Description',"sa-swatches"); ?></label>
+			<label for="sa_attribute_settings"><?php esc_html_e('Description', "sa-swatches"); ?></label>
 		</th>
 		<td>
 			<div class="sa_attribute_field "><?php wp_editor($data['description'], 'sa_attr_desc', ['textarea_rows' => 15]); ?></div>

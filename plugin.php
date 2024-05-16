@@ -5,7 +5,7 @@
  * Description:       Variation Swatches for WooCommerce the ultimate solution to enhance your WooCommerce store's product presentation.
  * Requires at least: 6.5
  * Requires PHP:      7.0
- * Version: 					0.1.1
+ * Version: 					0.1.3
  * Author:            shrimp2t
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -133,6 +133,6 @@ add_filter('get_object_terms', function ($terms, $object_ids, $taxonomies, $args
 		// var_dump($values);
 		return $values;
 	}
-	
+
 	return $terms;
 }, 100, 4);

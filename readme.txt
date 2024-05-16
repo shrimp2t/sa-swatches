@@ -2,7 +2,7 @@
 Contributors:      pressmaximum
 Tags: 			   		 woocommerce, swatches, variation swatches, variable product attributes, variation product swatches
 Tested up to:      6.0.1
-Stable tag:        0.1.0
+Stable tag:        0.1.3
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 

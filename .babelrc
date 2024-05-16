@@ -1,11 +1,13 @@
 {
-  "presets": [
-    "@wordpress/babel-preset-default"
-  ],
-  "plugins": [
-    [
-        "@wordpress/babel-plugin-makepot",
-        { "output": "languages/manyswatches.pot" }
-    ]
-]
+	"presets": [
+		"@wordpress/babel-preset-default"
+	],
+	"plugins": [
+		[
+			"@wordpress/babel-plugin-makepot",
+			{
+				"output": "languages/sa-swatches.pot"
+			}
+		]
+	]
 }
