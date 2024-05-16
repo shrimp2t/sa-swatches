@@ -10,14 +10,13 @@
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       sa-swatches
+ * Requires Plugins: 	woocommerce
  *
  * @package           SaSwatches
  */
 
 namespace SA_WC_SWATCHES;
 
-use Countable;
-use WP_Term;
 
 define('SA_WC_SWATCHES_BASEFILE', __FILE__);
 define('SA_WC_SWATCHES_URL', plugins_url('/', __FILE__));
@@ -38,7 +37,7 @@ add_action('init', __NAMESPACE__ . '\load_textdomain');
 
 function load_textdomain()
 {
-	load_plugin_textdomain('sa-wc-swatches', false, SA_WC_SWATCHES_PATH . '/languages');
+	load_plugin_textdomain('sa-swatches', false, SA_WC_SWATCHES_PATH . '/languages');
 	wp_set_script_translations('sa_wc_admin_settings',"sa-swatches");
 	wp_set_script_translations('sa_wc_admin_attr_manager',"sa-swatches");
 	wp_set_script_translations('sa_wc_swatches',"sa-swatches");

@@ -12,7 +12,6 @@ msgid "Auto"
 msgstr ""
 
 #: src/admin/OptionSettings.js:127
-#: src/components/fields/border.js:28
 #: src/wc-attributes/components/SwatchSettings.js:184
 msgid "Style"
 msgstr ""
@@ -103,175 +102,12 @@ msgstr ""
 msgid "Attribute description"
 msgstr ""
 
-#: src/blocks/list/edit.js:100
-msgid "Add Items"
-msgstr ""
-
-#: src/blocks/list/settings.js:10
-msgid "Items"
-msgstr ""
-
-#: src/blocks/list/settings.js:17
-msgid "Title"
-msgstr ""
-
-#: src/blocks/list/settings.js:18
-msgid "Item title"
-msgstr ""
-
-#: src/blocks/list/settings.js:22
-msgid "Subtitle"
-msgstr ""
-
-#: src/blocks/list/settings.js:24
-msgid "Item subtitle"
-msgstr ""
-
-#: src/blocks/list/settings.js:29
-msgid "Description"
-msgstr ""
-
-#: src/blocks/list/settings.js:30
-msgid "Item description"
-msgstr ""
-
-#: src/blocks/list/settings.js:38
-msgid "Columns"
-msgstr ""
-
-#: src/blocks/list/settings.js:6
-msgid "Content"
-msgstr ""
-
-#: src/components/fields/background.js:111
-msgid "Repeat"
-msgstr ""
-
-#: src/components/fields/background.js:114
-msgid "no-repeat"
-msgstr ""
-
-#: src/components/fields/background.js:118
-msgid "repeat"
-msgstr ""
-
-#: src/components/fields/background.js:122
-msgid "repeat-x"
-msgstr ""
-
-#: src/components/fields/background.js:126
-msgid "repeat-y"
-msgstr ""
-
-#: src/components/fields/background.js:142
-msgid "Attachment"
-msgstr ""
-
-#: src/components/fields/background.js:145
-msgid "Scroll"
-msgstr ""
-
-#: src/components/fields/background.js:149
-msgid "Fixed"
-msgstr ""
-
-#: src/components/fields/background.js:153
-msgid "Local"
-msgstr ""
-
-#: src/components/fields/background.js:157
-msgid "Local, scroll"
-msgstr ""
-
-#: src/components/fields/background.js:16
-msgid "Type"
-msgstr ""
-
-#: src/components/fields/background.js:161
-msgid "Scroll, local"
-msgstr ""
-
-#: src/components/fields/background.js:35
-#: src/components/fields/border.js:48
-msgid "Color"
-msgstr ""
-
-#: src/components/fields/background.js:47
-#: src/components/fields/border.js:39
-msgid "Gradient"
-msgstr ""
-
-#: src/components/fields/background.js:59
-#: src/components/fields/border.js:35
-msgid "Image"
-msgstr ""
-
-#: src/components/fields/background.js:88
-#: src/wc-attributes/components/SortableList.js:162
-#: src/wc-attributes/components/SwatchSettings.js:174
-msgid "Default"
-msgstr ""
-
-#: src/components/fields/background.js:92
-msgid "Cover"
-msgstr ""
-
-#: src/components/fields/background.js:96
-msgid "Contain"
-msgstr ""
-
-#: src/components/fields/border.js:16
-msgid "Border Width"
-msgstr ""
-
-#: src/components/fields/border.js:54
-msgid "Border Radius"
-msgstr ""
-
-#: src/components/fields/color.js:100
-msgid "Clear"
-msgstr ""
-
-#: src/components/fields/image.js:51
-msgid "Edit image"
-msgstr ""
-
-#: src/components/fields/image.js:60
-msgid "Replace image"
-msgstr ""
-
-#: src/components/fields/image.js:68
-msgid "Change Image"
-msgstr ""
-
-#: src/components/fields/image.js:69
-msgid "Upload Image"
-msgstr ""
-
-#: src/components/fields/image.js:78
-#: src/components/fields/repeater.js:108
-#: src/wc-attributes/attr-manager.js:131
-msgid "Remove"
-msgstr ""
-
-#: src/components/fields/repeater.js:180
-msgid "Add Item"
-msgstr ""
-
-#: src/components/fields/responsive.js:60
-msgid "Desktop"
-msgstr ""
-
-#: src/components/fields/responsive.js:68
-msgid "Tablet"
-msgstr ""
-
-#: src/components/fields/responsive.js:76
-msgid "Mobile"
-msgstr ""
-
 #: src/wc-attributes/attr-manager.js:123
 msgid "Upload"
+msgstr ""
+
+#: src/wc-attributes/attr-manager.js:131
+msgid "Remove"
 msgstr ""
 
 #: src/wc-attributes/attr-product.js:233
@@ -284,6 +120,11 @@ msgstr ""
 
 #: src/wc-attributes/components/SortableList.js:145
 msgid "Swatch type"
+msgstr ""
+
+#: src/wc-attributes/components/SortableList.js:162
+#: src/wc-attributes/components/SwatchSettings.js:174
+msgid "Default"
 msgstr ""
 
 #: src/wc-attributes/components/SortableList.js:174

@@ -94,7 +94,7 @@ module.exports = function (grunt) {
 				options: {
 					cwd: "./",
 					domainPath: "languages/",
-					potFilename: "sa-wc-swatches.pot", // Name of the POT file.
+					potFilename: "sa-swatches.pot", // Name of the POT file.
 					type: "wp-plugin", // Type of project (wp-plugin or wp-theme).
 				},
 			},
