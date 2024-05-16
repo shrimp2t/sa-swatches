@@ -61,7 +61,7 @@ jQuery(($) => {
 						form.trigger("sa_variants", [res?.data]);
 					}
 				})
-				.catch((e) => {});
+				.catch((e) => { });
 		}
 
 		const args = {
@@ -217,12 +217,12 @@ jQuery(($) => {
 					appEl.trigger("sa_variants", [res?.data]);
 				}
 			})
-			.catch((e) => {});
+			.catch((e) => { });
 
 		const loopSettings = {
 			layout: "inline",
 			loop: true,
-			selection: preSettings?.shop?.selection == !"no" ? true : false,
+			selection: preSettings?.shop?.selection !== "no" ? true : false,
 			showAttrLabel: false,
 			align: preSettings?.shop?.align || "center",
 			option: preSettings?.shop?.option,

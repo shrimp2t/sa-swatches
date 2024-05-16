@@ -21,6 +21,7 @@ module.exports = function (grunt) {
 					"!tests/**",
 					"!phpunit.xml.dist",
 					"!*.sh",
+					"!*.md",
 					"!*.map",
 					"!Gruntfile.js",
 					"!package.json",
@@ -34,6 +35,8 @@ module.exports = function (grunt) {
 					"!composer.lock",
 					"!package-lock.json",
 					"!phpcs.xml.dist",
+					"!webpack.config.js",
+					"!.babelrc",
 				],
 				dest: `${pkgInfo.name}/`,
 			},
@@ -119,7 +122,6 @@ module.exports = function (grunt) {
 	]);
 	grunt.registerTask("release", function (ver) {
 		grunt.task.run("clean:zip");
-		grunt.task.run("clean:js");
 		grunt.task.run("shell:build");
 		// Replace new version
 		let newVersion = pkgInfo.version;
