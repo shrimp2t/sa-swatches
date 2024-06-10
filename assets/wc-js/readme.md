@@ -29,8 +29,8 @@ Listend event variation change:
 
 const e = he(); // getContext 
 const element = getElement();
-element.ref.addEventListener("sa_wc_variation_change", (evt) => {
-  console.log('sa_wc_variation_change', evt.detail, e);
+element.ref.addEventListener("sasw_variation_change", (evt) => {
+  console.log('sasw_variation_change', evt.detail, e);
   e.productId = evt.detail?.variation_id || 0;
 });
 

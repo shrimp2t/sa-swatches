@@ -25,7 +25,7 @@ const SwatchSettings = ({ onChange, values }) => {
 	return (
 		<>
 			<div className="settings-form">
-				<div className="sa_heading">
+				<div className="sasw_heading">
 					<h3>{__("Options Settings","sa-swatches")}</h3>
 				</div>
 
@@ -40,9 +40,9 @@ const SwatchSettings = ({ onChange, values }) => {
 								handleOnChange("label", v);
 							}}
 						>
-							{Object.keys(SA_WC_SWATCHES.configs.yes_no).map((k) => (
+							{Object.keys(SASW_SWATCHES.configs.yes_no).map((k) => (
 								<option value={k} key={k}>
-									{SA_WC_SWATCHES.configs.yes_no[k]}
+									{SASW_SWATCHES.configs.yes_no[k]}
 								</option>
 							))}
 						</select>
@@ -58,9 +58,9 @@ const SwatchSettings = ({ onChange, values }) => {
 								handleOnChange("layout", e.target.value);
 							}}
 						>
-							{Object.keys(SA_WC_SWATCHES.configs.option_layout).map((k) => (
+							{Object.keys(SASW_SWATCHES.configs.option_layout).map((k) => (
 								<option value={k} key={k}>
-									{SA_WC_SWATCHES.configs.option_layout[k]}
+									{SASW_SWATCHES.configs.option_layout[k]}
 								</option>
 							))}
 						</select>
@@ -109,10 +109,10 @@ const SwatchSettings = ({ onChange, values }) => {
 								handleOnChange('style', v);
 							}}
 						>
-							{Object.keys(SA_WC_SWATCHES.configs.swatch_style).map(
+							{Object.keys(SASW_SWATCHES.configs.swatch_style).map(
 								(key) => (
 									<option value={key} key={key}>
-										{SA_WC_SWATCHES.configs.swatch_style[key]}
+										{SASW_SWATCHES.configs.swatch_style[key]}
 									</option>
 								),
 							)}
@@ -120,9 +120,9 @@ const SwatchSettings = ({ onChange, values }) => {
 					</div>
 				</div>
 
-				<div className="sa_heading has_desc">
+				<div className="sasw_heading has_desc">
 					<h3>{__("Selected Option Settings","sa-swatches")}</h3>
-					<p className="sa_desc">
+					<p className="sasw_desc">
 						{__("Apply for drawer layout only.","sa-swatches")}
 					</p>
 				</div>
@@ -137,9 +137,9 @@ const SwatchSettings = ({ onChange, values }) => {
 								handleOnChange("drawer_label", v);
 							}}
 						>
-							{Object.keys(SA_WC_SWATCHES.configs.show_hide).map((k) => (
+							{Object.keys(SASW_SWATCHES.configs.show_hide).map((k) => (
 								<option value={k} key={k}>
-									{SA_WC_SWATCHES.configs.show_hide[k]}
+									{SASW_SWATCHES.configs.show_hide[k]}
 								</option>
 							))}
 						</select>
@@ -156,9 +156,9 @@ const SwatchSettings = ({ onChange, values }) => {
 								handleOnChange("drawer_layout", e.target.value);
 							}}
 						>
-							{Object.keys(SA_WC_SWATCHES.configs.option_layout).map((k) => (
+							{Object.keys(SASW_SWATCHES.configs.option_layout).map((k) => (
 								<option value={k} key={k}>
-									{SA_WC_SWATCHES.configs.option_layout[k]}
+									{SASW_SWATCHES.configs.option_layout[k]}
 								</option>
 							))}
 						</select>
@@ -191,10 +191,10 @@ const SwatchSettings = ({ onChange, values }) => {
 								handleOnChange('drawer_style', v);
 							}}
 						>
-							{Object.keys(SA_WC_SWATCHES.configs.swatch_style).map(
+							{Object.keys(SASW_SWATCHES.configs.swatch_style).map(
 								(key) => (
 									<option value={key} key={key}>
-										{SA_WC_SWATCHES.configs.swatch_style[key]}
+										{SASW_SWATCHES.configs.swatch_style[key]}
 									</option>
 								),
 							)}

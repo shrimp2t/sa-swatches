@@ -1111,7 +1111,7 @@
 					syncTemporaryNumberOfItemsOnLoad: () => {
 						const e = he();
 						const element = getElement();
-						element.ref.addEventListener("sa_wc_variation_change", (evt) => {
+						element.ref.addEventListener("sasw_variation_change", (evt) => {
 							e.productId = evt.detail?.variation_id || 0;
 							e.link = evt.detail?.link || null;
 						});

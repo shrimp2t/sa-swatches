@@ -32,13 +32,13 @@ const Option = ({
 	let gloalSettings = {};
 	switch (optionSettings.type) {
 		case "image":
-		case "sa_image":
+		case "sasw_image":
 			if (!isDrawerPrev) {
 				gloalSettings = { ...(globalSettings?.option?.image || {}) };
 			}
 			break;
 		case "color":
-		case "sa_color":
+		case "sasw_color":
 			if (!isDrawerPrev) {
 				gloalSettings = { ...(settings?.color || {}) };
 			}
@@ -54,19 +54,19 @@ const Option = ({
 		...cleanObj(optionSettings || {}),
 	};
 
-	// if (swatch?.type === 'sa_color') {
+	// if (swatch?.type === 'sasw_color') {
 
 	let selectedVal =
 		typeof selected[attrName] !== "undefined"
 			? selected?.[attrName]
 			: defaults?.[attrName];
 
-	const classes = ["sa_attr_option"];
+	const classes = ["sasw_attr_option"];
 	let isActive = true;
 	let isClickable = true;
 	let isChecked = false;
 
-	classes.push(`sa_opt_layout_${swatch.layout}`);
+	classes.push(`sasw_opt_layout_${swatch.layout}`);
 
 	if (availableAttrs?.[attrName]) {
 		if (
@@ -85,18 +85,18 @@ const Option = ({
 
 	if (checkActive) {
 		if (isActive) {
-			classes.push("sa_active");
+			classes.push("sasw_active");
 		} else {
-			classes.push("sa_inactive");
+			classes.push("sasw_inactive");
 		}
 	}
 
 	if (!selectedVal) {
-		classes.push("sa_not_select");
+		classes.push("sasw_not_select");
 	}
 
 	if (selectedVal && selectedVal === option?.slug) {
-		classes.push("sa_selected");
+		classes.push("sasw_selected");
 		isClickable = true;
 		isChecked = true;
 	}
@@ -142,11 +142,11 @@ const Option = ({
 		};
 	}
 
-	const hasSwatch = ["sa_image", "image", "sa_color", "color"].includes(
+	const hasSwatch = ["sasw_image", "image", "sasw_color", "color"].includes(
 		swatch?.type,
 	);
 
-	if (selectedVal && ["sa_image", "image"].includes(
+	if (selectedVal && ["sasw_image", "image"].includes(
 		swatch?.type,
 	)) {
 		delete cssSwatch.height;
@@ -166,15 +166,15 @@ const Option = ({
 	}
 
 	if (!willShowLabel) {
-		classes.push("sa_no_label");
+		classes.push("sasw_no_label");
 	} else {
-		classes.push("sa_has_label");
+		classes.push("sasw_has_label");
 	}
 
 	let isCircle = false;
 	if (hasSwatch || isDrawerPrev) {
 		if (style) {
-			classes.push("sa_style_" + style);
+			classes.push("sasw_style_" + style);
 			isCircle = style === "circle";
 		}
 	}
@@ -207,19 +207,19 @@ const Option = ({
 
 	return (
 		<>
-			<div className="sa_opt_wrap" style={css}>
+			<div className="sasw_opt_wrap" style={css}>
 				<div {...divProps}>
 					{checkActive && ["checkbox"].includes(settings?.layout) && (
-						<span className="sa_checkbox_wrap">
-							<span className="sa_checkbox"></span>
+						<span className="sasw_checkbox_wrap">
+							<span className="sasw_checkbox"></span>
 						</span>
 					)}
-					{swatch?.type === "sa_color" ? (
-						<span className="sa_swatch_wrap">
-							<span className="sa_swatch sa_color" style={cssSwatch}>
-								<div className="sa_color_inner">
+					{swatch?.type === "sasw_color" ? (
+						<span className="sasw_swatch_wrap">
+							<span className="sasw_swatch sasw_color" style={cssSwatch}>
+								<div className="sasw_color_inner">
 									<span
-										className="sa_color_item"
+										className="sasw_color_item"
 										style={{ background: `${swatch?.value}` }}
 									></span>
 
@@ -228,7 +228,7 @@ const Option = ({
 											{swatch?.more.map((c) => (
 												<span
 													key={c}
-													className="sa_color_item"
+													className="sasw_color_item"
 													style={{ background: `${c}` }}
 												></span>
 											))}
@@ -239,10 +239,10 @@ const Option = ({
 						</span>
 					) : null}
 
-					{swatch?.type === "sa_image" ? (
-						<span className="sa_swatch_wrap">
-							<span className="sa_swatch sa_image" style={cssSwatch}>
-								<span className="sa_image_item">
+					{swatch?.type === "sasw_image" ? (
+						<span className="sasw_swatch_wrap">
+							<span className="sasw_swatch sasw_image" style={cssSwatch}>
+								<span className="sasw_image_item">
 									<img alt="" src={swatch?.thumbnail || swatch?.full} />
 								</span>
 							</span>
@@ -250,31 +250,31 @@ const Option = ({
 					) : null}
 
 					{noSelect && !selectedVal && (
-						<span className="sa_swatch_wrap">
+						<span className="sasw_swatch_wrap">
 							<span
-								className="sa_swatch sa_no sa_swatch_placeholder"
+								className="sasw_swatch sasw_no sasw_swatch_placeholder"
 								style={cssSwatch}
 							>
-								<span className="sa_no_item">{"..."}</span>
+								<span className="sasw_no_item">{"..."}</span>
 							</span>
 						</span>
 					)}
 
 					{willShowLabel && (
-						<span className="sa_opt_label" style={cssSwatchLabel}>
+						<span className="sasw_opt_label" style={cssSwatchLabel}>
 							{option?.custom_name || option?.name}
 						</span>
 					)}
 
 					{!isCircle && showIcon && isChecked && (
-						<div className="sa_icon">
+						<div className="sasw_icon">
 							<IconCheck />
 						</div>
 					)}
 				</div>
 			</div>
 
-			<Tooltip className="sa_tooltip" style={{ zIndex: 999999 }} id={tooltipId}>
+			<Tooltip className="sasw_tooltip" style={{ zIndex: 999999 }} id={tooltipId}>
 				{option?.custom_name || option?.name}
 			</Tooltip>
 		</>

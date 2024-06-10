@@ -1,12 +1,12 @@
 <?php
 
-namespace SA_WC_SWATCHES\Attr\Post;
+namespace SASW_SWATCHES\Attr\Post;
 
 use Exception;
 
-use function SA_WC_SWATCHES\get_assets;
-use function SA_WC_SWATCHES\get_text_settings_for_admin;
-use function SA_WC_SWATCHES\remove_empty_from_array;
+use function SASW_SWATCHES\get_assets;
+use function SASW_SWATCHES\get_text_settings_for_admin;
+use function SASW_SWATCHES\remove_empty_from_array;
 
 
 function admin_scripts()
@@ -26,23 +26,23 @@ function admin_scripts()
 
 	$assets['dependencies'][] = 'jquery';
 	wp_enqueue_media();
-	wp_register_script('sa_attr_product', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
-	wp_register_style('sa_attr_product', $assets['files']['css'], [], $assets['version']);
+	wp_register_script('sasw_attr_product', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
+	wp_register_style('sasw_attr_product', $assets['files']['css'], [], $assets['version']);
 
 	global $post;
 
 	$config =  [
 		'root' => esc_url_raw(rest_url()),
-		'ajax' => add_query_arg(['action' => 'sa_wc_ajax', 'nonce' => wp_create_nonce('sa_wc_ajax')], admin_url('admin-ajax.php')),
+		'ajax' => add_query_arg(['action' => 'sasw_ajax', 'nonce' => wp_create_nonce('sasw_ajax')], admin_url('admin-ajax.php')),
 		'nonce' => wp_create_nonce('wp_rest'),
 		'pid' => $post->ID,
 		'att_types' => wc_get_attribute_types(),
 		'configs' => get_text_settings_for_admin(),
 	];
 
-	wp_localize_script('sa_attr_product', 'SA_WC_SWATCHES', $config);
-	wp_enqueue_script('sa_attr_product');
-	wp_enqueue_style('sa_attr_product');
+	wp_localize_script('sasw_attr_product', 'SASW_SWATCHES', $config);
+	wp_enqueue_script('sasw_attr_product');
+	wp_enqueue_style('sasw_attr_product');
 }
 
 add_action('admin_enqueue_scripts', __NAMESPACE__ . '\admin_scripts');
@@ -59,12 +59,12 @@ add_action('admin_enqueue_scripts', __NAMESPACE__ . '\admin_scripts');
 
 function woocommerce_product_option_terms($attribute_taxonomy, $i, $attribute)
 {
-	if (strpos($attribute_taxonomy->attribute_type, 'sa_') === false) {
+	if (strpos($attribute_taxonomy->attribute_type, 'sasw_') === false) {
 		return;
 	}
 
 ?>
-	<select multiple="multiple" data-return_id="id" data-title="<?php echo esc_attr(wc_attribute_label($attribute->get_name())) ?>" data-selected="<?php echo wp_json_encode($attribute->get_options()); ?>" data-placeholder="<?php esc_attr_e('Select values', "sa-swatches"); ?>" class="sa_attr_swatches multiselect attribute_values" name="attribute_values[<?php echo esc_attr($i); ?>][]" data-taxonomy="<?php echo esc_attr($attribute->get_taxonomy()); ?>">
+	<select multiple="multiple" data-return_id="id" data-title="<?php echo esc_attr(wc_attribute_label($attribute->get_name())) ?>" data-selected="<?php echo wp_json_encode($attribute->get_options()); ?>" data-placeholder="<?php esc_attr_e('Select values', "sa-swatches"); ?>" class="sasw_attr_swatches multiselect attribute_values" name="attribute_values[<?php echo esc_attr($i); ?>][]" data-taxonomy="<?php echo esc_attr($attribute->get_taxonomy()); ?>">
 		<?php
 		$selected_terms = $attribute->get_options();
 		if ($selected_terms) {
@@ -84,8 +84,8 @@ function extra_fields($attribute, $i)
 ?>
 	<tr style="display:none !important;">
 		<td>
-			<input type="hidden" class="sa_overwrite_swatches checkbox" name="sa_overwrite_swatches[<?php echo esc_attr($i); ?>]" />
-			<input type="hidden" class="sa_attribute_settings checkbox" name="sa_attr_settings[<?php echo esc_attr($i); ?>]" />
+			<input type="hidden" class="sasw_overwrite_swatches checkbox" name="sasw_overwrite_swatches[<?php echo esc_attr($i); ?>]" />
+			<input type="hidden" class="sasw_attribute_settings checkbox" name="sasw_attr_settings[<?php echo esc_attr($i); ?>]" />
 		</td>
 	</tr>
 <?php
@@ -99,15 +99,16 @@ add_action('woocommerce_after_product_object_save', __NAMESPACE__ . '\save_attri
 
 function save_attribute_custom_meta($product)
 {
-	if (!isset($_POST['action']) || 'woocommerce_save_attributes' != $_POST['action']) {
+	// Just check if has action.
+	if (!isset($_POST['action']) || 'woocommerce_save_attributes' != $_POST['action']) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		return;
 	}
 
 	$post_id = $product->get_id();
-	$key = '_sa_custom_swatches';
-	$key_settings = '_sa_attr_settings';
-	try {
-		parse_str(wp_unslash($_POST['data']), $data);
+	$key = '_sasw_custom_swatches';
+	$key_settings = '_sasw_attr_settings';
+	try { 
+		parse_str(wp_unslash($_POST['data']), $data); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if (!is_array($data)) {
 			$data = [];
 		}
@@ -122,8 +123,8 @@ function save_attribute_custom_meta($product)
 			$attribute_values = [];
 		}
 
-		$overwrite_swatches = isset($data['sa_overwrite_swatches']) && is_array($data['sa_overwrite_swatches']) ? $data['sa_overwrite_swatches'] : [];
-		$settings = isset($data['sa_attr_settings']) && is_array($data['sa_attr_settings']) ? $data['sa_attr_settings'] : [];
+		$overwrite_swatches = isset($data['sasw_overwrite_swatches']) && is_array($data['sasw_overwrite_swatches']) ? $data['sasw_overwrite_swatches'] : [];
+		$settings = isset($data['sasw_attr_settings']) && is_array($data['sasw_attr_settings']) ? $data['sasw_attr_settings'] : [];
 		$save_data = [];
 		$save_settings = [];
 		$save_options_order = [];
@@ -148,7 +149,7 @@ function save_attribute_custom_meta($product)
 		}
 		update_post_meta($post_id, $key, $save_data);
 		update_post_meta($post_id, $key_settings, $save_settings);
-		update_post_meta($post_id, '_sa_attr_options_order', $save_options_order);
+		update_post_meta($post_id, '_sasw_attr_options_order', $save_options_order);
 	} catch (Exception $e) {
 		update_post_meta($post_id, $key, []);
 	}

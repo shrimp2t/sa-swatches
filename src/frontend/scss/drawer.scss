@@ -1,53 +1,53 @@
-.sa_drawer {
+.sasw_drawer {
 	--sa-padding: 1em;
 	max-width: 100%;
 	max-height: 100%;
 
-	.sa_drawer_wrap {
+	.sasw_drawer_wrap {
 		display: flex;
 		flex-direction: column;
 		height: 100%;
 	}
-	.sa_drawer_actions,
-	.sa_drawer_btn {
+	.sasw_drawer_actions,
+	.sasw_drawer_btn {
 		display: flex;
 		align-items: center;
 		gap: 10px;
 	}
 
-	.sa_drawer_head_inner,
-	.sa_drawer_footer_inner {
+	.sasw_drawer_head_inner,
+	.sasw_drawer_footer_inner {
 		min-height: 1em;
 		display: flex;
 		align-items: center;
 	}
 
-	.sa_drawer_head,
-	.sa_drawer_footer {
+	.sasw_drawer_head,
+	.sasw_drawer_footer {
 		padding: calc(var(--sa-padding) / 2) var(--sa-padding);
 		align-items: center;
 	}
 
-	.sa_drawer_head {
+	.sasw_drawer_head {
 		border-bottom: 1px solid var(--sa-border-color);
 		flex: 0;
 	}
 
-	.sa_drawer_footer {
+	.sasw_drawer_footer {
 		flex-shrink: 0;
 		border-top: 1px solid var(--sa-border-color);
 	}
 
-	.sa_drawer_title {
+	.sasw_drawer_title {
 		font-size: 1em;
 		font-weight: 600;
 	}
 
-	.sa_drawer_actions {
+	.sasw_drawer_actions {
 		margin-left: auto;
 	}
 
-	.sa_drawer_body {
+	.sasw_drawer_body {
 		flex: 1;
 		overflow: auto;
 		padding: var(--sa-padding);

@@ -11,14 +11,14 @@ const ColSwatch = ({ term, tax, type, setSelectedList, setList }) => {
 			term_id: term.id,
 		};
 
-		if (type === 'sa_image') {
+		if (type === 'sasw_image') {
 			saveData.value = changeData?.id;
 		}
 
-		saveData.pid = SA_WC_SWATCHES?.pid;
+		saveData.pid = SASW_SWATCHES?.pid;
 
 		req({
-			url: SA_WC_SWATCHES?.ajax,
+			url: SASW_SWATCHES?.ajax,
 			method: "post",
 			data: saveData,
 			params: {
@@ -54,12 +54,12 @@ const ColSwatch = ({ term, tax, type, setSelectedList, setList }) => {
 	};
 	return (
 		<>
-			{type === "sa_image" ? (
+			{type === "sasw_image" ? (
 				<td className="col_swatch">
 					<ImagePicker swatch={term?.swatch} onChange={onChange} />
 				</td>
 			) : null}
-			{type === "sa_color" ? (
+			{type === "sasw_color" ? (
 				<td className="col_swatch">
 					<ColorPicker
 						confirm={true}
@@ -82,7 +82,7 @@ const TableOptions = ({
 	setList,
 }) => {
 	return (
-		<table className="sa_swatch_table wp-list-table widefat striped fixed table-view-list">
+		<table className="sasw_swatch_table wp-list-table widefat striped fixed table-view-list">
 			<tbody>
 				{list.map((term) => {
 					const classes = ["term-item"];

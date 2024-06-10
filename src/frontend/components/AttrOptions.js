@@ -2,13 +2,13 @@ import Option from "./Option";
 
 
 const AttrOptions = ({ attr, settings }) => {
-	const classes = ["sa_attr_options"];
-	classes.push("sa_opts_l_" + settings?.layout);
+	const classes = ["sasw_attr_options"];
+	classes.push("sasw_opts_l_" + settings?.layout);
 	if (settings?.col > 0) {
-		classes.push("sa_opts_col");
+		classes.push("sasw_opts_col");
 	} else {
 		if (!settings?.loop) {
-			classes.push("sa_opts_col_auto");
+			classes.push("sasw_opts_col_auto");
 		}
 	}
 

@@ -27,7 +27,7 @@ const App = ({
 	);
 
 	useEffect(() => {
-		form.on("sa_variants", (evt, data) => {
+		form.on("sasw_variants", (evt, data) => {
 			setVariants(data);
 			setAjaxLoaded(Date.now());
 		});
@@ -37,7 +37,7 @@ const App = ({
 	useEffect(() => {
 		setAppId(`_${pid}_${Date.now()}`);
 		req({
-			url: SA_WC_SWATCHES.ajax,
+			url: SASW_SWATCHES.ajax,
 			params: {
 				endpoint: "get_product_attrs",
 				pid,
@@ -131,8 +131,8 @@ const App = ({
 		settings,
 	};
 
-	const classes = ["sa_attr_product"];
-	classes.push("sa_layout_" + settings.layout);
+	const classes = ["sasw_attr_product"];
+	classes.push("sasw_layout_" + settings.layout);
 
 	return (
 		<AppContext.Provider value={contentValues}>

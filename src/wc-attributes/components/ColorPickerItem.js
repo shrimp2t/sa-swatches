@@ -16,7 +16,7 @@ const ColorPickerItem = ({ color, onChange, confirm, size = "def" }) => {
 		onChange?.(color);
 	};
 
-	const classes = ["wc_swatch_color sa_border"];
+	const classes = ["wc_swatch_color sasw_border"];
 	classes.push(size);
 
 	return (

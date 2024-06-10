@@ -31,7 +31,7 @@ const OptionSettings = ({
 			{isVisible && (
 				<Popover
 					placement={`right-start`}
-					className="sa_wc_setting_popover"
+					className="sasw_setting_popover"
 					offset={15}
 					noArrow={false}
 					anchor={ref?.current}
@@ -52,10 +52,10 @@ const OptionSettings = ({
 										handleOnChange(keyName(`layout`), e.target.value);
 									}}
 								>
-									{Object.keys(SA_WC_SWATCHES.configs.option_layout).map(
+									{Object.keys(SASW_SWATCHES.configs.option_layout).map(
 										(key) => (
 											<option value={key} key={key}>
-												{SA_WC_SWATCHES.configs.option_layout[key]}
+												{SASW_SWATCHES.configs.option_layout[key]}
 											</option>
 										),
 									)}
@@ -76,9 +76,9 @@ const OptionSettings = ({
 										handleOnChange(keyName("label"), v);
 									}}
 								>
-									{Object.keys(SA_WC_SWATCHES.configs.show_hide).map((k) => (
+									{Object.keys(SASW_SWATCHES.configs.show_hide).map((k) => (
 										<option value={k} key={k}>
-											{SA_WC_SWATCHES.configs.show_hide[k]}
+											{SASW_SWATCHES.configs.show_hide[k]}
 										</option>
 									))}
 								</select>
@@ -134,10 +134,10 @@ const OptionSettings = ({
 										handleOnChange(keyName("style"), v);
 									}}
 								>
-									{Object.keys(SA_WC_SWATCHES.configs.swatch_style).map(
+									{Object.keys(SASW_SWATCHES.configs.swatch_style).map(
 										(key) => (
 											<option value={key} key={key}>
-												{SA_WC_SWATCHES.configs.swatch_style[key]}
+												{SASW_SWATCHES.configs.swatch_style[key]}
 											</option>
 										),
 									)}

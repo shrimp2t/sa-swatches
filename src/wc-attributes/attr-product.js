@@ -34,10 +34,10 @@ const App = ({
 
 	useEffect(() => {
 		jQuery(document.body).on(
-			"sa_wc_admin_product_attr_settings",
+			"sasw_admin_product_attr_settings",
 			(evt, data) => {
 				console.log(
-					"sa_wc_admin_product_attr_settings__on",
+					"sasw_admin_product_attr_settings__on",
 					taxonomy,
 					data?.[taxonomy],
 				);
@@ -63,14 +63,14 @@ const App = ({
 			body.search = search;
 		}
 
-		body.pid = SA_WC_SWATCHES?.pid;
+		body.pid = SASW_SWATCHES?.pid;
 		body.is_custom = isCustom ? 1 : null;
 		if (isCustom) {
 			body.taxonomy = modalTitle;
 		}
 
 		req({
-			url: SA_WC_SWATCHES?.ajax,
+			url: SASW_SWATCHES?.ajax,
 			method: "post",
 			signal,
 			params: {
@@ -183,7 +183,7 @@ const App = ({
 
 		setLoading(true);
 		req({
-			url: SA_WC_SWATCHES?.ajax,
+			url: SASW_SWATCHES?.ajax,
 			method: "post",
 			params: {
 				endpoint: "add_term",
@@ -191,7 +191,7 @@ const App = ({
 			data: {
 				taxonomy,
 				name: newTerm,
-				pid: SA_WC_SWATCHES?.pid,
+				pid: SASW_SWATCHES?.pid,
 			},
 		})
 			.then((res) => {
@@ -228,7 +228,7 @@ const App = ({
 				onClose={handleOnRemove}
 				taxonomy={taxonomy}
 			/>
-			<div className="sa_space">
+			<div className="sasw_space">
 				<button type="button" className="button" onClick={() => setOpen(true)}>
 					{__("Select Options","sa-swatches")}
 				</button>
@@ -244,11 +244,11 @@ const App = ({
 				<Modal
 					title={modalTitle}
 					size="medium"
-					className="sa_swatch_modal"
+					className="sasw_swatch_modal"
 					style={{ width: 550 }}
 					onRequestClose={() => setOpen(false)}
 					headerActions={
-						<div className="sa_space">
+						<div className="sasw_space">
 							{!["add", "settings"].includes(isOpen) ? (
 								<>
 									<input
@@ -275,7 +275,7 @@ const App = ({
 						</div>
 					}
 				>
-					<div className="sa_drawer_inner" style={{ minHeight: "50vh" }}>
+					<div className="sasw_drawer_inner" style={{ minHeight: "50vh" }}>
 						{loading ? (
 							<div className="loading">
 								<Spinner
@@ -315,7 +315,7 @@ const saInit = () => {
 		function () {
 			const el = jQuery(this);
 
-			if (el.hasClass("sa_added")) {
+			if (el.hasClass("sasw_added")) {
 				return;
 			}
 
@@ -348,8 +348,8 @@ const saInit = () => {
 				? el.data("selected") || undefined
 				: getCustomValues();
 			const taxonomy = el.data("taxonomy");
-			const customInput = parent.find("input.sa_overwrite_swatches");
-			const settingsInput = parent.find("input.sa_attribute_settings");
+			const customInput = parent.find("input.sasw_overwrite_swatches");
+			const settingsInput = parent.find("input.sasw_attribute_settings");
 			if (!selected && !isCustomAttr) {
 				selected = el.val();
 				jQuery(
@@ -360,8 +360,8 @@ const saInit = () => {
 				el.removeClass("wc-taxonomy-term-search");
 			}
 			console.log("selected", selected, taxonomy);
-			el.addClass("sa_added sa_hide");
-			el.parent().addClass("sa_wrapper_added");
+			el.addClass("sasw_added sasw_hide");
+			el.parent().addClass("sasw_wrapper_added");
 
 			if (el.hasClass("select2-hidden-accessible")) {
 				try {
@@ -442,17 +442,17 @@ const saInit = () => {
 const saLoadSettings = () => {
 	setTimeout(() => {
 		req({
-			url: SA_WC_SWATCHES?.ajax,
+			url: SASW_SWATCHES?.ajax,
 			method: "post",
 			params: {
 				endpoint: "get_attr_settings",
 			},
 			data: {
-				pid: SA_WC_SWATCHES?.pid,
+				pid: SASW_SWATCHES?.pid,
 			},
 		})
 			.then((res) => {
-				jQuery(document.body).trigger("sa_wc_admin_product_attr_settings", [
+				jQuery(document.body).trigger("sasw_admin_product_attr_settings", [
 					res?.data || {},
 				]);
 			})

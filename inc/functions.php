@@ -1,26 +1,26 @@
 <?php
 
-namespace SA_WC_SWATCHES;
+namespace SASW_SWATCHES;
 
 use Exception;
 
 function get_assets($path)
 {
-	$file = SA_WC_SWATCHES_PATH . "/build/{$path}.asset.php";
+	$file = SASW_SWATCHES_PATH . "/build/{$path}.asset.php";
 	if (!file_exists($file)) {
 		return false;
 	}
 
 	$assets =  include $file;
 	$assets['files'] = [];
-	$js_file = SA_WC_SWATCHES_PATH . "/build/{$path}.js";
+	$js_file = SASW_SWATCHES_PATH . "/build/{$path}.js";
 	if (file_exists($js_file)) {
-		$assets['files']['js'] =  SA_WC_SWATCHES_URL . 'build/' . $path . '.js';
+		$assets['files']['js'] =  SASW_SWATCHES_URL . 'build/' . $path . '.js';
 	}
 
-	$css_file = SA_WC_SWATCHES_PATH . "/build/{$path}.css";
+	$css_file = SASW_SWATCHES_PATH . "/build/{$path}.css";
 	if (file_exists($css_file)) {
-		$assets['files']['css'] =  SA_WC_SWATCHES_URL . 'build/' . $path . '.css';
+		$assets['files']['css'] =  SASW_SWATCHES_URL . 'build/' . $path . '.css';
 	}
 
 	return $assets;
@@ -44,7 +44,7 @@ function get_image_data($image_id, $image_size = 'thumbnail')
 
 function get_swatch_data($term_id, $type = null, $image_size = 'thumbnail')
 {
-	$data = get_term_meta($term_id, '_sa_wc_swatch', true);
+	$data = get_term_meta($term_id, '_sasw_swatch', true);
 
 	if (!is_array($data) && is_string($data)) {
 		$data = json_decode($data, true);
@@ -64,7 +64,7 @@ function get_swatch_data($term_id, $type = null, $image_size = 'thumbnail')
 		$type = $data['type'];
 	}
 
-	if ($type === 'sa_image' && $data['value']) {
+	if ($type === 'sasw_image' && $data['value']) {
 		$image = get_image_data($data['value'], $image_size);
 		$data = array_merge($data, $image);
 	}
@@ -77,22 +77,31 @@ function get_swatch_data($term_id, $type = null, $image_size = 'thumbnail')
 function get_custom_attr_data($attr_id)
 {
 	global $wpdb;
-	$table = $wpdb->prefix . 'sa_attr_tax_data';
+	$table = $wpdb->prefix . 'sasw_attr_tax_data';
 
-	$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE attr_id = %d LIMIT 1", $attr_id), ARRAY_A); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$cache_key = 'sasw_attr_tax_'.$attr_id;
+
+	$data = wp_cache_get( $cache_key, $table );
+	if ( $data ) {
+		return;
+	}
+
+	$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE attr_id = %d LIMIT 1", $attr_id), ARRAY_A); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$row = wp_parse_args($row, [
 		'attr_id' => 0,
 		'title' => '',
 		'description' => '',
 		'button_label' => '',
 	]);
+
+	wp_cache_set( $cache_key, $row, $table );
 	return $row;
 }
 
 
 function get_wc_tax_attrs()
 {
-	$key = 'sa_attr_map_types';
+	$key = 'sasw_attr_map_types';
 	if (isset($GLOBALS[$key])) {
 		return $GLOBALS[$key];
 	}
@@ -121,7 +130,7 @@ function get_ajax_configs()
 
 	$config =  [
 		'root' => esc_url_raw(rest_url()),
-		'ajax' => add_query_arg(['action' => 'sa_wc_ajax', 'nonce' => wp_create_nonce('sa_wc_ajax')], admin_url('admin-ajax.php')),
+		'ajax' => add_query_arg(['action' => 'sasw_ajax', 'nonce' => wp_create_nonce('sasw_ajax')], admin_url('admin-ajax.php')),
 		'nonce' => wp_create_nonce('wp_rest'),
 	];
 

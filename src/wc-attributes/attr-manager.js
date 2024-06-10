@@ -7,13 +7,13 @@ import "./attr-style.scss";
 
 const sendReq = ({ url, path, method, data, body, params }) => {
 	return new Promise((resolve, reject) => {
-		let reqUrl = url ? url : window?.SA_WC_SWATCHES?.root + path;
+		let reqUrl = url ? url : window?.SASW_SWATCHES?.root + path;
 		const args = {
 			method: method || "get", // *GET, POST, PUT, DELETE, etc.
 			cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
 			headers: {
 				"Content-Type": "application/json",
-				"X-WP-Nonce": window?.SA_WC_SWATCHES?.nonce,
+				"X-WP-Nonce": window?.SASW_SWATCHES?.nonce,
 			},
 			redirect: "follow", // manual, *follow, error
 		};
@@ -139,13 +139,13 @@ const Image2 = ({ value, type, onChange, clear }) => {
 const App = () => {
 	const onChange = (data) => {
 		console.log("onChange", data);
-		jQuery("input#sa_wc_attr_swatch").val(JSON.stringify({ ...data, type: SA_WC_SWATCHES?.current_tax?.type }));
+		jQuery("input#sasw_attr_swatch").val(JSON.stringify({ ...data, type: SASW_SWATCHES?.current_tax?.type }));
 	};
 	return (
-		<div className="sa_wc_attr_main">
-			{SA_WC_SWATCHES?.current_tax?.type === "sa_image" ? (
+		<div className="sasw_attr_main">
+			{SASW_SWATCHES?.current_tax?.type === "sasw_image" ? (
 				<Image2
-					value={window.SA_WC_SWATCHES?.current_term}
+					value={window.SASW_SWATCHES?.current_term}
 					clear={true}
 					autoSave={false}
 					onChange={onChange}
@@ -153,9 +153,9 @@ const App = () => {
 				/>
 			) : null}
 
-			{SA_WC_SWATCHES?.current_tax?.type === "sa_color" ? (
+			{SASW_SWATCHES?.current_tax?.type === "sasw_color" ? (
 				<ColorPicker
-					value={window.SA_WC_SWATCHES?.current_term}
+					value={window.SASW_SWATCHES?.current_term}
 					onChange={onChange}
 				/>
 			) : null}
@@ -168,17 +168,17 @@ const AppCol = ({ data, term_id }) => {
 		console.log("onChange__col", changeData);
 
 		let saveData = {
-			...SA_WC_SWATCHES.current_tax,
+			...SASW_SWATCHES.current_tax,
 			...changeData,
 			term_id,
 		};
 
-		if (saveData?.type === 'sa_image') {
+		if (saveData?.type === 'sasw_image') {
 			saveData.value = changeData?.id;
 		}
 
 		sendReq({
-			url: SA_WC_SWATCHES?.ajax,
+			url: SASW_SWATCHES?.ajax,
 			method: "post",
 			data: saveData,
 			params: {
@@ -192,18 +192,18 @@ const AppCol = ({ data, term_id }) => {
 	};
 	return (
 		<>
-			{SA_WC_SWATCHES?.current_tax?.type === "sa_image" ? (
+			{SASW_SWATCHES?.current_tax?.type === "sasw_image" ? (
 				<Image2 value={data} onChange={onChange} />
 			) : null}
 
-			{SA_WC_SWATCHES?.current_tax?.type === "sa_color" ? (
+			{SASW_SWATCHES?.current_tax?.type === "sasw_color" ? (
 				<ColorPicker confirm={true} onChange={onChange} value={data} />
 			) : null}
 		</>
 	);
 };
 
-const domNode = document.getElementById("sa_wc_attr_swatch_el");
+const domNode = document.getElementById("sasw_attr_swatch_el");
 const appEl = document.createElement("div");
 domNode.append(appEl);
 render(<App />, appEl);
@@ -211,19 +211,19 @@ render(<App />, appEl);
 const renderCol = (el) => {
 	const data = el.data("swatch");
 	const term_id = el.data("term_id");
-	el.addClass("sa_added");
+	el.addClass("sasw_added");
 	render(<AppCol data={data} term_id={term_id} />, el.get(0));
 };
 
-jQuery(".sa_wc_swatch").each(function () {
+jQuery(".sasw_swatch").each(function () {
 	const el = jQuery(this);
 	renderCol(el);
 });
 
 jQuery(window).on("taxonomy_term_added", (e, res) => {
 	console.log('New term added');
-	jQuery(".sa_wc_swatch")
-		.not(".sa_added")
+	jQuery(".sasw_swatch")
+		.not(".sasw_added")
 		.each(function () {
 			const el = jQuery(this);
 			renderCol(el);

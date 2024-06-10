@@ -1,22 +1,22 @@
 <?php
 
-namespace SA_WC_SWATCHES\Frontend\Product;
+namespace SASW_SWATCHES\Frontend\Product;
 
 use Exception;
 use WC_Product_Simple;
 use WC_Product_Variable;
 use WC_Product_Variation;
 
-use function SA_WC_SWATCHES\get_assets;
+use function SASW_SWATCHES\get_assets;
 
 function get_option_settings()
 {
 
-	$key = 'sa_swatches_settings';
+	$key = 'sasw_swatches_settings';
 	if (isset($GLOBALS[$key])) {
 		return $GLOBALS[$key];
 	}
-	$all_settings = json_decode(get_option('sa_swatches_settings', ''), true);
+	$all_settings = json_decode(get_option('sasw_swatches_settings', ''), true);
 	if (!is_array($all_settings)) {
 		$all_settings = [];
 	}
@@ -55,11 +55,11 @@ function scripts()
 
 	$settings = get_option_settings();
 
-	wp_register_script('sa_wc_swatches', $assets['files']['js'], $assets['dependencies'], $assets['version']);
-	wp_enqueue_script('sa_wc_swatches');
+	wp_register_script('sasw_swatches', $assets['files']['js'], $assets['dependencies'], $assets['version']);
+	wp_enqueue_script('sasw_swatches');
 
-	wp_register_style('sa_wc_swatches', $assets['files']['css'], ['wp-components'], $assets['version']);
-	wp_enqueue_style('sa_wc_swatches');
+	wp_register_style('sasw_swatches', $assets['files']['css'], ['wp-components'], $assets['version']);
+	wp_enqueue_style('sasw_swatches');
 
 	$custom_css = "";
 	if (isset($settings['single']['pooverSize'])) {
@@ -68,7 +68,7 @@ function scripts()
 	if ($custom_css) {
 		$custom_css = "body{ {$custom_css} }";
 	}
-	wp_add_inline_style('sa_wc_swatches', $custom_css);
+	wp_add_inline_style('sasw_swatches', $custom_css);
 
 	$sample_product = new WC_Product_Variation();
 	$sample_product->set_parent_data([
@@ -93,17 +93,17 @@ function scripts()
 	// var_dump($settings);
 
 	$configs =  [
-		'ajax' => add_query_arg(['action' => 'sa_wc_ajax', 'nonce' => wp_create_nonce('sa_wc_ajax')], admin_url('admin-ajax.php')),
+		'ajax' => add_query_arg(['action' => 'sasw_ajax', 'nonce' => wp_create_nonce('sasw_ajax')], admin_url('admin-ajax.php')),
 		'settings' => (object) $settings,
 		'i18n' => [
 			'add_cart' => $sample_product->add_to_cart_text(),
 			'select_options' => $variable_product->add_to_cart_text(),
-			'select_attr' => __('Select %s',"sa-swatches"),
+			'select_attr' => __('Select %s',"sa-swatches"), // phpcs:ignore WordPress.WP.I18n.MissingTranslatorsComment
 			'btn_details' => __('Details',"sa-swatches"),
 		],
 	];
 
-	wp_localize_script('jquery', 'SA_WC_SWATCHES', $configs);
+	wp_localize_script('jquery', 'SASW_SWATCHES', $configs);
 }
 
 add_action('wp_enqueue_scripts', __NAMESPACE__ . '\scripts');
@@ -130,8 +130,8 @@ function loop_swatches($html, $product, $args)
 		return $html;
 	}
 
-	$link  = apply_filters('woocommerce_loop_product_link', get_the_permalink(), $product);
-	$html_swatches = '<div class="sa_loop_swatches" data-link="' . esc_url($link) . '" data-id="' . esc_attr($id) . '" data-type="' . esc_attr($type) . '"></div>';
+	$link  = apply_filters('woocommerce_loop_product_link', get_the_permalink(), $product); // phpcs:ignore
+	$html_swatches = '<div class="sasw_loop_swatches" data-link="' . esc_url($link) . '" data-id="' . esc_attr($id) . '" data-type="' . esc_attr($type) . '"></div>';
 	switch ($pos) {
 		case 'after@loop/add-to-cart.php':
 			return  $html . $html_swatches;
@@ -157,7 +157,7 @@ function get_the_swatches()
 	}
 
 	$link  = apply_filters('woocommerce_loop_product_link', get_the_permalink(), $product);
-	$html_swatches = '<div class="sa_loop_swatches" data-link="' . esc_url($link) . '" data-id="' . esc_attr($id) . '" data-type="' . esc_attr($type) . '"></div>';
+	$html_swatches = '<div class="sasw_loop_swatches" data-link="' . esc_url($link) . '" data-id="' . esc_attr($id) . '" data-type="' . esc_attr($type) . '"></div>';
 
 	return $html_swatches; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
@@ -171,7 +171,7 @@ function loop_swatches_before($template_name)
 	if ('before@' . $template_name != $pos) {
 		return;
 	}
-	echo get_the_swatches();
+	echo get_the_swatches(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 
@@ -181,7 +181,7 @@ function loop_swatches_after($template_name)
 	if ('after@' . $template_name !== get_swatches_position()) {
 		return;
 	}
-	echo get_the_swatches();
+	echo get_the_swatches(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 add_action('woocommerce_before_template_part', __NAMESPACE__ . '\loop_swatches_before', 1, 3);
@@ -199,10 +199,7 @@ function loop_classes($classes, $product)
 
 
 	$type = $product->get_type();
-	if ('variable' != $type) {
-		// return $classes;
-	}
-	$classes[] = 'sa_p_loop_wrap';
+	$classes[] = 'sasw_p_loop_wrap';
 	return $classes;
 }
 
@@ -211,7 +208,7 @@ add_filter('woocommerce_post_class', __NAMESPACE__ . '\loop_classes', 99999, 2);
 
 function product_get_image($image, $product)
 {
-	return '<span class="sa_loop_thumb">' . $image . '</span>';
+	return '<span class="sasw_loop_thumb">' . $image . '</span>';
 }
 add_filter('woocommerce_product_get_image', __NAMESPACE__ . '\product_get_image', 999, 2);
 
@@ -258,10 +255,10 @@ add_filter('render_block', function ($content, $parsed_block, $parent_block) {
 
 		switch ($pos) {
 			case 'after@loop/add-to-cart.php':
-				return  '<div class="sa_loop_wc_block">' . $content . $html_swatches . '</div>';
+				return  '<div class="sasw_loop_wc_block">' . $content . $html_swatches . '</div>';
 				break;
 			case 'before@loop/add-to-cart.php':
-				return '<div class="sa_loop_wc_block">' . $html_swatches . $content . '</div>';
+				return '<div class="sasw_loop_wc_block">' . $html_swatches . $content . '</div>';
 				break;
 		}
 
@@ -301,7 +298,7 @@ function wp_script_attributes($attributes)
 {
 
 	if ($attributes['id'] == 'wc-product-button-interactivity-frontend-js') {
-		$attributes['src'] = SA_WC_SWATCHES_URL . '/assets/wc-js/product-button-interactivity-frontend.js';
+		$attributes['src'] = SASW_SWATCHES_URL . '/assets/wc-js/product-button-interactivity-frontend.js';
 	}
 	return $attributes;
 }

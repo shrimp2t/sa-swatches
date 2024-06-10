@@ -1,17 +1,17 @@
 <?php
 
-namespace SA_WC_SWATCHES\Admin\Attr;
+namespace SASW_SWATCHES\Admin\Attr;
 
-use function SA_WC_SWATCHES\get_assets;
-use function SA_WC_SWATCHES\get_wc_tax_attrs;
-use function SA_WC_SWATCHES\get_ajax_configs;
-use function SA_WC_SWATCHES\get_custom_attr_data;
-use function SA_WC_SWATCHES\get_swatch_data;
+use function SASW_SWATCHES\get_assets;
+use function SASW_SWATCHES\get_wc_tax_attrs;
+use function SASW_SWATCHES\get_ajax_configs;
+use function SASW_SWATCHES\get_custom_attr_data;
+use function SASW_SWATCHES\get_swatch_data;
 
 function get_current_tax()
 {
-	if (isset($_GET['taxonomy'])) {
-		return sanitize_text_field($_GET['taxonomy']);
+	if (isset($_GET['taxonomy'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return sanitize_text_field($_GET['taxonomy']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	}
 	return false;
 }
@@ -20,7 +20,7 @@ function get_current_tax()
 
 function get_current_tax_type()
 {
-	$key = 'sa_current_tax_type';
+	$key = 'sasw_current_tax_type';
 	if (isset($GLOBALS[$key])) {
 		return $GLOBALS[$key];
 	}
@@ -38,11 +38,11 @@ function get_current_tax_type()
 
 function save_term_fields($term_id)
 {
-	if (isset($_POST['sa_wc_attr_swatch'])) {
-		$data = wp_unslash(json_decode(wp_unslash($_POST['sa_wc_attr_swatch']), true));
+	if (isset($_POST['sasw_attr_swatch'])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$data = wp_unslash(json_decode(wp_unslash($_POST['sasw_attr_swatch']), true)); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		update_term_meta(
 			$term_id,
-			'_sa_wc_swatch',
+			'_sasw_swatch',
 			$data,
 		);
 	}
@@ -61,8 +61,8 @@ function column_content($content, $column_name, $term_id)
 		case 'swatch':
 			$tax =  get_current_tax_type();
 			$data = get_swatch_data($term_id);
-			if (in_array($tax['type'], ['sa_color', 'sa_image'])) {
-				$content =  '<div data-tax="' . esc_attr($tax['tax']) . '" data-swatch="' . esc_attr(wp_json_encode($data, JSON_NUMERIC_CHECK)) . '" data-tax-type="' . esc_attr($tax['type']) . '" data-term_id="' . esc_attr($term_id) . '"  class="sa_wc_swatch"></div>';
+			if (in_array($tax['type'], ['sasw_color', 'sasw_image'])) {
+				$content =  '<div data-tax="' . esc_attr($tax['tax']) . '" data-swatch="' . esc_attr(wp_json_encode($data, JSON_NUMERIC_CHECK)) . '" data-tax-type="' . esc_attr($tax['type']) . '" data-term_id="' . esc_attr($term_id) . '"  class="sasw_swatch"></div>';
 			} else {
 				$content = esc_html($data['value']);
 			}
@@ -85,9 +85,9 @@ function add_term_fields_text($taxonomy)
 {
 ?>
 	<div class="form-field">
-		<label for="sa_wc_attr_swatch"><?php _e('Swatch label') ?></label>
-		<div id="sa_wc_attr_swatch_el">
-			<input type="text" name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" />
+		<label for="sasw_attr_swatch"><?php esc_html_e('Swatch label') ?></label>
+		<div id="sasw_attr_swatch_el">
+			<input type="text" name="sasw_attr_swatch" id="sasw_attr_swatch" />
 		</div>
 	</div>
 <?php
@@ -97,9 +97,9 @@ function add_term_fields_color($taxonomy)
 {
 ?>
 	<div class="form-field">
-		<label for="sa_wc_attr_swatch"><?php _e('Swatch color', "sa-swatches") ?></label>
-		<div id="sa_wc_attr_swatch_el">
-			<input type="hidden" name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" />
+		<label for="sasw_attr_swatch"><?php esc_html_e('Swatch color', "sa-swatches") ?></label>
+		<div id="sasw_attr_swatch_el">
+			<input type="hidden" name="sasw_attr_swatch" id="sasw_attr_swatch" />
 		</div>
 	</div>
 <?php
@@ -110,9 +110,9 @@ function add_term_fields_image($taxonomy)
 ?>
 	<div class="form-field">
 
-		<label for="sa_wc_attr_swatch"><?php _e('Swatch image', "sa-swatches") ?></label>
-		<div id="sa_wc_attr_swatch_el">
-			<input type="hidden" name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" />
+		<label for="sasw_attr_swatch"><?php esc_html_e('Swatch image', "sa-swatches") ?></label>
+		<div id="sasw_attr_swatch_el">
+			<input type="hidden" name="sasw_attr_swatch" id="sasw_attr_swatch" />
 		</div>
 	</div>
 <?php
@@ -125,10 +125,10 @@ function edit_term_fields_text($term, $taxonomy)
 	$data = get_swatch_data($term->term_id);
 
 ?><tr class="form-field">
-		<th><label for="sa_wc_attr_swatch"><?php _e('Swatch label', "sa-swatches") ?></label></th>
+		<th><label for="sasw_attr_swatch"><?php esc_html_e('Swatch label', "sa-swatches") ?></label></th>
 		<td>
-			<div id="sa_wc_attr_swatch_el">
-				<input type="hidden" name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" />
+			<div id="sasw_attr_swatch_el">
+				<input type="hidden" name="sasw_attr_swatch" id="sasw_attr_swatch" />
 			</div>
 		</td>
 	</tr>
@@ -141,10 +141,10 @@ function edit_term_fields_color($term, $taxonomy)
 	// get meta data value
 	$data = get_term_swatch($term->term_id);
 ?><tr class="form-field">
-		<th><label for="sa_wc_attr_swatch_color"><?php _e('Swatch label', "sa-swatches") ?></label></th>
+		<th><label for="sasw_attr_swatch_color"><?php esc_html_e('Swatch label', "sa-swatches") ?></label></th>
 		<td>
-			<div id="sa_wc_attr_swatch_el">
-				<input name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" type="hidden" value="<?php echo esc_attr(wp_json_encode($data, JSON_NUMERIC_CHECK)) ?>" />
+			<div id="sasw_attr_swatch_el">
+				<input name="sasw_attr_swatch" id="sasw_attr_swatch" type="hidden" value="<?php echo esc_attr(wp_json_encode($data, JSON_NUMERIC_CHECK)) ?>" />
 			</div>
 		</td>
 	</tr>
@@ -156,10 +156,10 @@ function edit_term_fields_image($term, $taxonomy)
 
 	$data = get_term_swatch($term->term_id);
 ?><tr class="form-field">
-		<th><label for="sa_wc_attr_swatch_image"><?php _e('Swatch image', "sa-swatches") ?></label></th>
+		<th><label for="sasw_attr_swatch_image"><?php esc_html_e('Swatch image', "sa-swatches") ?></label></th>
 		<td>
-			<div id="sa_wc_attr_swatch_el">
-				<input name="sa_wc_attr_swatch" id="sa_wc_attr_swatch" type="hidden" value="<?php echo esc_attr(wp_json_encode($data, JSON_NUMERIC_CHECK)) ?>" />
+			<div id="sasw_attr_swatch_el">
+				<input name="sasw_attr_swatch" id="sasw_attr_swatch" type="hidden" value="<?php echo esc_attr(wp_json_encode($data, JSON_NUMERIC_CHECK)) ?>" />
 			</div>
 		</td>
 	</tr>
@@ -177,10 +177,10 @@ function manage_attr_columns()
 		$tax = "pa_{$attr->attribute_name}";
 		$field = '_text';
 		switch ($attr->attribute_type) {
-			case 'sa_color':
+			case 'sasw_color':
 				$field = '_color';
 				break;
-			case 'sa_image':
+			case 'sasw_image':
 				$field = '_image';
 				break;
 		}
@@ -210,7 +210,7 @@ add_action('admin_enqueue_scripts', __NAMESPACE__ . '\admin_scripts');
 function maybe_change_admin_js($src, $handle)
 {
 	if ($handle === 'admin-tags') {
-		$src = SA_WC_SWATCHES_URL . '/assets/wp-admin-js/tags.js';
+		$src = SASW_SWATCHES_URL . '/assets/wp-admin-js/tags.js';
 	}
 	return $src;
 }
@@ -224,19 +224,19 @@ function attr_terms_scripts()
 
 	$assets['dependencies'][] = 'jquery';
 	wp_enqueue_media();
-	wp_register_script('sa_wc_admin_attr_manager', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
-	wp_register_style('sa_wc_admin_attr_manager', $assets['files']['css'], [], $assets['version']);
+	wp_register_script('sasw_admin_attr_manager', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
+	wp_register_style('sasw_admin_attr_manager', $assets['files']['css'], [], $assets['version']);
 
 	$config = get_ajax_configs();
 	$config['current_tax'] = get_current_tax_type();
 
-	if (isset($_GET['tag_ID'])) {
-		$config['current_term'] = get_swatch_data(absint($_GET['tag_ID']));
+	if (isset($_GET['tag_ID'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$config['current_term'] = get_swatch_data(absint($_GET['tag_ID'])); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	}
 
-	wp_localize_script('sa_wc_admin_attr_manager', 'SA_WC_SWATCHES', $config);
-	wp_enqueue_script('sa_wc_admin_attr_manager');
-	wp_enqueue_style('sa_wc_admin_attr_manager');
+	wp_localize_script('sasw_admin_attr_manager', 'SASW_SWATCHES', $config);
+	wp_enqueue_script('sasw_admin_attr_manager');
+	wp_enqueue_style('sasw_admin_attr_manager');
 
 	add_filter('script_loader_src', __NAMESPACE__ . '\maybe_change_admin_js', 10, 2);
 }
@@ -251,18 +251,18 @@ function product_attr_scripts()
 
 	$assets['dependencies'][] = 'jquery';
 	wp_enqueue_media();
-	wp_register_script('sa_wc_admin_product_attr', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
-	wp_register_style('sa_wc_admin_product_attr', $assets['files']['css'], [], $assets['version']);
+	wp_register_script('sasw_admin_product_attr', $assets['files']['js'], $assets['dependencies'], $assets['version'], ['in_footer' => true]);
+	wp_register_style('sasw_admin_product_attr', $assets['files']['css'], [], $assets['version']);
 
 
 	$config = get_ajax_configs();
-	if (isset($_GET['edit'])) {
-		$config['id'] = absint($_GET['edit']);
+	if (isset($_GET['edit'])) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$config['id'] = absint($_GET['edit']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	}
 
-	wp_localize_script('sa_wc_admin_product_attr', 'SA_WC_SWATCHES', $config);
-	wp_enqueue_script('sa_wc_admin_product_attr');
-	wp_enqueue_style('sa_wc_admin_product_attr');
+	wp_localize_script('sasw_admin_product_attr', 'SASW_SWATCHES', $config);
+	wp_enqueue_script('sasw_admin_product_attr');
+	wp_enqueue_style('sasw_admin_product_attr');
 }
 
 
@@ -291,26 +291,26 @@ function update_attribute($id, $data = [])
 {
 	global $wpdb;
 
-	$desc =  isset($_POST['sa_attr_desc']) ? wp_unslash($_POST['sa_attr_desc']) : '';
-	$label =  isset($_POST['sa_attr_btn_label']) ? wp_unslash($_POST['sa_attr_btn_label']) : '';
-	$title =  isset($_POST['sa_attr_modal_title']) ? wp_unslash($_POST['sa_attr_modal_title']) : '';
+	$desc =  isset($_POST['sasw_attr_desc']) ? wp_unslash($_POST['sasw_attr_desc']) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$label =  isset($_POST['sasw_attr_btn_label']) ? wp_unslash($_POST['sasw_attr_btn_label']) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$title =  isset($_POST['sasw_attr_modal_title']) ? wp_unslash($_POST['sasw_attr_modal_title']) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$save_data =  [
 		'description' =>  $desc,
 		'title' =>  $title,
 		'button_label' =>  $label,
 	];
-	$table =  $wpdb->prefix . 'sa_attr_tax_data';
-	$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE attr_id = %d LIMIT 1", $id)); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$table =  $wpdb->prefix . 'sasw_attr_tax_data';
+	$row = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE attr_id = %d LIMIT 1", $id)); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 	if ($row) {
-		$wpdb->update(
+		$wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 			$table,
 			$save_data,
 			array('attr_id' => $id),
-		);
+		); 
 	} else {
 		$save_data['attr_id'] = $id;
-		$wpdb->insert(
+		$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
 			$table,
 			$save_data,
 		);
@@ -320,8 +320,8 @@ function update_attribute($id, $data = [])
 function delete_attribute($id)
 {
 	global $wpdb;
-	$table =  $wpdb->prefix . 'sa_attr_tax_data';
-	$wpdb->query($wpdb->prepare("DELETE FROM {$table} WHERE attr_id = %d", $id)); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$table =  $wpdb->prefix . 'sasw_attr_tax_data';
+	$wpdb->query($wpdb->prepare("DELETE FROM {$table} WHERE attr_id = %d", $id)); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 }
 add_action('woocommerce_attribute_updated', __NAMESPACE__ . '\update_attribute', 10, 2);
 add_action('woocommerce_attribute_added', __NAMESPACE__ . '\update_attribute', 10, 2);
@@ -331,58 +331,58 @@ function add_attribute_fields()
 {
 ?>
 	<div class="form-field">
-		<label for="sa_attr_btn_label"><?php esc_html_e('Button label', "sa-swatches"); ?></label>
-		<div class="sa_attribute_field">
-			<input name="sa_attr_btn_label" id="sa_attr_btn_label" type="text" value="">
-			<p class="description"><?php _e('E.g: View chart size', "sa-swatches"); ?></p>
+		<label for="sasw_attr_btn_label"><?php esc_html_e('Button label', "sa-swatches"); ?></label>
+		<div class="sasw_attribute_field">
+			<input name="sasw_attr_btn_label" id="sasw_attr_btn_label" type="text" value="">
+			<p class="description"><?php esc_html_e('E.g: View chart size', "sa-swatches"); ?></p>
 		</div>
 	</div>
 	<div class="form-field">
-		<label for="sa_attr_modal_title"><?php esc_html_e('Modal title', "sa-swatches"); ?></label>
-		<div class="sa_attribute_field">
-			<input name="sa_attr_modal_title" id="sa_attr_modal_title" type="text" value="">
-			<p class="description"><?php _e('E.g: View chart size', "sa-swatches"); ?></p>
+		<label for="sasw_attr_modal_title"><?php esc_html_e('Modal title', "sa-swatches"); ?></label>
+		<div class="sasw_attribute_field">
+			<input name="sasw_attr_modal_title" id="sasw_attr_modal_title" type="text" value="">
+			<p class="description"><?php esc_html_e('E.g: View chart size', "sa-swatches"); ?></p>
 		</div>
 	</div>
 	<div class="form-field">
-		<label for="sa_attribute_settings"><?php esc_html_e('Description', "sa-swatches"); ?></label>
-		<div class="sa_attribute_field"><?php wp_editor("", 'sa_attr_desc', ['textarea_rows' => 15]); ?></div>
-		<div class="sa_attribute_settings"></div>
+		<label for="sasw_attribute_settings"><?php esc_html_e('Description', "sa-swatches"); ?></label>
+		<div class="sasw_attribute_field"><?php wp_editor("", 'sasw_attr_desc', ['textarea_rows' => 15]); ?></div>
+		<div class="sasw_attribute_settings"></div>
 	</div>
 <?php
 }
 function edit_attribute_fields()
 {
 
-	$id = isset($_GET['edit']) ? absint($_GET['edit']) : 0;
+	$id = isset($_GET['edit']) ? absint($_GET['edit']) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$data = get_custom_attr_data($id);
 
 
 ?>
 	<tr class="form-field form-required">
 		<th scope="row" valign="top">
-			<label for="sa_attr_btn_label"><?php esc_html_e('Button label', "sa-swatches"); ?></label>
+			<label for="sasw_attr_btn_label"><?php esc_html_e('Button label', "sa-swatches"); ?></label>
 		</th>
 		<td>
-			<div class="sa_attribute_field "><input name="sa_attr_btn_label" id="sa_attr_btn_label" type="text" value="<?php echo esc_attr($data['button_label']); ?>"></div>
-			<p class="description"><?php _e('E.g: View chart size', "sa-swatches"); ?></p>
+			<div class="sasw_attribute_field "><input name="sasw_attr_btn_label" id="sasw_attr_btn_label" type="text" value="<?php echo esc_attr($data['button_label']); ?>"></div>
+			<p class="description"><?php esc_html_e('E.g: View chart size', "sa-swatches"); ?></p>
 		</td>
 	</tr>
 	<tr class="form-field form-required">
 		<th scope="row" valign="top">
-			<label for="sa_attr_modal_title"><?php esc_html_e('Modal title', "sa-swatches"); ?></label>
+			<label for="sasw_attr_modal_title"><?php esc_html_e('Modal title', "sa-swatches"); ?></label>
 		</th>
 		<td>
-			<div class="sa_attribute_field "><input name="sa_attr_modal_title" id="sa_attr_modal_title" type="text" value="<?php echo esc_attr($data['title']); ?>"></div>
+			<div class="sasw_attribute_field "><input name="sasw_attr_modal_title" id="sasw_attr_modal_title" type="text" value="<?php echo esc_attr($data['title']); ?>"></div>
 		</td>
 	</tr>
 	<tr class="form-field form-required">
 		<th scope="row" valign="top">
-			<label for="sa_attribute_settings"><?php esc_html_e('Description', "sa-swatches"); ?></label>
+			<label for="sasw_attribute_settings"><?php esc_html_e('Description', "sa-swatches"); ?></label>
 		</th>
 		<td>
-			<div class="sa_attribute_field "><?php wp_editor($data['description'], 'sa_attr_desc', ['textarea_rows' => 15]); ?></div>
-			<div class="sa_attribute_settings"></div>
+			<div class="sasw_attribute_field "><?php wp_editor($data['description'], 'sasw_attr_desc', ['textarea_rows' => 15]); ?></div>
+			<div class="sasw_attribute_settings"></div>
 		</td>
 	</tr>
 <?php

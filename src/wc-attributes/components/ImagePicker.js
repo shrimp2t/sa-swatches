@@ -61,7 +61,7 @@ const Image = ({ swatch, type, onChange, clear }) => {
 
   return (
     <div className="wc_swatch_image_wrap" data-type={type}>
-      <div onClick={handleOpen} className="wc_swatch_image sa_border">
+      <div onClick={handleOpen} className="wc_swatch_image sasw_border">
         {src ? (
           <img src={src} alt="" />
         ) : (

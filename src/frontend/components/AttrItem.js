@@ -40,12 +40,12 @@ const AttrItem = ({ attr }) => {
 	const inDrawer = ["drawer", "popover"].includes(settings?.layout);
 	switch (attr.type) {
 		case "image":
-		case "sa_image":
+		case "sasw_image":
 			optSettings = { ...(settings?.option?.image || {}) };
 			optSelectedSettings = { ...(settings?.drawer?.option?.image || {}) };
 			break;
 		case "color":
-		case "sa_color":
+		case "sasw_color":
 			optSettings = { ...(settings?.option?.color || {}) };
 			optSelectedSettings = { ...(settings?.drawer?.option?.color || {}) };
 			break;
@@ -64,31 +64,31 @@ const AttrItem = ({ attr }) => {
 	return (
 		<div
 			className={[
-				"sa_attr",
+				"sasw_attr",
 				attr.name,
 				"atype-" + (attr?.type || "mixed"),
-				"sa_align_" + (settings?.align || "none"),
+				"sasw_align_" + (settings?.align || "none"),
 			].join(" ")}
 		>
 			{showAttrLabel && (
-				<div className="sa_attr_label">
-					<span className="sa_label_title">
+				<div className="sasw_attr_label">
+					<span className="sasw_label_title">
 						{attr?.label}
 						{showColon ? <span className="colon">:</span> : ""}
 					</span>
 
-					{showValue && <span className="sa_label_val">{selectedLabel}</span>}
+					{showValue && <span className="sasw_label_val">{selectedLabel}</span>}
 				</div>
 			)}
 
 			<div
 				ref={refValue}
-				className={[!loop ? "sa_attr_values" : "sa_loop_values"].join(" ")}
+				className={[!loop ? "sasw_attr_values" : "sasw_loop_values"].join(" ")}
 			>
 				{inDrawer ? (
 					<>
 						<div
-							className="sa_opt_selected_prev"
+							className="sasw_opt_selected_prev"
 							ref={ref}
 							onClick={(e) => {
 								e.preventDefault();
@@ -118,7 +118,7 @@ const AttrItem = ({ attr }) => {
 								{isOpen && (
 									<Popover
 										placement={`bottom`}
-										className="sa_wc_popover"
+										className="sasw_popover"
 										offset={15}
 										focusOnMount={true}
 										noArrow={false}
@@ -127,7 +127,7 @@ const AttrItem = ({ attr }) => {
 											setIsOpen(false);
 										}}
 									>
-										<div className="sa_wc_popover_inner">
+										<div className="sasw_popover_inner">
 											<AttrOptions
 												attr={attr}
 												settings={{
@@ -150,7 +150,7 @@ const AttrItem = ({ attr }) => {
 								title={
 									attr?.data?.button_label?.length
 										? attr?.data?.button_label
-										: SA_WC_SWATCHES.i18n.select_attr.replace("%s", attr?.label)
+										: SASW_SWATCHES.i18n.select_attr.replace("%s", attr?.label)
 								}
 							>
 								<AttrOptions
@@ -178,7 +178,7 @@ const AttrItem = ({ attr }) => {
 				{willShowDetail ? (
 					<>
 						<a
-							className="sa_attr_details"
+							className="sasw_attr_details"
 							onClick={(e) => {
 								console.log("CLICK____");
 								e.preventDefault();
@@ -191,17 +191,17 @@ const AttrItem = ({ attr }) => {
 						>
 							{attr?.data?.button_label?.length
 								? attr?.data?.button_label
-								: SA_WC_SWATCHES.i18n.btn_details}
+								: SASW_SWATCHES.i18n.btn_details}
 						</a>
 
 						{isOpenModal && (
 							<Modal
 								size="large"
-								className="sa_attr_desc_modal"
+								className="sasw_attr_desc_modal"
 								title={attr?.data?.title}
 								onRequestClose={() => setOpenModal(false)}
 							>
-								<div className="sa_modal_inner">
+								<div className="sasw_modal_inner">
 									<div
 										dangerouslySetInnerHTML={{
 											__html: attr?.data?.description,

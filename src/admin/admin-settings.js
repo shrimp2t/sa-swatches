@@ -30,7 +30,7 @@ const Settings = ({ onChange, values }) => {
 			<div className="sa-settings-form">
 				<h2>{__("Variations in product page","sa-swatches")}</h2>
 				<div className="group-items">
-					<div className="sa_heading">
+					<div className="sasw_heading">
 						<h3>{__("Layout Settings","sa-swatches")}</h3>
 					</div>
 
@@ -47,9 +47,9 @@ const Settings = ({ onChange, values }) => {
 									handleOnChange("single.layout", v);
 								}}
 							>
-								{Object.keys(SA_WC_SWATCHES.configs.main_layout).map((k) => (
+								{Object.keys(SASW_SWATCHES.configs.main_layout).map((k) => (
 									<option value={k} key={k}>
-										{SA_WC_SWATCHES.configs.main_layout[k]}
+										{SASW_SWATCHES.configs.main_layout[k]}
 									</option>
 								))}
 							</select>
@@ -85,9 +85,9 @@ const Settings = ({ onChange, values }) => {
 									handleOnChange("single.viewAttrDetail", v);
 								}}
 							>
-								{Object.keys(SA_WC_SWATCHES.configs.show_hide).map((k) => (
+								{Object.keys(SASW_SWATCHES.configs.show_hide).map((k) => (
 									<option value={k} key={k}>
-										{SA_WC_SWATCHES.configs.show_hide[k]}
+										{SASW_SWATCHES.configs.show_hide[k]}
 									</option>
 								))}
 							</select>
@@ -96,7 +96,7 @@ const Settings = ({ onChange, values }) => {
 				</div>
 
 				<div className="group-items">
-					<div className="sa_heading">
+					<div className="sasw_heading">
 						<h3>{__("Options Settings","sa-swatches")}</h3>
 					</div>
 
@@ -140,9 +140,9 @@ const Settings = ({ onChange, values }) => {
 				</div>
 				{["drawer"].includes(getVal("single.layout")) ? (
 					<div className="group-items">
-						<div className="sa_heading has_desc">
+						<div className="sasw_heading has_desc">
 							<h3>{__("Selected Option Settings","sa-swatches")}</h3>
-							<p className="sa_desc">
+							<p className="sasw_desc">
 								{__("Apply for drawer layout only.","sa-swatches")}
 							</p>
 						</div>
@@ -194,7 +194,7 @@ const Settings = ({ onChange, values }) => {
 			<div className="sa-settings-form">
 				<h2>{__("Variations in shop & archive pages","sa-swatches")}</h2>
 				<div className="group-items">
-					<div className="sa_heading">
+					<div className="sasw_heading">
 						<h3>{__("Layout Settings","sa-swatches")}</h3>
 					</div>
 
@@ -211,9 +211,9 @@ const Settings = ({ onChange, values }) => {
 									handleOnChange("shop.show", v);
 								}}
 							>
-								{Object.keys(SA_WC_SWATCHES.configs.yes_no).map((key) => (
+								{Object.keys(SASW_SWATCHES.configs.yes_no).map((key) => (
 									<option value={key} key={key}>
-										{SA_WC_SWATCHES.configs.yes_no[key]}
+										{SASW_SWATCHES.configs.yes_no[key]}
 									</option>
 								))}
 							</select>
@@ -222,7 +222,7 @@ const Settings = ({ onChange, values }) => {
 				</div>
 
 				<div className="group-items">
-					<div className="sa_heading">
+					<div className="sasw_heading">
 						<h3>{__("Options Settings","sa-swatches")}</h3>
 					</div>
 
@@ -239,9 +239,9 @@ const Settings = ({ onChange, values }) => {
 									handleOnChange("shop.position", v);
 								}}
 							>
-								{Object.keys(SA_WC_SWATCHES.configs.position).map((key) => (
+								{Object.keys(SASW_SWATCHES.configs.position).map((key) => (
 									<option value={key} key={key}>
-										{SA_WC_SWATCHES.configs.position[key]}
+										{SASW_SWATCHES.configs.position[key]}
 									</option>
 								))}
 							</select>
@@ -261,9 +261,9 @@ const Settings = ({ onChange, values }) => {
 									handleOnChange("shop.align", v);
 								}}
 							>
-								{Object.keys(SA_WC_SWATCHES.configs.align).map((key) => (
+								{Object.keys(SASW_SWATCHES.configs.align).map((key) => (
 									<option value={key} key={key}>
-										{SA_WC_SWATCHES.configs.align[key]}
+										{SASW_SWATCHES.configs.align[key]}
 									</option>
 								))}
 							</select>
@@ -283,9 +283,9 @@ const Settings = ({ onChange, values }) => {
 									handleOnChange("shop.selection", v);
 								}}
 							>
-								{Object.keys(SA_WC_SWATCHES.configs.yes_no).map((key) => (
+								{Object.keys(SASW_SWATCHES.configs.yes_no).map((key) => (
 									<option value={key} key={key}>
-										{SA_WC_SWATCHES.configs.yes_no[key]}
+										{SASW_SWATCHES.configs.yes_no[key]}
 									</option>
 								))}
 							</select>
@@ -347,12 +347,12 @@ const App = ({ input, initValues }) => {
 	);
 };
 
-jQuery("#sa_wc_setting_wrap").each(function () {
+jQuery("#sasw_setting_wrap").each(function () {
 	const panel = jQuery(this);
-	const input = jQuery("#sa_swatches_settings");
+	const input = jQuery("#sasw_swatches_settings");
 	const form = panel.closest("form");
 	form.append(input);
-	jQuery(".wc-settings-row-sa_swatches_settings, h2", form).remove();
+	jQuery(".wc-settings-row-sasw_swatches_settings, h2", form).remove();
 	let initValues = {};
 	try {
 		initValues = JSON.parse(input.val());

@@ -1,4 +1,4 @@
-.sa_hide {
+.sasw_hide {
 	display: none !important;
 }
 
@@ -141,7 +141,7 @@
 	}
 }
 
-.sa_border {
+.sasw_border {
 	border: 1px solid #d5d5d5;
 	border-radius: 3px;
 }
@@ -185,16 +185,16 @@
 	}
 }
 
-.sa_space {
+.sasw_space {
 	display: flex;
 	gap: 10px;
 
-	&.sa_wrap {
+	&.sasw_wrap {
 		flex-wrap: wrap;
 	}
 }
 
-.sa_group_colors {
+.sasw_group_colors {
 	display: flex;
 	width: 100%;
 	height: 100%;
@@ -204,7 +204,7 @@
 	width: 50px;
 }
 
-.sa_swatch {
+.sasw_swatch {
 	width: 30px;
 	height: 30px;
 	display: flex;
@@ -212,25 +212,25 @@
 	border-radius: 3px;
 	border: 1px solid #8c8f94;
 
-	&.sa_no {
+	&.sasw_no {
 		justify-content: center;
 		align-items: center;
 	}
 
-	.sa_color_inner {
+	.sasw_color_inner {
 		width: 100%;
 		height: 100%;
 		display: flex;
 		transform: rotate(45deg) scale(1.45);
 	}
 
-	.sa_color_item {
+	.sasw_color_item {
 		flex-basis: 100%;
 		height: 100%;
 		display: flex;
 	}
 
-	.sa_image_item {
+	.sasw_image_item {
 		flex-basis: 100%;
 		height: 100%;
 		display: flex;
@@ -284,7 +284,7 @@
 	}
 }
 
-.sa_swatch_modal {
+.sasw_swatch_modal {
 	* {
 		box-sizing: border-box;
 	}
@@ -327,7 +327,7 @@
 }
 
 .components-modal__frame {
-	&.sa_swatch_modal {
+	&.sasw_swatch_modal {
 		.components-modal__content {
 			padding-left: 15px;
 			padding-right: 15px;
@@ -340,14 +340,14 @@
 			height: auto;
 		}
 
-		.sa_drawer_inner {
+		.sasw_drawer_inner {
 			display: block;
 			margin-top: 15px;
 			.col_swatch {
 				width: 56px;
 			}
 
-			.sa_swatch {
+			.sasw_swatch {
 				width: 40px;
 				height: 40px;
 			}
@@ -382,7 +382,7 @@
 	}
 }
 
-.sa_swatch_table {
+.sasw_swatch_table {
 	.actions {
 		width: 100px;
 		text-align: left;
@@ -440,25 +440,25 @@
 	}
 }
 
-.sa_heading {
+.sasw_heading {
 	h3 {
 		margin: 0px;
 		font-size: 16px;
 	}
 
-	.sa_desc {
+	.sasw_desc {
 		margin-bottom: 0px;
 		font-style: italic;
 		opacity: 0.8;
 	}
 }
 
-.wc_swatch_colors .sa_swatch {
+.wc_swatch_colors .sasw_swatch {
 	background-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill-opacity=".05"><path d="M8 0h8v8H8zM0 8h8v8H0z"/></svg>');
 }
 
-.sa_wc_attr_main {
-	.sa_swatch,
+.sasw_attr_main {
+	.sasw_swatch,
 	.wc_swatch_image {
 		width: 100px;
 		height: 100px;
@@ -476,7 +476,7 @@
 		}
 	}
 }
-.sa_wrapper_added {
+.sasw_wrapper_added {
 	.select2-container {
 		display: none;
 	}

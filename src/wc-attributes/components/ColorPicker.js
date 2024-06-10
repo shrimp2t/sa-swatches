@@ -60,16 +60,16 @@ const ColorPicker = ({ value, onChange, confirm }) => {
 		<>
 			<div className="">
 				<div
-					className="wc_swatch_colors sa_space sa_wrap"
+					className="wc_swatch_colors sasw_space sasw_wrap"
 					onClick={() => {
 						setIsVisible(!isVisible);
 					}}
 				>
-					<span className="sa_swatch">
-						<span className="sa_color_inner">
+					<span className="sasw_swatch">
+						<span className="sasw_color_inner">
 							{values.map((i) => (
 								<span
-									className="sa_color_item"
+									className="sasw_color_item"
 									style={{ background: i.v, pointer: "cursor" }}
 								></span>
 							))}
@@ -80,7 +80,7 @@ const ColorPicker = ({ value, onChange, confirm }) => {
 				{isVisible && (
 					<Modal
 						title="Select Color"
-						className="sa_swatch_modal"
+						className="sasw_swatch_modal"
 						onClickOutside={() => {
 							setIsVisible(false);
 						}}
@@ -88,7 +88,7 @@ const ColorPicker = ({ value, onChange, confirm }) => {
 							setIsVisible(false);
 						}}
 						headerActions={
-							<div className="sa_space">
+							<div className="sasw_space">
 								<button
 									className="button"
 									onClick={(e) => {
@@ -103,7 +103,7 @@ const ColorPicker = ({ value, onChange, confirm }) => {
 							</div>
 						}
 					>
-						<div className="sa_space sa_wrap">
+						<div className="sasw_space sasw_wrap">
 							{values.map((i, index) => {
 								return (
 									<div key={i.t} className="color_item">

@@ -1,13 +1,13 @@
 <?php
 
-namespace SA_WC_SWATCHES\API\Product;
+namespace SASW_SWATCHES\API\Product;
 
-add_action('sa_wc_api/get_variants', __NAMESPACE__ . '\rest_get_variants');
+add_action('sasw_api/get_variants', __NAMESPACE__ . '\rest_get_variants');
 function rest_get_variants()
 {
-	$pid = isset($_GET['pid']) ? sanitize_text_field($_GET['pid']) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-	$product = wc_get_product($pid);
+	$pid = isset($_GET['pid']) ? sanitize_text_field($_GET['pid']) : ''; // phpcs:ignore
 	$data = [];
+	$product = wc_get_product($pid);
 	if (method_exists($product, 'get_available_variations')) {
 		$data = $product->get_available_variations();
 	}

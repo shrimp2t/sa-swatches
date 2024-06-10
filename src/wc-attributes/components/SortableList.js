@@ -76,16 +76,16 @@ const ListSelectedTermItem = ({
 				onClick={() => onClick?.(term)}
 				key={term.id}
 			>
-				{lastSwatch?.type === "sa_image" ? (
-					<span className="img sa_border">
+				{lastSwatch?.type === "sasw_image" ? (
+					<span className="img sasw_border">
 						<img src={lastSwatch?.thumbnail || lastSwatch?.full || ""} alt="" />
 					</span>
 				) : null}
-				{lastSwatch?.type === "sa_color" ? (
-					<span className="sa_group_colors sa_swatch">
-						<span className="sa_color_inner">
+				{lastSwatch?.type === "sasw_color" ? (
+					<span className="sasw_group_colors sasw_swatch">
+						<span className="sasw_color_inner">
 							<span
-								className="sa_color_item"
+								className="sasw_color_item"
 								style={{
 									background: `${lastSwatch?.value}`,
 								}}
@@ -93,7 +93,7 @@ const ListSelectedTermItem = ({
 							{lastSwatch?.more?.length &&
 								lastSwatch?.more.map((mc) => (
 									<span
-										className="sa_color_item"
+										className="sasw_color_item"
 										style={{
 											background: `${mc}`,
 										}}
@@ -121,11 +121,11 @@ const ListSelectedTermItem = ({
 				<Modal
 					title={`Swatch settings`}
 					size="medium"
-					className="sa_swatch_modal"
+					className="sasw_swatch_modal"
 					style={{ width: 600 }}
 					onRequestClose={() => setOpen(false)}
 				>
-					<div className="sa_drawer_inner">
+					<div className="sasw_drawer_inner">
 						{loading ? (
 							<div className="loading">
 								<Spinner
@@ -160,10 +160,10 @@ const ListSelectedTermItem = ({
 											}}
 										>
 											<option value={``}>{__("Default","sa-swatches")}</option>
-											{Object.keys(SA_WC_SWATCHES.att_types).map((key) => {
+											{Object.keys(SASW_SWATCHES.att_types).map((key) => {
 												return (
 													<option value={key} key={key}>
-														{SA_WC_SWATCHES.att_types[key]}
+														{SASW_SWATCHES.att_types[key]}
 													</option>
 												);
 											})}
@@ -173,7 +173,7 @@ const ListSelectedTermItem = ({
 								<div class="form-item">
 									<label className="form_label">{__("Swatch","sa-swatches")}</label>
 									<div className="form_value">
-										{lastSwatch?.type === "sa_image" ? (
+										{lastSwatch?.type === "sasw_image" ? (
 											<ImagePicker
 												swatch={customSwatch}
 												onChange={(changeData) => {
@@ -184,7 +184,7 @@ const ListSelectedTermItem = ({
 												}}
 											/>
 										) : null}
-										{lastSwatch?.type === "sa_color" ? (
+										{lastSwatch?.type === "sasw_color" ? (
 											<ColorPicker
 												confirm={false}
 												onChange={(changeData) => {
@@ -225,20 +225,20 @@ const ListSelectedTermItem = ({
 							</div>
 						</div>
 
-						<div className="sa_box">
+						<div className="sasw_box">
 							<h3>{__("Global settings","sa-swatches")}</h3>
 							<div className="term-item swatch_box">
-								{term?.swatch?.type === "sa_image" ? (
-									<span className="img sa_border">
+								{term?.swatch?.type === "sasw_image" ? (
+									<span className="img sasw_border">
 										<img
 											src={term?.swatch?.thumbnail || term?.swatch?.full || ""}
 											alt=""
 										/>
 									</span>
 								) : null}
-								{term?.swatch?.type === "sa_color" ? (
+								{term?.swatch?.type === "sasw_color" ? (
 									<span
-										className="color sa_border"
+										className="color sasw_border"
 										style={{ background: `${term?.swatch?.value}` }}
 									></span>
 								) : null}

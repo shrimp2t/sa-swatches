@@ -8,10 +8,10 @@ import App from "./components/App";
 import req from "../common/req";
 import { cleanObj } from "./common/variants";
 
-const { SA_WC_SWATCHES } = window;
+const { SASW_SWATCHES } = window;
 
 jQuery(($) => {
-	const preSettings = cleanObj(SA_WC_SWATCHES.settings, true);
+	const preSettings = cleanObj(SASW_SWATCHES.settings, true);
 	const { option = {} } = preSettings?.single || {};
 	const { option: drawerOption = {} } = preSettings?.drawer || {};
 
@@ -19,9 +19,9 @@ jQuery(($) => {
 		const form = $(this);
 		const pid = form.data("product_id");
 		const table = form.find(".variations");
-		table.wrap("<div class='sa_vtb_wrap sa_loading sa_hidden'></div>");
+		table.wrap("<div class='sasw_vtb_wrap sasw_loading sasw_hidden'></div>");
 		const wrap = table.parent();
-		const appEl = $("<div class='sa_wc_swatches'/>");
+		const appEl = $("<div class='sasw_swatches'/>");
 		wrap.css({
 			height: `${table.height()}px`,
 		});
@@ -49,7 +49,7 @@ jQuery(($) => {
 
 		if (useAjax) {
 			req({
-				url: SA_WC_SWATCHES.ajax,
+				url: SASW_SWATCHES.ajax,
 				params: {
 					endpoint: "get_variants",
 					pid,
@@ -58,7 +58,7 @@ jQuery(($) => {
 			})
 				.then((res) => {
 					if (res?.success && res?.data?.length) {
-						form.trigger("sa_variants", [res?.data]);
+						form.trigger("sasw_variants", [res?.data]);
 					}
 				})
 				.catch((e) => { });
@@ -73,13 +73,13 @@ jQuery(($) => {
 			form,
 			onReady: () => {
 				if (table) {
-					wrap.removeClass("sa_loading");
+					wrap.removeClass("sasw_loading");
 
 					table.hide();
 					setTimeout(() => {
 						wrap.css({ height: `${appEl.outerHeight()}px` });
 						setTimeout(() => {
-							wrap.removeClass("sa_hidden");
+							wrap.removeClass("sasw_hidden");
 							wrap.css({ height: `` });
 						}, 500);
 					}, 300);
@@ -92,12 +92,12 @@ jQuery(($) => {
 
 	// For loop Products
 
-	jQuery(".sa_loop_swatches").each(function () {
+	jQuery(".sasw_loop_swatches").each(function () {
 		const appEl = jQuery(this);
 		const pid = appEl.data("id");
 		const url = appEl.data("link");
-		appEl.addClass("sa_loop_product");
-		let wrap = appEl.closest(".sa_p_loop_wrap");
+		appEl.addClass("sasw_loop_product");
+		let wrap = appEl.closest(".sasw_p_loop_wrap");
 		if (!wrap.length) {
 			wrap = appEl.closest(".product");
 		}
@@ -105,7 +105,7 @@ jQuery(($) => {
 		const isBlockBtn = addCartBtn.hasClass("wc-interactive");
 		const isCartBtn = addCartBtn.prop("tagName") === "BUTTON";
 		const a = wrap.find(`a.woocommerce-loop-product__link, a[href="${url}"]`);
-		const thumb = wrap.find(".sa_loop_thumb");
+		const thumb = wrap.find(".sasw_loop_thumb");
 		const thumbHtml = thumb.html();
 		let blockContext = {};
 		const blockParent = addCartBtn.parent();
@@ -140,7 +140,7 @@ jQuery(($) => {
 			if (isBlockBtn) {
 				addCartBtn.addClass("wc-interactive");
 				const btnSpan = addCartBtn.find("span");
-				btnSpan.html(SA_WC_SWATCHES.i18n.add_cart);
+				btnSpan.html(SASW_SWATCHES.i18n.add_cart);
 				blockParent.attr(
 					"wc-context",
 					JSON.stringify({
@@ -149,7 +149,7 @@ jQuery(($) => {
 					}),
 				);
 				btnSpan.get(0).dispatchEvent(
-					new CustomEvent("sa_wc_variation_change", {
+					new CustomEvent("sasw_variation_change", {
 						bubbles: true,
 						detail: {
 							variation_id: variation.variation_id,
@@ -158,7 +158,7 @@ jQuery(($) => {
 					}),
 				);
 			} else {
-				addCartBtn.html(SA_WC_SWATCHES.i18n.add_cart);
+				addCartBtn.html(SASW_SWATCHES.i18n.add_cart);
 			}
 
 			addCartBtn.addClass("ajax_add_to_cart");
@@ -185,9 +185,9 @@ jQuery(($) => {
 			if (isBlockBtn) {
 				addCartBtn.removeClass("wc-interactive");
 				const btnSpan = addCartBtn.find("span");
-				btnSpan.html(SA_WC_SWATCHES.i18n.select_options);
+				btnSpan.html(SASW_SWATCHES.i18n.select_options);
 				btnSpan.get(0).dispatchEvent(
-					new CustomEvent("sa_wc_variation_change", {
+					new CustomEvent("sasw_variation_change", {
 						bubbles: true,
 						detail: {
 							variation_id: 0,
@@ -196,7 +196,7 @@ jQuery(($) => {
 					}),
 				);
 			} else {
-				addCartBtn.html(SA_WC_SWATCHES.i18n.select_options);
+				addCartBtn.html(SASW_SWATCHES.i18n.select_options);
 			}
 			addCartBtn.removeClass("ajax_add_to_cart");
 
@@ -205,7 +205,7 @@ jQuery(($) => {
 		});
 
 		req({
-			url: SA_WC_SWATCHES.ajax,
+			url: SASW_SWATCHES.ajax,
 			params: {
 				endpoint: "get_variants",
 				pid,
@@ -214,7 +214,7 @@ jQuery(($) => {
 		})
 			.then((res) => {
 				if (res?.success && res?.data?.length) {
-					appEl.trigger("sa_variants", [res?.data]);
+					appEl.trigger("sasw_variants", [res?.data]);
 				}
 			})
 			.catch((e) => { });
@@ -251,4 +251,4 @@ jQuery(($) => {
 	});
 });
 
-console.log("SA_WC_SWATCHES", SA_WC_SWATCHES);
+console.log("SASW_SWATCHES", SASW_SWATCHES);

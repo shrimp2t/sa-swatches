@@ -1,16 +1,16 @@
 <?php
 
-namespace SA_WC_SWATCHES;
+namespace SASW_SWATCHES;
 
 
-global $sa_db_version;
-$sa_db_version = '1.0';
+global $sasw_db_version;
+$sasw_db_version = '1.0';
 
 function install()
 {
 	global $wpdb;
-	global $sa_db_version;
-	$table_name = $wpdb->prefix . 'sa_attr_tax_data';
+	global $sasw_db_version;
+	$table_name = $wpdb->prefix . 'sasw_attr_tax_data';
 
 	$charset_collate = $wpdb->get_charset_collate();
 
@@ -26,5 +26,5 @@ function install()
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	dbDelta($sql);
 
-	add_option('sa_db_version', $sa_db_version);
+	add_option('sasw_db_version', $sasw_db_version);
 }

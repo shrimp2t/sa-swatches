@@ -1,49 +1,41 @@
-# wc-blocks-by-sa
+# sa-swatches
 
-// New Store cart API -- check nonce
-app/public/wp-content/plugins/woocommerce/src/StoreApi/Routes/V1/AbstractCartRoute.php
-
+## Dev
 
 
-https://github.com/WordPress/playground-tools/tree/trunk/packages/wp-now
+```sh
 
-# sliders
+npm install -f
 
-https://react-responsive-carousel.js.org/storybook/?path=/story/01-basic--base
+npm run dev
 
-https://react-responsive-carousel.js.org/storybook/?path=/story/02-advanced--youtube-autoplay-with-custom-thumbs
+# or
 
-
-Slick vertical gallery: https://codepen.io/hashif/pen/xxbPLKx
-
-https://linxtion.com/demo/react-image-gallery/
+yarn dev
 
 
-
-woocommerce_simple_add_to_cart
-woocommerce_variable_add_to_cart
-woocommerce_external_add_to_cart
-woocommerce_grouped_add_to_cart
-woocommerce_template_single_add_to_cart
-
-$product->get_available_variation();
+```
 
 
+## Build
 
-http://www.menucool.com/slider/thumbnail-slider-demo-3
 
-https://codepen.io/hashif/pen/xxbPLKx
+```sh
 
-https://www.unipresscorp.com/magicslideshow-commercial3/example3.html
 
-https://amazingslider.com/examples/jquery-gallery-with-vertical-thumbnails-id28/#
+npm run build
 
-https://www.jqueryscript.net/demo/Simple-Clean-jQuery-Vertical-Product-Gallery/#
+# or
 
-## Links
+yarn build
 
-// app\public\wp-content\plugins\woocommerce\assets\js\admin\meta-boxes-product.js
-// app\public\wp-content\plugins\woocommerce\includes\admin\meta-boxes\views\html-product-attribute-inner.php
-// app\public\wp-content\plugins\woocommerce\includes\admin\class-wc-admin-assets.php
-// https://github.com/WordPress/gutenberg/blob/HEAD/packages/block-editor/src/components/media-upload/README.md
-// https://dev.to/diballesteros/how-to-create-a-stunning-side-drawer-with-react-spring-bja
+
+```
+
+## Realease
+
+```sh
+
+grunt release
+
+```

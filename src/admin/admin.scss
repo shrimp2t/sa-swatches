@@ -1,8 +1,8 @@
-#sa_swatches_settings {
+#sasw_swatches_settings {
 	display: none !important;
 }
 
-#sa_wc_setting_wrap {
+#sasw_setting_wrap {
 	margin-top: 1.5em;
 	display: flex;
 	flex-direction: column;
@@ -76,7 +76,7 @@
 	}
 }
 
-.sa_wc_setting_popover {
+.sasw_setting_popover {
 	background: #fff;
 
 	.components-popover__content {
